@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+
+
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=calendarapi
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@calendarapi.com
+      - PGADMIN_DEFAULT_PASSWORD=secret
+    depends_on:
+      - postgres
+
+  web:
+    image: calendarapi
+    build: .
+    command: gunicorn -b 0.0.0.0:5000 calendarapi.wsgi:app
+    env_file:
+      - ./.flaskenv
+    environment:
+      - DATABASE_URI=postgresql://admin:admin@postgres:5432/calendarapi
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq
+      - CELERY_RESULT_BACKEND_URL=redis://redis
+    volumes:
+      - ./calendarapi:/code/calendarapi
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+
+  rabbitmq:
+    image: rabbitmq
+
+  redis:
+    image: redis
+
+  celery:
+    image: calendarapi
+    command: "celery -A calendarapi.celery_app:app worker"
+    env_file:
+      - ./.flaskenv
+    volumes:
+      - .:/code
+    depends_on:
+      - rabbitmq
+    environment:
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq
+      - CELERY_RESULT_BACKEND_URL=redis://redis
+
+  flower:
+    image: mher/flower
+    command: "celery --broker=amqp://guest:guest@rabbitmq flower"
+    ports:
+      - "5555:5555"
+    depends_on:
+      - rabbitmq
