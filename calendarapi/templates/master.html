@@ -1,0 +1,26 @@
+{% extends 'admin/base.html' %}
+{% block head %}
+<style>
+    body {
+        margin: 0;
+    }
+    
+    .btn {
+        color: white;
+    }
+    .btn:hover {
+      color: red;
+  }
+  </style>
+<title>
+    {% block title %}
+    {% if admin_view.category %}{{ admin_view.category }} - {% endif %}{{ admin_view.name }} - CalendarApi
+    {% endblock %}
+</title>
+{{ super() }}
+{% endblock %}
+{% block access_control %}
+{% if current_user.is_authenticated %}
+<a class="btn" href="{{ url_for('admin.logout_view') }}" title="Вийти з панелі адміністратора">Вийти</a>
+{% endif %}
+{% endblock %}

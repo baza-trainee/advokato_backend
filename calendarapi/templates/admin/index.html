@@ -1,0 +1,30 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{{ super() }}
+<div class="row-fluid">
+  <div>
+    {% if current_user.is_authenticated %}
+    <h1>Кабінет Адміністратора</h1>
+    {% else %}
+    <form method="POST" action="" style="text-align: center;">
+      {{ form.hidden_tag() if form.hidden_tag }}
+      {% for f in form if f.type != 'CSRFTokenField' %}
+      {% if f.errors %}
+      <div class="list-group">
+        {% for e in f.errors %}
+        <a href="#" class="list-group-item list-group-item-action list-group-item-danger">{{ e }}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="form-group">
+        {{ f.label }}<br>
+        {{ f }}
+      </div>
+      {% endfor %}
+      <button class="btn btn-dark" type="submit">Увійти</button>
+    </form>
+    {{ link | safe }}
+    {% endif %}
+  </div>
+</div>
+{% endblock body %}
