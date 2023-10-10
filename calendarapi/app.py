@@ -1,10 +1,23 @@
 from flask import Flask
 from flask_sqlalchemy import record_queries
+from flask_admin import Admin
 
-from calendarapi import api
-from calendarapi import auth
-from calendarapi import manage
-from calendarapi.api.resources import UserList, UserResource
+from calendarapi import api, auth, manage
+from calendarapi.extensions import apispec, db, jwt, migrate, celery
+from calendarapi.auth.views import (
+    login,
+    refresh,
+    revoke_access_token,
+    revoke_refresh_token,
+)
+from calendarapi.admin import (
+    UserAdminModelView,
+    CustomAdminIndexView,
+    configure_login,
+)
+from calendarapi.models import (
+    User,
+)
 from calendarapi.api.schemas import (
     UserSchema,
     VisitorSchema,
@@ -13,13 +26,11 @@ from calendarapi.api.schemas import (
     SpecializationSchema,
     AppointmentSchema,
 )
-from calendarapi.auth.views import (
-    login,
-    refresh,
-    revoke_access_token,
-    revoke_refresh_token,
+
+from calendarapi.api.resources import (
+    UserList,
+    UserResource,
 )
-from calendarapi.extensions import apispec, db, jwt, migrate, celery
 
 
 def create_app(testing=False):
@@ -29,6 +40,8 @@ def create_app(testing=False):
     if testing is True:
         app.config["TESTING"] = True
         app.config["CACHE_TYPE"] = "null"
+    configure_login(app)
+    register_adminsite(app)
     configure_extensions(app)
     configure_cli(app)
     configure_apispec(app)
@@ -53,6 +66,19 @@ def create_app(testing=False):
         apispec.spec.path(view=revoke_access_token, app=app)
         apispec.spec.path(view=revoke_refresh_token, app=app)
     return app
+
+
+def register_adminsite(app):
+    admin = Admin(
+        app,
+        name="CalendarAdmin",
+        index_view=CustomAdminIndexView(),
+        base_template="master.html",
+        template_mode="bootstrap4",
+    )
+    admin.add_view(
+        UserAdminModelView(User, db.session, name="Користувачі", category="Керування")
+    )
 
 
 def configure_extensions(app):

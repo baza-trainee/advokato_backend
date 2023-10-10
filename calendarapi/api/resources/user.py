@@ -1,6 +1,7 @@
 from flask import request
 from flask_restful import Resource, abort
 from flask_jwt_extended import jwt_required
+
 from calendarapi.api.schemas import UserSchema
 from calendarapi.models import User
 from calendarapi.extensions import db
