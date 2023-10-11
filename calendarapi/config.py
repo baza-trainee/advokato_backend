@@ -7,6 +7,8 @@ import os
 ENV = os.getenv("FLASK_ENV")
 DEBUG = ENV == "development"
 SECRET_KEY = os.getenv("SECRET_KEY")
+ADMIN_DEFAULT_LOGIN = os.getenv("ADMIN_DEFAULT_LOGIN")
+ADMIN_DEFAULT_PASSWORD = os.getenv("ADMIN_DEFAULT_PASSWORD")
 
 # CACHE_TYPE = "RedisCache"
 # CACHE_DEFAULT_TIMEOUT = 30

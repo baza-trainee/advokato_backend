@@ -1,3 +1,4 @@
+from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from calendarapi.extensions import db, pwd_context
@@ -10,7 +11,8 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
     _password = db.Column("password", db.String(255), nullable=False)
-    active = db.Column(db.Boolean, default=True)
+    description = db.Column(db.String, nullable=True)
+    is_active = db.Column(db.Boolean, default=True)
 
     @hybrid_property
     def password(self):
@@ -18,7 +20,15 @@ class User(db.Model):
 
     @password.setter
     def password(self, value):
-        self._password = pwd_context.hash(value)
+        salt = current_app.config.get("SECRET_KEY").encode("utf-8")
+        self._password = pwd_context.hash(value, salt=salt)
 
     def __repr__(self):
         return "<User %s>" % self.username
+
+    def get_id(self):
+        return self.id
+
+    @property
+    def is_authenticated(self):
+        return True

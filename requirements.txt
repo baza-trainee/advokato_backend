@@ -5,6 +5,9 @@ flask-migrate
 flask-sqlalchemy
 flask-marshmallow
 flask-jwt-extended
+flask-admin==1.6.1
+flask_login==0.6.2
+Werkzeug==2.3.0
 marshmallow-sqlalchemy
 python-dotenv
 passlib

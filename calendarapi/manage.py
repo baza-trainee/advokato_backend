@@ -1,4 +1,5 @@
 import click
+from flask import current_app
 from flask.cli import with_appcontext
 
 
@@ -11,7 +12,10 @@ def init():
 
     click.echo("create user")
     user = User(
-        username="admin", email="admin@gmail.com", password="admin", active=True
+        username=current_app.config["ADMIN_DEFAULT_LOGIN"],
+        email="admin@gmail.com",
+        password=current_app.config["ADMIN_DEFAULT_PASSWORD"],
+        is_active=True,
     )
     db.session.add(user)
     db.session.commit()
