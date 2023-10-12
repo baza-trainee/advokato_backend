@@ -1,4 +1,3 @@
-from flask import current_app
 from wtforms.fields import StringField
 from wtforms.validators import DataRequired
 

@@ -1,8 +1,8 @@
 from calendarapi.models import Appointment
-from calendarapi.extensions import ma, db
+from calendarapi.extensions import db, fm
 
 
-class AppointmentSchema(ma.SQLAlchemyAutoSchema):
+class AppointmentSchema(fm.SQLAlchemyAutoSchema):
     class Meta:
         model = Appointment
         exclude = ["id"]

@@ -11,8 +11,9 @@ class Lawyer(db.Model):
     city_id = db.Column(db.Integer, db.ForeignKey("cities.id"))
 
     specializations = db.relationship(
-        "SpecializationCategory",
+        "Specialization",
         secondary="specializations_to_lawyers",
+        lazy=True,
         backref=db.backref("lawyers", lazy=True),
     )
 

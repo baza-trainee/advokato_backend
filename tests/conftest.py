@@ -6,16 +6,24 @@ from flask_sqlalchemy import SQLAlchemy
 import pytest
 from dotenv import load_dotenv
 from datetime import date
-from calendarapi.models import User
+from calendarapi.models import User, City, Lawyer, Specialization
 from calendarapi.app import create_app
 from calendarapi.extensions import db as _db
 from pytest_factoryboy import register
-from tests.factories import UserFactory
+from tests.factories import (
+    UserFactory,
+    CityFactory,
+    LawyerFactory,
+    SpecializationFactory,
+)
 from calendarapi.app import init_celery
 from flask.testing import FlaskClient
 
 
 register(UserFactory)
+register(CityFactory)
+register(LawyerFactory)
+register(SpecializationFactory)
 
 
 @pytest.fixture(scope="session")
@@ -93,3 +101,29 @@ def celery_session_app(celery_session_app: Celery, app: Flask) -> Celery:
 @pytest.fixture(scope="session")
 def celery_worker_pool() -> str:
     return "solo"
+
+
+@pytest.fixture
+def city(db: SQLAlchemy) -> City:
+    city = City(city_name="Lviv")
+    db.session.add(city)
+    db.session.commit()
+    return city
+
+
+@pytest.fixture
+def lawyer(db: SQLAlchemy, city) -> Lawyer:
+    specializations = [
+        Specialization(specialization_name="Цивільна"),
+        Specialization(specialization_name="Адміністративна"),
+    ]
+    lawyer = Lawyer(
+        city_id=1,
+        lawyer_mail="emily@example.com",
+        name="Emily",
+        surname="string",
+        specializations=specializations,
+    )
+    db.session.add(lawyer)
+    db.session.commit()
+    return lawyer
