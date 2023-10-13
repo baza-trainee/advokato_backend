@@ -1,14 +1,16 @@
-from wtforms import form, fields, validators
 from flask import redirect, url_for, request, current_app
 import flask_login as login
 from flask_admin import AdminIndexView, helpers, expose
 from flask_admin.contrib.sqla import ModelView
+from wtforms import form, fields, validators
 
 from calendarapi.extensions import db, pwd_context
 from calendarapi.models import User
 
 
 class AdminModelView(ModelView):
+    extra_css = ["/static/styles/green_mist.css"]
+
     create_modal = True
     edit_modal = True
 
@@ -60,6 +62,8 @@ class CustomAdminIndexView(AdminIndexView):
     def index(self):
         if not login.current_user.is_authenticated:
             return redirect(url_for(".login_view"))
+
+        self.extra_css = AdminModelView.extra_css
 
         return super(CustomAdminIndexView, self).index()
 

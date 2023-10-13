@@ -111,7 +111,15 @@ You can also test the project locally by installing the dependencies from the `r
 ```
 http://localhost:5000/swagger-ui
 ```
-
+- Access to the admin panel for managing the database and schedule is available here
+```
+http://localhost:5000/admin
+```
+The **password** and **login** to the main user of the admin panel can be changed in the file: `.flaskenv`
+```
+ADMIN_DEFAULT_LOGIN = admin
+ADMIN_DEFAULT_PASSWORD = admin
+```
 - You can access pgAdmin at the following URL: 
 ```
 http://localhost:5050

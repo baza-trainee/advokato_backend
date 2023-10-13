@@ -24,6 +24,7 @@ class UserAdminModelView(AdminModelView):
         if is_created:
             model.password = form.password.data
         else:
+            # TODO
             old_password = form.password.object_data
             # If password has been changed, hash password
             if not old_password == model.password:
