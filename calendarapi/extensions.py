@@ -8,17 +8,18 @@ from passlib.context import CryptContext
 from flask_jwt_extended import JWTManager
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
+import marshmallow
 from celery import Celery
-import sqlalchemy
 
 # from flask_caching import Cache
 
 from calendarapi.commons.apispec import APISpecExt
 
 
-db: sqlalchemy = SQLAlchemy()
+ma = marshmallow
+db = SQLAlchemy()
 jwt = JWTManager()
-ma = Marshmallow()
+fm = Marshmallow()
 migrate = Migrate()
 apispec = APISpecExt()
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")

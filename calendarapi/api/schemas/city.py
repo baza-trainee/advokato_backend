@@ -1,8 +1,8 @@
 from calendarapi.models import City
-from calendarapi.extensions import ma, db
+from calendarapi.extensions import fm, db
 
 
-class CitySchema(ma.SQLAlchemyAutoSchema):
+class CitySchema(fm.SQLAlchemyAutoSchema):
     class Meta:
         model = City
         exclude = ["id"]

@@ -1,5 +1,3 @@
-import os
-
 from wtforms import form, fields, validators
 from flask import redirect, url_for, request, current_app
 import flask_login as login

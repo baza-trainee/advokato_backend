@@ -1,8 +1,8 @@
 from calendarapi.models import Visitor
-from calendarapi.extensions import ma, db
+from calendarapi.extensions import fm, db
 
 
-class VisitorSchema(ma.SQLAlchemyAutoSchema):
+class VisitorSchema(fm.SQLAlchemyAutoSchema):
     class Meta:
         model = Visitor
         exclude = ["id"]

@@ -1,11 +1,11 @@
 from calendarapi.models import User
-from calendarapi.extensions import ma, db
+from calendarapi.extensions import fm, db, ma
 
 
-class UserSchema(ma.SQLAlchemyAutoSchema):
-    id = ma.Int(dump_only=True)
-    password = ma.String(load_only=True, required=True)
-    email = ma.String(required=True)
+class UserSchema(fm.SQLAlchemyAutoSchema):
+    id = ma.fields.Int(dump_only=True)
+    password = ma.fields.String(load_only=True, required=True)
+    email = ma.fields.String(required=True)
 
     class Meta:
         model = User

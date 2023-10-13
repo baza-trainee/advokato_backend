@@ -25,7 +25,7 @@ def test_get_user(
     data: dict = response.get_json()["user"]
     assert data["username"] == user.username
     assert data["email"] == user.email
-    assert data["active"] == user.active
+    assert data["is_active"] == user.is_active
 
 
 def test_put_user(
@@ -47,7 +47,7 @@ def test_put_user(
     data: dict = response.get_json()["user"]
     assert data["username"] == "updated"
     assert data["email"] == user.email
-    assert data["active"] == user.active
+    assert data["is_active"] == user.is_active
 
     db.session.refresh(user)
     assert pwd_context.verify("new_password", user.password)

@@ -30,6 +30,11 @@ from calendarapi.api.schemas import (
 from calendarapi.api.resources import (
     UserList,
     UserResource,
+    CityListResource,
+    SpecializationListResource,
+    LawyerResource,
+    LawyersListResource,
+    CityResource,
 )
 
 
@@ -58,7 +63,11 @@ def create_app(testing=False):
             "SpecializationSchema", schema=SpecializationSchema
         )
         apispec.spec.components.schema("AppointmentSchema", schema=AppointmentSchema)
-
+        apispec.spec.path(view=CityResource, app=app)
+        apispec.spec.path(view=CityListResource, app=app)
+        apispec.spec.path(view=LawyersListResource, app=app)
+        apispec.spec.path(view=LawyerResource, app=app)
+        apispec.spec.path(view=SpecializationListResource, app=app)
         apispec.spec.path(view=UserResource, app=app)
         apispec.spec.path(view=UserList, app=app)
         apispec.spec.path(view=login, app=app)

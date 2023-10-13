@@ -1,0 +1,7 @@
+flake8
+pytest
+pytest-flask
+pytest-runner
+pytest-factoryboy
+pytest-celery
+factory_boy
