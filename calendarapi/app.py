@@ -13,10 +13,19 @@ from calendarapi.auth.views import (
 from calendarapi.admin import (
     UserAdminModelView,
     CustomAdminIndexView,
+    CityAdminModelView,
     configure_login,
+    LawyerAdminModelView,
+    SheduleModelView,
+    SpecializationAdminModelView,
 )
+
 from calendarapi.models import (
     User,
+    City,
+    Lawyer,
+    Schedule,
+    Specialization,
 )
 from calendarapi.api.schemas import (
     UserSchema,
@@ -88,6 +97,12 @@ def register_adminsite(app):
     admin.add_view(
         UserAdminModelView(User, db.session, name="Користувачі", category="Керування")
     )
+    admin.add_view(CityAdminModelView(City, db.session, name="Місто"))
+    admin.add_view(
+        SpecializationAdminModelView(Specialization, db.session, name="Cпеціалізація")
+    )
+    admin.add_view(LawyerAdminModelView(Lawyer, db.session, name="Адвокати"))
+    admin.add_view(SheduleModelView(Schedule, db.session, name="Розклад"))
 
 
 def configure_extensions(app):

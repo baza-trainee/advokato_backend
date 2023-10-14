@@ -45,3 +45,9 @@ lint:
 
 clean:
 	sudo find . | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs sudo rm -rf
+
+local_dev:
+	flask db init
+	flask db migrate
+	flask db upgrade
+	flask init

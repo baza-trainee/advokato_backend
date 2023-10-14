@@ -93,7 +93,7 @@ def test_patch_existing_lawyer(
     assert updated_lawyer.surname == updated_data["surname"]
 
 
-def test_delete_film(
+def test_delete_lawyer(
     client: testing.FlaskClient,
     db: SQLAlchemy,
     lawyer: Lawyer,
