@@ -8,4 +8,4 @@ class City(db.Model):
     city_name = db.Column(db.String(100), unique=True, nullable=False)
 
     def __repr__(self):
-        return f"City: {self.city_name}"
+        return f"{self.city_name}"

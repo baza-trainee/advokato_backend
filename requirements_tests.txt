@@ -5,3 +5,4 @@ pytest-runner
 pytest-factoryboy
 pytest-celery
 factory_boy
+mock==5.1.0

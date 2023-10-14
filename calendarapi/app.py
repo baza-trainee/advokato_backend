@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import record_queries
 from flask_admin import Admin
+from flask_babel import Babel
 
 from calendarapi import api, auth, manage
 from calendarapi.extensions import apispec, db, jwt, migrate, celery
@@ -51,6 +52,7 @@ def create_app(testing=False):
     """Application factory, used to create application"""
     app = Flask("calendarapi")
     app.config.from_object("calendarapi.config")
+    Babel(app)
     if testing is True:
         app.config["TESTING"] = True
         app.config["CACHE_TYPE"] = "null"
@@ -61,7 +63,8 @@ def create_app(testing=False):
     configure_apispec(app)
     register_blueprints(app)
     init_celery(app)
-    app.after_request(sql_debug)
+    if app.config["DEBUG"]:
+        app.after_request(sql_debug)
 
     with app.app_context():
         apispec.spec.components.schema("UserSchema", schema=UserSchema)

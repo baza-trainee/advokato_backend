@@ -31,7 +31,7 @@ open-redis:
 test:
 	docker compose stop celery # stop celery to avoid conflicts with celery tests
 	docker compose start rabbitmq redis # ensuring both redis and rabbitmq are started
-	docker compose run --rm -v $(PWD)/tests:/code/tests:ro web tox -e test -- -v
+	docker compose run --rm -v "$(PWD)/tests:/code/tests:ro" web tox -e test -- -v
 	docker compose start celery
 
 tox:
@@ -47,7 +47,15 @@ clean:
 	sudo find . | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs sudo rm -rf
 
 local_dev:
+	sed -i 's/:\/\/admin:admin@postgres:/:\/\/admin:admin@localhost:/g' .flaskenv
+	@if [ -d "migrations" ]; then \
+		rm -r migrations; \
+	fi
+	docker compose down
+	docker compose build postgres pgadmin
+	docker compose up -d postgres pgadmin
 	flask db init
 	flask db migrate
 	flask db upgrade
 	flask init
+	flask --debug run

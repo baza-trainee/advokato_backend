@@ -9,5 +9,5 @@ class Schedule(db.Model):
         db.Integer,
         db.ForeignKey("lawyers.id"),
     )
-    date = db.Column(db.Date)
+    date = db.Column(db.Date, nullable=False)
     time = db.Column(db.ARRAY(db.Time))
