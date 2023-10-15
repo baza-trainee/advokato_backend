@@ -7,9 +7,9 @@ from calendarapi.api.resources import (
     UserList,
     CityListResource,
     SpecializationListResource,
-    LawyerResource,
     LawyersListResource,
-    CityResource,
+    ScheduleResource,
+    AppointmentResource,
 )
 
 
@@ -19,12 +19,12 @@ api = Api(blueprint)
 api.add_resource(UserResource, "/users/<int:user_id>", endpoint="user_by_id")
 api.add_resource(UserList, "/users", endpoint="users")
 api.add_resource(CityListResource, "/cities", endpoint="cities")
-api.add_resource(CityResource, "/city/<int:city_id>", endpoint="city_by_id")
 api.add_resource(
     SpecializationListResource, "/specialization", endpoint="specialization"
 )
-api.add_resource(LawyerResource, "/lawyer/<int:lawyer_id>", endpoint="lawyer_by_id")
 api.add_resource(LawyersListResource, "/lawyers", endpoint="lawyers")
+api.add_resource(ScheduleResource, "/schedule", endpoint="schedule")
+api.add_resource(AppointmentResource, "/appointment", endpoint="appointment")
 
 
 @blueprint.errorhandler(ValidationError)

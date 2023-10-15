@@ -9,5 +9,6 @@ RUN pip install -r requirements.txt
 RUN pip install -e .
 
 COPY calendarapi calendarapi/
+COPY tests tests/
 
 EXPOSE 5000

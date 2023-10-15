@@ -13,7 +13,7 @@ from pytest_factoryboy import register
 from tests.factories import (
     UserFactory,
     CityFactory,
-    LawyerFactory,
+    LawyersFactory,
     SpecializationFactory,
 )
 from calendarapi.app import init_celery
@@ -22,7 +22,7 @@ from flask.testing import FlaskClient
 
 register(UserFactory)
 register(CityFactory)
-register(LawyerFactory)
+register(LawyersFactory)
 register(SpecializationFactory)
 
 
