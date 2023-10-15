@@ -4,7 +4,10 @@ from calendarapi.extensions import fm, db, ma
 
 class LawyerSchema(fm.SQLAlchemyAutoSchema):
     city_id = ma.fields.Int(validate=ma.fields.validate.Range(min=1, max=3))
-    lawyer_mail = ma.fields.String(required=True, validate=ma.fields.validate.Email())
+    lawyer_mail = ma.fields.String(
+        required=True,
+        validate=ma.fields.validate.Email(error="Недопустимий формат пошти."),
+    )
     name = ma.fields.String(
         required=True, validate=ma.fields.validate.Length(min=3, max=30)
     )

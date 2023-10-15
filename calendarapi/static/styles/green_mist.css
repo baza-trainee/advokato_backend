@@ -29,11 +29,11 @@
   }
   .select2-search-choice {
     color: black!important;
-    background: rgb(235, 160, 160)!important;
+    background: rgb(255, 218, 218)!important;
     border-color: #575757!important;
   }
   .container{
-    max-width: 95%;
+    max-width: 90%;
   }
   .bg-dark {
     background-color: var(--header-background )!important;

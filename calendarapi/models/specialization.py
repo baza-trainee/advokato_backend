@@ -8,4 +8,4 @@ class Specialization(db.Model):
     specialization_name = db.Column(db.String(255), unique=True)
 
     def __repr__(self):
-        return f"Specialization: {self.specialization_name}"
+        return f"{self.specialization_name}"
