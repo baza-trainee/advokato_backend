@@ -1,6 +1,6 @@
 from typing import List
 
-from flask_restful import Resource
+from flask_restful import Resource, request
 from sqlalchemy.orm import joinedload
 
 from calendarapi.api.schemas import SpecializationSchema
@@ -15,9 +15,15 @@ class SpecializationListResource(Resource):
     ---
     get:
       tags:
-        - Lawyer
+        - Specialization
       summary: Get a list of specializations.
       description: Get a list of specializations.
+      parameters:
+        - in: query
+          name: city_id
+          required: true
+          type: integer
+          description: "City ID for filtering specializations"
       responses:
         200:
           description: List of specializations.
@@ -32,18 +38,23 @@ class SpecializationListResource(Resource):
                       type: integer
                     question:
                       type: string
-        404:
-          description: No specialization found.
+        400:
+          description: "City ID is required"
     """
 
     specialization_schema: SpecializationSchema = SpecializationSchema()
 
     def get(self):
-        specializations: List[Specialization] = (
-            db.session.query(Specialization)
-            .options(
-                joinedload(Specialization.lawyers).joinedload(Lawyer.specializations)
-            )
+        city_id = request.args.get("city_id")
+
+        if not city_id:
+            return {"message": "City ID is required"}, 400
+
+        specializations = (
+            db.session.query(Specialization.specialization_name, Specialization.id)
+            .join(Lawyer.specializations)
+            .filter(Lawyer.cities.any(id=city_id))
+            .distinct()
             .all()
         )
         return self.specialization_schema.dump(specializations, many=True), 200

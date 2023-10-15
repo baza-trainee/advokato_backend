@@ -21,3 +21,4 @@ psycopg2-binary==2.9.9
 flower==2.0.1
 Flask-Caching==2.1.0
 black
+factory_boy
