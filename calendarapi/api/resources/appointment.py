@@ -5,6 +5,7 @@ from calendarapi.api.schemas import AppointmentSchema, VisitorSchema
 from calendarapi.extensions import db, ma
 from calendarapi.models import Visitor, Appointment, Schedule
 from sqlalchemy import exc
+from calendarapi.services.send_email import send_email
 
 
 class AppointmentResource(Resource):
@@ -161,8 +162,17 @@ class AppointmentResource(Resource):
             lawyer_schedule.time.remove(
                 str(datetime.strptime(appointment_time, "%H:%M").time())
             )
-            db.session.commit()
 
+            # db.session.commit()
+            send_email(
+                existing_visitor.name,
+                existing_visitor.surname,
+                appointment.appointment_date,
+                appointment.appointment_time,
+                appointment.lawyer_id,
+                appointment.specialization_id,
+                existing_visitor.phone_number,
+            )
             return {"message": "Appointment created successfully"}, 201
 
         except exc.SQLAlchemyError as e:
