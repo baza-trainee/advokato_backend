@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import record_queries
 from flask_admin import Admin
-
+from flask_mail import Mail
 from calendarapi import api, auth, manage
 from calendarapi.extensions import apispec, db, jwt, migrate, celery
 from calendarapi.auth.views import (
@@ -61,6 +61,7 @@ def create_app(testing=False):
     configure_apispec(app)
     register_blueprints(app)
     init_celery(app)
+    configure_mails(app)
     app.after_request(sql_debug)
 
     with app.app_context():
@@ -170,3 +171,13 @@ def sql_debug(response):
         )
     )
     return response
+
+
+def configure_mails(app):
+    app.config["MAIL_SERVER"] = "outlook.office365.com"
+    app.config["MAIL_PORT"] = 587
+    app.config["MAIL_USERNAME"] = app.config.get("MAIL_USERNAME")
+    app.config["MAIL_PASSWORD"] = app.config.get("MAIL_PASSWORD")
+    app.config["MAIL_USE_TLS"] = True
+    app.config["MAIL_USE_SSL"] = False
+    Mail(app)
