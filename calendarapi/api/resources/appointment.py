@@ -1,10 +1,12 @@
 from datetime import datetime
+
 from flask_restful import Resource
 from flask import request
+from sqlalchemy import exc
+
 from calendarapi.api.schemas import AppointmentSchema, VisitorSchema
 from calendarapi.extensions import db, ma
-from calendarapi.models import Visitor, Appointment, Schedule
-from sqlalchemy import exc
+from calendarapi.models import Visitor, Appointment, Schedule, Lawyer, Specialization
 from calendarapi.services.send_email import send_email
 
 
@@ -95,19 +97,22 @@ class AppointmentResource(Resource):
     visitor_schema = VisitorSchema()
     appointment_schema = AppointmentSchema()
 
-    def get_lawyer_schedule(self, lawyer_id: int) -> Schedule:
-        lawyer_schedule = Schedule.query.filter_by(lawyer_id=lawyer_id).first()
+    def get_lawyer_name_and_specialization(self, lawyer_id: int, spec_id: int) -> tuple:
+        lawer_name = Lawyer.query.filter_by(id=lawyer_id).first()
+        specialization = Specialization.query.filter_by(id=spec_id).first()
+        return (lawer_name, specialization)
+
+    def get_lawyer_schedule(self, lawyer_id: int, date: str) -> Schedule:
+        lawyer_schedule = Schedule.query.filter_by(
+            lawyer_id=lawyer_id, date=date
+        ).first()
         return lawyer_schedule
 
     def is_time_available(
         self, lawyer_schedule: Schedule, date: str, time: str
     ) -> bool:
-        appointment_date = datetime.strptime(date, "%Y-%m-%d").date()
         appointment_time = datetime.strptime(time, "%H:%M").time()
-        if (
-            lawyer_schedule.date == appointment_date
-            and appointment_time in lawyer_schedule.time
-        ):
+        if lawyer_schedule.date == date and appointment_time in lawyer_schedule.time:
             return True
         return False
 
@@ -146,10 +151,13 @@ class AppointmentResource(Resource):
         existing_visitor = self.find_or_create_visitor(**visitor_data)
         appointment_date = validated_appointment_data.appointment_date
         appointment_time = validated_appointment_data.appointment_time
-        lawyer_schedule = self.get_lawyer_schedule(validated_appointment_data.lawyer_id)
-
+        lawyer_schedule = self.get_lawyer_schedule(
+            validated_appointment_data.lawyer_id, appointment_date
+        )
+        if lawyer_schedule is None:
+            return {"message": "Date not available for this lawyer"}, 400
         if not self.is_time_available(
-            lawyer_schedule, str(appointment_date), str(appointment_time)
+            lawyer_schedule, appointment_date, str(appointment_time)
         ):
             return {"message": "Time not available for this lawyer"}, 400
 
@@ -162,16 +170,19 @@ class AppointmentResource(Resource):
             lawyer_schedule.time.remove(
                 str(datetime.strptime(appointment_time, "%H:%M").time())
             )
-
-            # db.session.commit()
-            send_email(
-                existing_visitor.name,
-                existing_visitor.surname,
-                appointment.appointment_date,
-                appointment.appointment_time,
-                appointment.lawyer_id,
-                appointment.specialization_id,
-                existing_visitor.phone_number,
+            lawyer_data = self.get_lawyer_name_and_specialization(
+                lawyer_id=appointment.lawyer_id, spec_id=appointment.specialization_id
+            )
+            db.session.commit()
+            send_email.delay(
+                user_name=existing_visitor.name,
+                user_surname=existing_visitor.surname,
+                user_email=existing_visitor.email,
+                appointment_date=appointment.appointment_date,
+                appointment_time=appointment.appointment_time,
+                lawyer_name=str(lawyer_data[-2]),
+                specialization_name=str(lawyer_data[-1]),
+                phone_number=existing_visitor.phone_number,
             )
             return {"message": "Appointment created successfully"}, 201
 
