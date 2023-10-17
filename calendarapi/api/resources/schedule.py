@@ -44,13 +44,16 @@ class ScheduleResource(Resource):
         if not lawyer_id:
             return {"message": "Lawyer ID is required"}, 400
         lawyer_schedule = (
-            db.session.query(Schedule).filter_by(lawyer_id=lawyer_id).first()
+            db.session.query(Schedule).filter_by(lawyer_id=lawyer_id).all()
         )
         if not lawyer_schedule:
             return {"message": "No schedule found for the specified lawyer"}, 404
-        schedule_data = {
-            "date": lawyer_schedule.date,
-            "time": [time.strftime("%H:%M") for time in lawyer_schedule.time],
-            "lawyer_id": lawyer_schedule.lawyer_id,
-        }
-        return self.schedule_schema.dump(schedule_data), 200
+        output = [
+            {
+                "date": schedule.date,
+                "time": [time.strftime("%H:%M") for time in schedule.time],
+                "lawyer_id": schedule.lawyer_id,
+            }
+            for schedule in lawyer_schedule
+        ]
+        return self.schedule_schema.dump(output, many=True), 200

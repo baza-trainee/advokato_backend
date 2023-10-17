@@ -20,9 +20,24 @@
     --black-borders: #000000;
     --input-form-background: #aab4af;
   }
-
+  @font-face {
+      font-family: 'header_font';
+      src: url('/static/fonts/RussoOne-Regular.ttf') format('truetype');
+  }  
+  @font-face {
+    font-family: 'desc_font';
+    src: url('/static/fonts/Comfortaa-VariableFont_wght.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'table_font';
+    src: url('/static/fonts/Oswald-VariableFont_wght.ttf') format('truetype');
+  }
 /* Фон сайта и хедера */
   body {
+    background-image: url(/static/interface/table_back.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.9;
     background-color: var(--site-background);
     width: 100%;
     margin: 0;
@@ -39,6 +54,8 @@
     background-color: var(--header-background )!important;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    font-family: 'header_font', sans-serif;
+    text-transform: uppercase;
   }
   /* Table styles */
   .table {
@@ -57,10 +74,12 @@
     background-color: var(--table-header-background);
     color: var(--text-color);
     text-align: center;
-    font-weight: bold;
+    font-family: 'table_font', sans-serif;
+    font-size: 18px;
     border: 2px solid var(--table-border);
   }
   td {
+    font-family: 'desc_font', sans-serif;
     border: none;
     background-color: var(--table-background);
   }
@@ -201,6 +220,8 @@
   .dropdown-item, .dropdown-item:active {
     background-color: var(--dropdown-menu-background);
     color: var(--text-color);
+    font-family: "table_font";
+    font-style: normal;
   }
   .dropdown-menu {
     background-color: var(--dropdown-menu-background);
@@ -226,12 +247,13 @@
   .text-muted {
     color: var(--text-color);
   }
-
   /* navigations */
   .breadcrumb {
     background-color: var(--button);
   }
-
+  .navbar-dark .navbar-nav .nav-link {
+    margin-left: 5px;
+}
   .nav-tabs .nav-link {
     background-color: var(--button);
     border-top-left-radius: .25rem;
@@ -242,9 +264,12 @@
   }
   .nav-tabs {
     border-collapse: separate;
-    border-bottom: 1px solid var(--site-background);
+    border-bottom: none;
+    margin-bottom: 3px;
+    font-family: "table_font";
   }
   .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    font-family: "table_font";
     color: var(--text-color);
     background-color: var(--button);
     border-color: #dee2e600 #dee2e600 #573b3b00;

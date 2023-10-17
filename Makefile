@@ -1,6 +1,6 @@
-.PHONY: init init-migration build run db-migrate test tox
+.PHONY: init init-migration down build run db-migrate test tox
 
-init:  build run
+init: down build run
 	docker compose exec web flask db init
 	docker compose exec web flask db migrate
 	docker compose exec web flask db upgrade
@@ -9,6 +9,9 @@ init:  build run
 
 build:
 	docker compose build
+
+down:
+	docker compose down
 
 run:
 	docker compose up -d
