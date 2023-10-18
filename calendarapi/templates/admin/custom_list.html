@@ -52,14 +52,14 @@
     {% block model_menu_bar_after_filters %}{% endblock %}
     <form action="" method="post" class="nav-item dropdown ml-auto">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-            aria-expanded="false">
-            {{admin_view.current_city}}
-        </a>
-        <div class="dropdown-menu">
-            <input class="dropdown-item" type="submit" name="city" value="Усі міста" />
-            {% for city in admin_view.get_item() %}
-            <input class="dropdown-item" type="submit" name="city" value="{{city.city_name}}" />
-            {% endfor %}
-        </div>
-    </form>
+        aria-expanded="false">
+        {{admin_view.current_city}}
+    </a>
+    <div class="dropdown-menu">
+        <input class="dropdown-item" type="submit" name="city" value="Усі міста" />
+        {% for city in admin_view.get_item() %}
+        <input class="dropdown-item" type="submit" name="city" value="{{city.city_name}}" />
+        {% endfor %}
+    </div>
+</form>
     {% endblock %}

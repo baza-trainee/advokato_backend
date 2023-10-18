@@ -248,6 +248,10 @@
     color: var(--text-color);
   }
   /* navigations */
+  .select2-results .select2-highlighted{
+    background: #616161 !important;
+    color: #fff;
+}
   .breadcrumb {
     background-color: var(--button);
   }
@@ -303,6 +307,11 @@
     color: var(--text-color);
     background-color: var(--table-header-background);
     border-color: var(--header-background);
+  }
+  fieldset {
+    background: rgb(193, 193, 193);
+    border-color: var(--table-border);
+    border-radius: 5px;
   }
   .page-link {
     color: var(--header-background);

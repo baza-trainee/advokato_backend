@@ -9,7 +9,7 @@ from calendarapi.models import (
     City,
     Schedule,
 )
-from random import sample, randint
+from random import sample, randint, choice
 from tests.factories import LawyersFactory, ScheduleFactory
 from calendarapi.extensions import db
 
@@ -30,6 +30,10 @@ def init():
         City(city_name="Одеса"),
         City(city_name="Миколаїв"),
     ]
+
+    db.session.add_all(city_list)
+    db.session.flush()
+
     spec_list = [
         Specialization(specialization_name="Цивільна"),
         Specialization(specialization_name="Адміністративна"),
@@ -40,21 +44,29 @@ def init():
         Specialization(specialization_name="Порушення прав людини"),
     ]
 
-    fake_schedule: List[Schedule] = ScheduleFactory.create_batch(10)
-    fake_lawyers: List[Lawyer] = LawyersFactory.create_batch(10)
+    db.session.add_all(spec_list)
+    db.session.flush()
 
-    for lawyer, schedule in zip(fake_lawyers, fake_schedule):
-        lawyer.specializations = sample(spec_list, randint(1, 7))
-        lawyer.cities = list(sample(city_list, randint(1, 3)))
-        schedule.lawyer_id = randint(1, 10)
-        schedule.time = ["10:00", "11:00", "12:00", "13:00"]
-        lawyer.schedules = [schedule]
+    fake_schedule: List[Schedule] = ScheduleFactory.create_batch(1000)
+    fake_lawyers: List[Lawyer] = LawyersFactory.create_batch(100)
 
-    db.session.add_all([user, *city_list, *spec_list, *fake_lawyers, *fake_schedule])
+    for lawyer in fake_lawyers:
+        lawyer.cities = list(sample(city_list, randint(1, 2)))
+        lawyer.specializations = sample(spec_list, randint(1, 3))
+
+    db.session.add_all(fake_lawyers)
+    db.session.flush()
+
+    for schedule in fake_schedule:
+        lawyer = choice(fake_lawyers)
+        schedule.lawyers = [lawyer]
+        schedule.lawyer_id = lawyer.id
+        schedule.time = [f"{randint(9,18)}:00" for _ in range(4)]
+
+    db.session.add_all([*fake_schedule, user])
     db.session.commit()
+
     click.echo("created user admin")
-    click.echo(f"Added cities: Kyiv, Odesa, Mykolaiv")
-    click.echo(f"Added {len(fake_lawyers)} fake Lawyers")
-    click.echo(
-        "Added specializations: Цивільна, Адміністративна, Кримінальна, Сімейна, Військовий, Зруйноване майно, Порушення прав людини"
-    )
+    click.echo("Added fake cities")
+    click.echo("Added fake Lawyers")
+    click.echo("Added fake specializations")

@@ -56,5 +56,4 @@ class ScheduleFactory(factory.Factory):
     class Meta:
         model = Schedule
 
-    lawyer_id = factory.Faker("random_int", min=1, max=100)
     date = factory.Faker("date_between", start_date="today", end_date="+30d")
