@@ -3,6 +3,7 @@ import json
 
 from flask import Response, abort, request, redirect
 from flask_admin import expose
+from sqlalchemy import and_, or_
 from wtforms import DateField, ValidationError
 from wtforms.validators import DataRequired
 
@@ -83,19 +84,15 @@ class ScheduleModelView(AdminModelView):
         return redirect(f"?city={selected_city}")
 
     def get_query(self):
-        selected_city = request.args.get("city")
-
-        if selected_city and selected_city != "all":
+        self.selected_city = request.args.get("city")
+        if self.selected_city and self.selected_city != "all":
             self.query = db.session.query(Schedule).filter(
-                Schedule.lawyers.any(Lawyer.cities.any(City.city_name == selected_city))
+                Schedule.lawyers.any(
+                    Lawyer.cities.any(City.city_name == self.selected_city)
+                )
             )
         else:
             self.query = db.session.query(Schedule)
-
-        if selected_city and selected_city != "all":
-            self.selected_city = selected_city
-        else:
-            self.selected_city = selected_city
         return self.query
 
     @expose("/ajax/lookup/")
@@ -108,17 +105,31 @@ class ScheduleModelView(AdminModelView):
         loader = self._form_ajax_refs.get(name)
         if not loader:
             abort(404)
-        sql_query = loader.get_list(query, offset, limit)
-        if select_city is None:
-            data = [loader.format(m) for m in loader.get_list(query, offset, limit)]
-            return Response(json.dumps(data), mimetype="application/json")
 
-        lawyer_list_output = [
-            lawyer
-            for lawyer in sql_query
-            if select_city in [str(city) for city in lawyer.cities]
-        ]
-        data = [loader.format(lawyer) for lawyer in lawyer_list_output]
+        if select_city is None or select_city == "all":
+            data = [loader.format(m) for m in loader.get_list(query, offset, limit)]
+        else:
+            sql_query = (
+                db.session.query(Lawyer)
+                .filter(
+                    and_(
+                        Lawyer.cities.any(City.city_name == select_city),
+                        or_(
+                            Lawyer.name.ilike(f"%{query}%"),
+                            Lawyer.surname.ilike(f"%{query}%"),
+                        ),
+                    )
+                )
+                .offset(offset)
+                .limit(limit)
+            )
+            lawyer_list_output = [
+                lawyer
+                for lawyer in sql_query
+                if select_city in [str(city) for city in lawyer.cities]
+            ]
+            data = [loader.format(lawyer) for lawyer in lawyer_list_output]
+
         return Response(json.dumps(data), mimetype="application/json")
 
     column_labels = {
@@ -152,7 +163,7 @@ class ScheduleModelView(AdminModelView):
 
     form_ajax_refs = {
         "lawyers": {
-            "fields": ("id",),
+            "fields": ("name",),
             "placeholder": "Оберіть адвоката",
             "minimum_input_length": 0,
         },
