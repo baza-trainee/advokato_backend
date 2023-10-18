@@ -7,7 +7,7 @@ from calendarapi.admin.specialization import SpecializationAdminModelView
 from calendarapi.admin.user import UserAdminModelView
 from calendarapi.admin.city import CityAdminModelView
 from calendarapi.admin.lawyer import LawyerAdminModelView
-from calendarapi.admin.schedule import SheduleModelView
+from calendarapi.admin.schedule import ScheduleModelView
 
 __all__ = [
     "AdminModelView",
@@ -17,5 +17,5 @@ __all__ = [
     "CityAdminModelView",
     "SpecializationAdminModelView",
     "LawyerAdminModelView",
-    "SheduleModelView",
+    "ScheduleModelView",
 ]

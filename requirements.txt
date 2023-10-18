@@ -1,3 +1,5 @@
+# Flask_Admin from local distribution ¯\_(ツ)_/¯
+./custom_dist/Flask_Admin-1.6.1-py3-none-any.whl
 marshmallow==3.20.1
 flask==2.3.1
 flask-restful==0.3.10
@@ -5,9 +7,9 @@ flask-migrate==4.0.5
 flask-sqlalchemy==3.1.1
 flask-marshmallow==0.15.0
 flask-jwt-extended==4.5.3
-flask-admin==1.6.1
 flask_login==0.6.2
 Flask-Babel==4.0.0
+Flask-Mail==0.9.1
 Werkzeug==2.3.7
 marshmallow-sqlalchemy==0.29.0
 python-dotenv==1.0.0
@@ -22,4 +24,3 @@ flower==2.0.1
 Flask-Caching==2.1.0
 black
 factory_boy
-Flask-Mail

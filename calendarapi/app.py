@@ -3,6 +3,7 @@ from flask_sqlalchemy import record_queries
 from flask_admin import Admin
 from flask_babel import Babel
 from flask_mail import Mail
+
 from calendarapi import api, auth, manage
 from calendarapi.extensions import apispec, db, jwt, migrate, celery
 from calendarapi.auth.views import (
@@ -17,10 +18,9 @@ from calendarapi.admin import (
     CityAdminModelView,
     configure_login,
     LawyerAdminModelView,
-    SheduleModelView,
+    ScheduleModelView,
     SpecializationAdminModelView,
 )
-
 from calendarapi.models import (
     User,
     City,
@@ -37,7 +37,6 @@ from calendarapi.api.schemas import (
     AppointmentSchema,
     ScheduleSchema,
 )
-
 from calendarapi.api.resources import (
     UserList,
     UserResource,
@@ -108,7 +107,7 @@ def register_adminsite(app):
         SpecializationAdminModelView(Specialization, db.session, name="Cпеціалізація")
     )
     admin.add_view(LawyerAdminModelView(Lawyer, db.session, name="Адвокати"))
-    admin.add_view(SheduleModelView(Schedule, db.session, name="Розклад"))
+    admin.add_view(ScheduleModelView(Schedule, db.session, name="Розклад"))
 
 
 def configure_extensions(app):

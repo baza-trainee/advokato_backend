@@ -6,7 +6,9 @@ from calendarapi.admin.common import AdminModelView
 
 class UserAdminModelView(AdminModelView):
     form_extra_fields = {
-        "password": StringField("password", validators=[DataRequired()])
+        "password": StringField(
+            "password", validators=[DataRequired(message="Це поле обов'язкове.")]
+        )
     }
     form_columns = ["username", "email", "is_active", "password", "description"]
     column_list = ["username", "email", "is_active", "description"]

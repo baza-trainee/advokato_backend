@@ -1,5 +1,5 @@
+from wtforms import StringField
 from wtforms.validators import DataRequired, ValidationError
-
 from calendarapi.admin.common import AdminModelView
 from calendarapi.api.schemas import LawyerSchema
 
@@ -19,7 +19,21 @@ class LawyerAdminModelView(AdminModelView):
         "lawyer_mail": "Пошта",
         "cities": "Місто",
         "specializations": "Спеціалізації",
+        "specializations.specialization_name": "Спец...",
+        "cities.city_name": "Місто",
     }
+    column_sortable_list = [
+        "name",
+        "surname",
+        "lawyer_mail",
+    ]
+    column_searchable_list = [
+        "name",
+        "surname",
+        "lawyer_mail",
+        "cities.city_name",
+        "specializations.specialization_name",
+    ]
 
     column_list = [
         "name",
@@ -51,11 +65,11 @@ class LawyerAdminModelView(AdminModelView):
     form_args = {
         "specializations": {
             "label": "Спеціалізації",
-            "validators": [DataRequired()],
+            "validators": [DataRequired(message="Це поле обов'язкове.")],
         },
         "cities": {
             "label": "Місто",
-            "validators": [DataRequired()],
+            "validators": [DataRequired(message="Це поле обов'язкове.")],
         },
         "lawyer_mail": {
             "validators": [EmailValidator()],
