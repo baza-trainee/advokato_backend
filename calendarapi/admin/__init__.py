@@ -8,6 +8,8 @@ from calendarapi.admin.user import UserAdminModelView
 from calendarapi.admin.city import CityAdminModelView
 from calendarapi.admin.lawyer import LawyerAdminModelView
 from calendarapi.admin.schedule import ScheduleModelView
+from calendarapi.admin.appointment import AppointmentModelView
+from calendarapi.admin.visitor import VisitorModelView
 
 __all__ = [
     "AdminModelView",
@@ -18,4 +20,6 @@ __all__ = [
     "SpecializationAdminModelView",
     "LawyerAdminModelView",
     "ScheduleModelView",
+    "AppointmentModelView",
+    "VisitorModelView",
 ]

@@ -6,6 +6,7 @@ class Appointment(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     visitor_id = db.Column(db.Integer, db.ForeignKey("visitors.id"))
+    city_id = db.Column(db.Integer, db.ForeignKey("cities.id"))
     specialization_id = db.Column(db.Integer, db.ForeignKey("specializations.id"))
     lawyer_id = db.Column(db.Integer, db.ForeignKey("lawyers.id"))
     appointment_date = db.Column(db.Date)

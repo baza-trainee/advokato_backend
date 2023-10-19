@@ -20,6 +20,8 @@ from calendarapi.admin import (
     LawyerAdminModelView,
     ScheduleModelView,
     SpecializationAdminModelView,
+    AppointmentModelView,
+    VisitorModelView,
 )
 from calendarapi.models import (
     User,
@@ -27,6 +29,8 @@ from calendarapi.models import (
     Lawyer,
     Schedule,
     Specialization,
+    Appointment,
+    Visitor,
 )
 from calendarapi.api.schemas import (
     UserSchema,
@@ -64,8 +68,8 @@ def create_app(testing=False):
     configure_mails(app)
     register_blueprints(app)
     init_celery(app)
-    if app.config["DEBUG"]:
-        app.after_request(sql_debug)
+    # if app.config["DEBUG"]:
+    #     app.after_request(sql_debug)
 
     with app.app_context():
         apispec.spec.components.schema("UserSchema", schema=UserSchema)
@@ -108,6 +112,8 @@ def register_adminsite(app):
     )
     admin.add_view(LawyerAdminModelView(Lawyer, db.session, name="Адвокати"))
     admin.add_view(ScheduleModelView(Schedule, db.session, name="Розклад"))
+    admin.add_view(AppointmentModelView(Appointment, db.session, name="Записи"))
+    admin.add_view(VisitorModelView(Visitor, db.session, name="Клієнти"))
 
 
 def configure_extensions(app):

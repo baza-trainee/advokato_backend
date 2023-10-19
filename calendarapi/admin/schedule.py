@@ -56,7 +56,9 @@ def validate_lawyers_for_date(form, field):
     schedule_id = (
         form._obj.id if form._obj else None
     )  # _obj - old object from edit form
-    existing_schedule = Schedule.query.filter_by(lawyer_id=lawyer_id, date=date).first()
+    existing_schedule = Schedule.query.filter_by(
+        lawyer_id=lawyer_id, date=date
+    ).one_or_none()
 
     if existing_schedule and existing_schedule.id != schedule_id:
         raise ValidationError(
