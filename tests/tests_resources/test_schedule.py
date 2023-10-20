@@ -26,5 +26,4 @@ def test_get(
     db.session.commit()
 
     response = client.get(url_for("api.schedule", lawyer_id=1))
-    answer: List[dict] = response.get_json()
     assert response.status_code == 200
