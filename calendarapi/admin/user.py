@@ -1,33 +1,65 @@
-from wtforms.fields import StringField
-from wtforms.validators import DataRequired
+from flask_login import current_user
+from wtforms import EmailField, PasswordField
+from wtforms.validators import DataRequired, EqualTo, ValidationError
 
 from calendarapi.admin.common import AdminModelView
+from calendarapi.admin.common import AdminModelView
+from calendarapi.api.schemas import LawyerSchema
+
+
+class EmailValidator:
+    def __call__(self, form, field):
+        schema = LawyerSchema()
+        errors = schema.validate({"lawyer_mail": field.data})
+        if errors.get("lawyer_mail"):
+            raise ValidationError(errors["lawyer_mail"][0])
 
 
 class UserAdminModelView(AdminModelView):
-    form_extra_fields = {
-        "password": StringField(
-            "password", validators=[DataRequired(message="Це поле обов'язкове.")]
-        )
-    }
-    form_columns = ["username", "email", "is_active", "password", "description"]
-    column_list = ["username", "email", "is_active", "description"]
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_superuser
+
+    form_columns = [
+        "username",
+        "password",
+        "confirm_password",
+        "email",
+        "is_active",
+        "is_superuser",
+        "description",
+    ]
+    column_list = [
+        "username",
+        "email",
+        "description",
+        "is_active",
+        "is_superuser",
+    ]
     column_exclude_list = "password"
     column_labels = {
-        "email": "Email",
-        "password": "Пароль",
-        "is_active": "Активний",
-        "description": "Опис",
+        "email": "Пошта",
         "username": "Логін",
+        "description": "Опис",
+        "is_active": "Активний",
+        "is_superuser": "superuser",
     }
 
-    def on_model_change(self, form, model, is_created):
-        # If creating a new user, hash password
-        if is_created:
-            model.password = form.password.data
-        else:
-            # TODO
-            old_password = form.password.object_data
-            # If password has been changed, hash password
-            if not old_password == model.password:
-                model.password = form.password.data
+    form_extra_fields = {
+        "password": PasswordField(
+            "Пароль",
+            validators=[
+                DataRequired(message="Це поле обов'язкове."),
+                EqualTo("confirm_password", message="Паролі повинні співпадати"),
+            ],
+        ),
+        "confirm_password": PasswordField(
+            "Підтвердіть пароль",
+            validators=[
+                DataRequired(message="Це поле обов'язкове."),
+                EqualTo("password", message="Паролі повинні співпадати"),
+            ],
+        ),
+        "email": EmailField(
+            validators=[EmailValidator(), DataRequired("Це поле обов'язкове.")]
+        ),
+    }

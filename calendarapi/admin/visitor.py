@@ -21,13 +21,11 @@ class VisitorModelView(AdminModelView):
         "surname": "Прізвище",
         "phone_number": "Мобільний",
         "email": "Пошта",
+        "is_beneficiary": "Пільговик",
     }
 
-    # column_sortable_list = [
-    #     "lawyers.name",
-    # ]
-
-    # column_searchable_list = [
-    #     "lawyers.name",
-    #     "lawyers.surname",
-    # ]
+    column_formatters = {
+        "is_beneficiary": lambda view, context, model, name: "так"
+        if model.is_beneficiary
+        else "ні",
+    }

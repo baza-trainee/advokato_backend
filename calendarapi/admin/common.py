@@ -42,18 +42,19 @@ class LoginForm(form.Form):
         if user is None:
             raise validators.ValidationError("Невірний логін")
         # we're comparing hashes
-        salt = current_app.config.get("SECRET_KEY").encode("utf-8")
-        if not user.password == pwd_context.hash(self.password.data, salt=salt):
+        if not user.password == user.hash_password(self.password.data):
             raise validators.ValidationError("Невірний пароль")
 
         if not user.is_active:
             raise validators.ValidationError("Користувач не адміністратор")
 
     def get_user(self):
-        return db.session.query(User).filter_by(username=self.login.data).first()
+        return db.session.query(User).filter_by(username=self.login.data).one_or_none()
 
 
 class CustomAdminIndexView(AdminIndexView):
+    extra_css = AdminModelView.extra_css
+
     def is_visible(self):
         # This view won't appear in the menu structure
         return False
@@ -62,8 +63,6 @@ class CustomAdminIndexView(AdminIndexView):
     def index(self):
         if not login.current_user.is_authenticated:
             return redirect(url_for(".login_view"))
-
-        self.extra_css = AdminModelView.extra_css
 
         return super(CustomAdminIndexView, self).index()
 

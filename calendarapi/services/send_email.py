@@ -28,12 +28,12 @@ def send_email(
         user_email_msg.body = (
             f"Вітаю {visitor_name} {visitor_surname}!\n"
             f"У вас заплановано зустріч на {appointment_date} за темою: {specialization_name}.\n"
-            f"Юрист {lawyer_name} буде очікувати вас о {appointment_time} годині "
+            f"Юрист {lawyer_name} буде очікувати вас о {appointment_time} годині."
         )
         lawyer_email_msg.body = (
             f"Вітаю {lawyer_name}!\n"
             f"{visitor_name} {visitor_surname} залишив(ла) заявку на отримання консультації за темою: {specialization_name}.\n"
-            f"Зустріч заплановано на {appointment_date} о {appointment_time} годині."
+            f"Зустріч заплановано на {appointment_date} о {appointment_time} годині.\n"
             f"Телефон клієнта: {visitor_phone_number}"
         )
 

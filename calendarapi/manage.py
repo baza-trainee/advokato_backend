@@ -1,7 +1,10 @@
 from typing import List
 import click
+from random import sample, randint, choice
+
 from flask import current_app
 from flask.cli import with_appcontext
+
 from calendarapi.models import (
     Specialization,
     Lawyer,
@@ -9,7 +12,6 @@ from calendarapi.models import (
     City,
     Schedule,
 )
-from random import sample, randint, choice
 from tests.factories import LawyersFactory, ScheduleFactory
 from calendarapi.extensions import db
 
@@ -24,6 +26,7 @@ def init():
         email="admin@gmail.com",
         password=current_app.config["ADMIN_DEFAULT_PASSWORD"],
         is_active=True,
+        is_superuser=True,
     )
     city_list = [
         City(city_name="Київ"),
@@ -47,8 +50,8 @@ def init():
     db.session.add_all(spec_list)
     db.session.flush()
 
-    fake_schedule: List[Schedule] = ScheduleFactory.create_batch(10)
-    fake_lawyers: List[Lawyer] = LawyersFactory.create_batch(10)
+    fake_schedule: List[Schedule] = ScheduleFactory.create_batch(25)
+    fake_lawyers: List[Lawyer] = LawyersFactory.create_batch(25)
 
     for lawyer in fake_lawyers:
         lawyer.cities = list(sample(city_list, randint(1, 2)))
