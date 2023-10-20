@@ -32,6 +32,80 @@
     font-family: 'table_font';
     src: url('/static/fonts/Oswald-VariableFont_wght.ttf') format('truetype');
   }
+
+  /* validation error page */
+  form[action=""][class="admin-form"][method="POST"][enctype="multipart/form-data"] {
+    background: var(--modal-footer-header-body);
+    border-color: var(--table-border);
+    border-radius: 5px;
+    border: none;
+    padding: 16px;
+    margin-top: 10px;
+    width: 40%;
+    margin: 0 auto;
+    color: white;
+    font-size: 16px;
+    font-family: "desc_font", sans-serif;
+  }
+  input[name="_add_another"]{
+    display: none;
+  }
+  input[name="_continue_editing"]{
+    display: none;
+  }
+  div[class="col-md-offset-2 col-md-10 submit-row"]{
+    padding: 0;
+  }
+    ul.form-text.text-muted li {
+      color: red;
+  }
+  label[class="control-label"]{
+    font-family: "table_font";
+  }
+  input[class="form-control is-invalid"]{
+    font-family: "table_font", sans-serif;
+  }
+  /* login page */
+  label[for="password"]{
+    display: none;
+  }
+  label[for="login"]{
+    display: none;
+  }
+  input[name="login"] {
+    height: 40px;
+    width: 250px;
+    opacity: 0.4;
+    border-radius: 30px;
+    border: none;
+    font-size: 16px;
+    font-family: "desc_font", sans-serif;
+    text-align: center;
+    padding: 10px;
+    margin-top: 30px ;
+  }
+  input[type="password"] {
+    height: 40px;
+    width: 250px;
+    opacity: 0.4;
+    border-radius: 30px;
+    border: none;
+    font-size: 16px;
+    font-family: "desc_font", sans-serif;
+    text-align: center;
+    margin-top: 1px !important;
+    padding: 10px;
+    margin-bottom: 30px;
+  }
+  button[class="btn btn-dark"]{
+    font-family: "header_font", sans-serif;
+    text-transform: uppercase;
+    width: 250px;
+    height: 40px;
+    background-color: var(--header-background);
+    border-radius: 30px;
+    border: none;
+  }
 /* Фон сайта и хедера */
   body {
     background-image: url(/static/interface/table_back.jpg);
@@ -133,7 +207,9 @@
     color: var(--text-color);
   }
   .btn-primary {
-    background-color: var(--table-background);
+    font-family: "desc_font";
+    text-transform: lowercase;
+    background-color: var(--button-save);
     border-color: var(--table-border);
     color: var(--text-color);
     font-weight: bold;
@@ -144,8 +220,10 @@
     color: var(--text-color);
   }
   .btn-danger {
+    font-family: "desc_font";
+    text-transform: lowercase;
     color: var(--text-color);
-    background-color: var(--button);
+    background-color: var(--button-exit);
     border-color: var(--black-borders);
   }
   .btn-danger:hover {
@@ -180,6 +258,10 @@
   box-shadow: none;
 }
   /* modal window */
+  .modal-title {
+    margin: 0 auto;
+    font-family: "header_font";
+  }
   .modal-body {
     background-color: var(--modal-footer-header-body);
     color: var(--text-color);
@@ -191,9 +273,13 @@
     border-bottom: 1px solid #0080ff00;
   }
   .modal-content {
+    border-radius: 15px;
+    width: 50%;
+    margin: 0 auto;
     background-color: var(--form-background);
   }
   .modal-header .close {
+    margin: -16px;
     color: var(--button-exit);
   }
   .modal-footer {
@@ -201,17 +287,22 @@
     background-color: var(--modal-footer-header-body);
   }
   .modal-footer>:not(:first-child) {
+    font-family: "desc_font";
+    text-transform: lowercase;
     background-color: var(--button-exit);
-    border-color: var(--dropdown-border);
   }
   .modal-footer>:not(:last-child) {
+    font-family: "desc_font";
+    text-transform: lowercase;
     background-color: var(--button-save);
-    border-color:  var(--dropdown-border);
   }
   .fa_filter_container {
     display: none;
   }
-
+  input[type="text"]{
+    font-family: "desc_font";
+    font-size: 14px;
+  }
   /* dropdown menu */
   .dropdown-item.active, .dropdown-item:active {
     background-color: var(--button-hower);
@@ -290,6 +381,7 @@
   .form-control {
     height: calc(1.5em + .75rem + 6px);
     background-color: white;
+    opacity: 0.6;
     border: 1px solid var(--table-border);
   }
   .form-control {
@@ -308,10 +400,11 @@
     background-color: var(--table-header-background);
     border-color: var(--header-background);
   }
-  fieldset {
-    background: rgb(193, 193, 193);
-    border-color: var(--table-border);
-    border-radius: 5px;
+  .input-group-text {
+    border: none;
+    border-radius: 5px !important;
+    background-color: var(--button);
+    margin-left: 2px;
   }
   .page-link {
     color: var(--header-background);

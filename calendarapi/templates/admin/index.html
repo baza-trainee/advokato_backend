@@ -18,7 +18,7 @@
       }
     </style>
     {% else %}
-    <form method="POST" action="" style="text-align: center;">
+    <form method="POST" action="" style="text-align: center; margin-top: 50px">
       {{ form.hidden_tag() if form.hidden_tag }}
       {% for f in form if f.type != 'CSRFTokenField' %}
       {% if f.errors %}
@@ -28,9 +28,15 @@
         {% endfor %}
       </div>
       {% endif %}
-      <div class="form-group">
-        {{ f.label }}<br>
-        {{ f }}
+      <div class="form-group" >
+        {{ f.label }}
+        {% if f.name == 'login' %}
+          {{ f(placeholder="username") }}
+        {% elif f.name == 'password' %}
+          {{ f(placeholder="password") }}
+        {% else %}
+          {{ f }}
+        {% endif %}
       </div>
       {% endfor %}
       <button class="btn btn-dark" type="submit">Увійти</button>

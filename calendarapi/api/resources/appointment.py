@@ -178,14 +178,14 @@ class AppointmentResource(Resource):
             )
             db.session.commit()
             send_email.delay(
-                user_name=existing_visitor.name,
-                user_surname=existing_visitor.surname,
-                user_email=existing_visitor.email,
+                visitor_name=existing_visitor.name,
+                visitor_surname=existing_visitor.surname,
+                visitor_email=existing_visitor.email,
+                visitor_phone_number=existing_visitor.phone_number,
                 appointment_date=appointment.appointment_date,
-                appointment_time=appointment.appointment_time,
+                appointment_time=str(appointment.appointment_time)[:-3],
                 lawyer_name=str(lawyer_data[-2]),
                 specialization_name=str(lawyer_data[-1]),
-                phone_number=existing_visitor.phone_number,
             )
             return {"message": "Appointment created successfully"}, 201
 

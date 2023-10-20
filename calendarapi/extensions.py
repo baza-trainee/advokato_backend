@@ -10,6 +10,7 @@ from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 import marshmallow
 from celery import Celery
+from flask_mail import Mail
 
 # from flask_caching import Cache
 
@@ -25,3 +26,4 @@ apispec = APISpecExt()
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 celery = Celery()
 # cache = Cache()
+mail = Mail()
