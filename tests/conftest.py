@@ -39,11 +39,9 @@ def db(app: Flask) -> SQLAlchemy:
 
     with app.app_context():
         _db.create_all()
-
-    yield _db
-
-    _db.session.close()
-    _db.drop_all()
+        yield _db
+        _db.session.close()
+        _db.drop_all()
 
 
 @pytest.fixture

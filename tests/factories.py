@@ -1,8 +1,7 @@
 import random
-
 import factory
 import faker
-from calendarapi.models import User, City, Lawyer, Specialization, Schedule
+from calendarapi.models import User, City, Lawyer, Specialization, Schedule, Visitor
 
 
 fake = faker.Faker()
@@ -44,12 +43,14 @@ class SpecializationFactory(factory.Factory):
 
 
 class LawyersFactory(factory.Factory):
+    class Meta:
+        model = Lawyer
+
+    _id_counter = 0
+
     name = factory.Faker("first_name")
     surname = factory.Faker("last_name")
     lawyer_mail = factory.Faker("email")
-
-    class Meta:
-        model = Lawyer
 
 
 class ScheduleFactory(factory.Factory):
@@ -57,3 +58,18 @@ class ScheduleFactory(factory.Factory):
         model = Schedule
 
     date = factory.Faker("date_between", start_date="today", end_date="+30d")
+    time = ["09:00", "10:00", "11:00", "12:00"]
+
+
+class VisitorFactory(factory.Factory):
+    name = factory.Faker("first_name")
+    surname = factory.Faker("last_name")
+    email = factory.Faker("email")
+    is_beneficiary = False
+
+    class Meta:
+        model = Visitor
+
+    @factory.lazy_attribute
+    def phone_number(self):
+        return fake.unique.lexify(text="?" * 20)
