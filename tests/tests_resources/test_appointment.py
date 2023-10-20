@@ -39,6 +39,7 @@ def test_create_appointment(
         "appointment": {
             "appointment_date": str(schedules[0].date),
             "appointment_time": "10:00",
+            "city_id": 1,
             "lawyer_id": schedules[0].lawyer_id,
             "specialization_id": 1,
         },
