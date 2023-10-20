@@ -57,7 +57,7 @@
     </a>
     <div class="dropdown-menu">
         <input class="dropdown-item" type="submit" name="city" value="Усі міста" />
-        {% for city in admin_view.get_item() %}
+        {% for city in admin_view.get_cities() %}
         <input class="dropdown-item" type="submit" name="city" value="{{city.city_name}}" />
         {% endfor %}
     </div>

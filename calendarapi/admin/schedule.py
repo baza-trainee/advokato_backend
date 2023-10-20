@@ -1,9 +1,9 @@
 from datetime import datetime
 import json
 
-from flask import Response, abort, request, redirect
+from flask import Response, abort, request, redirect, url_for
 from flask_admin import expose
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, func, or_
 from wtforms import DateField, ValidationError
 from wtforms.validators import DataRequired
 
@@ -71,30 +71,45 @@ class ScheduleModelView(AdminModelView):
     list_template = "admin/custom_list.html"
     current_city = "Оберіть місто"
 
-    def get_item(self):
+    def _reset_current_city(self):
+        self.current_city = "Оберіть місто"
+
+    def get_cities(self):
         cities = db.session.query(City).all()
         return cities
 
-    @expose("/", methods=["GET", "POST"])
-    def test_view(self):
+    @expose("/", methods=["POST"])
+    def get_selected_city(self):
         selected_city = request.form.get("city")
-        if selected_city == "Усі міста":
-            self.current_city = "Оберіть місто"
-            selected_city = "all"
-        else:
-            self.current_city = selected_city
-        return redirect(f"?city={selected_city}")
+
+        if selected_city == "Усі міста" or not selected_city:
+            self._reset_current_city()
+            selected_city = None
+
+        self.current_city = selected_city
+        return redirect(
+            f"?city={selected_city}"
+            if selected_city
+            else url_for("schedule.get_selected_city")
+        )
 
     def get_query(self):
         self.selected_city = request.args.get("city")
-        if self.selected_city and self.selected_city != "all":
+        if self.selected_city:
             self.query = db.session.query(Schedule).filter(
                 Schedule.lawyers.any(
                     Lawyer.cities.any(City.city_name == self.selected_city)
                 )
             )
         else:
+            self._reset_current_city()
             self.query = db.session.query(Schedule)
+
+        if getattr(self, "sort_column", None) == "lawyers":
+            if self.sort_desc:
+                self.query = self.query.order_by(self.model.lawyer_id.desc())
+            else:
+                self.query = self.query.order_by(self.model.lawyer_id)
         return self.query
 
     @expose("/ajax/lookup/")
@@ -148,8 +163,28 @@ class ScheduleModelView(AdminModelView):
         "time",
     ]
 
+    def get_list(
+        self,
+        page,
+        sort_column,
+        sort_desc,
+        search,
+        filters,
+        execute=True,
+        page_size=None,
+    ):
+        if sort_column == "lawyers":
+            self.sort_column = sort_column
+            self.sort_desc = sort_desc
+            sort_column = None
+        return super().get_list(
+            page, sort_column, sort_desc, search, filters, execute, page_size
+        )
+
     column_sortable_list = [
-        "lawyers.name",
+        "id",
+        "lawyers",
+        "date",
     ]
 
     column_searchable_list = [
@@ -183,10 +218,6 @@ class ScheduleModelView(AdminModelView):
         else "",
     }
 
-    column_editable_list = [
-        "date",
-    ]
-
     form_args = {
         "lawyers": {
             "label": "Адвокат",
@@ -205,5 +236,6 @@ class ScheduleModelView(AdminModelView):
             for lawyer in form.data["lawyers"]:
                 model.lawyer_id = lawyer.id  # save to db
         if form.data["time"]:
-            res = _validate_time_format(form.data["time"])
+            res = list(set(_validate_time_format(form.data["time"])))
+            res.sort()
             model.time = res

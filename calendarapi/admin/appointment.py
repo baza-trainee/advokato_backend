@@ -1,10 +1,8 @@
 from datetime import datetime
 
 from calendarapi.admin.common import AdminModelView
-from calendarapi.models import Lawyer, City, Appointment
+from calendarapi.models import Lawyer, City, Specialization, Visitor
 from calendarapi.extensions import db
-from calendarapi.models.specialization import Specialization
-from calendarapi.models.visitor import Visitor
 
 
 class AppointmentModelView(AdminModelView):
@@ -63,12 +61,3 @@ class AppointmentModelView(AdminModelView):
             model.appointment_date, model.appointment_time
         ).strftime("%d/%m/%Y, %H:%M"),
     }
-
-    # column_sortable_list = [
-    #     "lawyers.name",
-    # ]
-
-    # column_searchable_list = [
-    #     "lawyers.name",
-    #     "lawyers.surname",
-    # ]

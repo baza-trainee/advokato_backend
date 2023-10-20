@@ -1,6 +1,5 @@
 # Flask_Admin from local distribution ¯\_(ツ)_/¯
 ./custom_dist/Flask_Admin-1.6.1-py3-none-any.whl
-marshmallow==3.20.1
 flask==2.3.1
 flask-restful==0.3.10
 flask-migrate==4.0.5
@@ -10,17 +9,19 @@ flask-jwt-extended==4.5.3
 flask_login==0.6.2
 Flask-Babel==4.0.0
 Flask-Mail==0.9.1
+Flask-Caching==2.1.0
 Werkzeug==2.3.7
+marshmallow==3.20.1
 marshmallow-sqlalchemy==0.29.0
 python-dotenv==1.0.0
+gunicorn==21.2.0
 passlib==1.7.4
 apispec[yaml]==6.3.0
 apispec-webframeworks==0.5.2
 tox==4.11.3
 celery[redis]==5.3.4
-gunicorn==21.2.0
 psycopg2-binary==2.9.9
 flower==2.0.1
-Flask-Caching==2.1.0
+tablib[all]==3.5.0
 black
 factory_boy

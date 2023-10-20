@@ -1,5 +1,6 @@
 from flask_restful import Resource
 from flask import request
+
 from calendarapi.api.schemas import ScheduleSchema
 from calendarapi.extensions import db, ma
 from calendarapi.models import Schedule
