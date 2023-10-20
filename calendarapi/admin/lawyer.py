@@ -13,6 +13,7 @@ class EmailValidator:
 
 
 class LawyerAdminModelView(AdminModelView):
+    can_set_page_size = True
     column_labels = {
         "name": "Ім'я",
         "surname": "Прізвище",

@@ -10,3 +10,6 @@ class Visitor(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     phone_number = db.Column(db.String(20), unique=True, nullable=False)
     is_beneficiary = db.Column(db.Boolean, default=False)
+
+    def __repr__(self) -> str:
+        return f"{self.name} {self.surname}"

@@ -12,6 +12,7 @@ class AppointmentSchema(fm.SQLAlchemyAutoSchema):
     lawyer_id = ma.fields.Integer(
         required=True, validate=ma.fields.validate.Range(min=1)
     )
+    city_id = ma.fields.Integer(required=True, validate=ma.fields.validate.Range(min=1))
     appointment_date = ma.fields.Date(required=True, format="%Y-%m-%d")
     appointment_time = ma.fields.String(
         required=True,

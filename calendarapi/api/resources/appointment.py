@@ -49,14 +49,17 @@ class AppointmentResource(Resource):
                 appointment:
                   type: object
                   required:
-                    - lawyer_id
+                    - city_id
                     - specialization_id
+                    - lawyer_id
                     - appointment_date
                     - appointment_time
                   properties:
-                    lawyer_id:
+                    city_id:
                       type: integer
                     specialization_id:
+                      type: integer
+                    lawyer_id:
                       type: integer
                     appointment_date:
                       type: string
