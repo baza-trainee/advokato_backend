@@ -50,20 +50,21 @@ services:
 
   celery:
     image: calendarapi
-    command: "celery -A calendarapi.celery_app:app worker"
+    command: "celery -A calendarapi.celery_app:app worker -B --loglevel=info"
     env_file:
       - ./.flaskenv
     volumes:
       - .:/code
     depends_on:
       - rabbitmq
+      - redis
     environment:
       - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq
       - CELERY_RESULT_BACKEND_URL=redis://redis
 
   flower:
     image: mher/flower
-    command: "celery --broker=amqp://guest:guest@rabbitmq flower"
+    command: "celery --broker=amqp://guest:guest@rabbitmq flower  --persistent=True"
     ports:
       - "5555:5555"
     depends_on:
