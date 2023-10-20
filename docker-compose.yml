@@ -14,6 +14,16 @@ services:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=calendarapi
 
+  postgres_test:
+    image: postgres:latest
+    container_name: postgres_test_db
+    ports:
+      - "5444:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=calendarapi_test
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin4

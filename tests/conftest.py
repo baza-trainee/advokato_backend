@@ -5,7 +5,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import pytest
 from dotenv import load_dotenv
-from datetime import date
 from calendarapi.models import User, City, Lawyer, Specialization
 from calendarapi.app import create_app
 from calendarapi.extensions import db as _db
@@ -15,15 +14,18 @@ from tests.factories import (
     CityFactory,
     LawyersFactory,
     SpecializationFactory,
+    VisitorFactory,
+    ScheduleFactory,
 )
 from calendarapi.app import init_celery
 from flask.testing import FlaskClient
-
 
 register(UserFactory)
 register(CityFactory)
 register(LawyersFactory)
 register(SpecializationFactory)
+register(VisitorFactory)
+register(ScheduleFactory)
 
 
 @pytest.fixture(scope="session")
@@ -33,17 +35,15 @@ def app() -> Flask:
     return app
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def db(app: Flask) -> SQLAlchemy:
     _db.app = app
 
     with app.app_context():
         _db.create_all()
-
-    yield _db
-
-    _db.session.close()
-    _db.drop_all()
+        yield _db
+        _db.session.close()
+        _db.drop_all()
 
 
 @pytest.fixture
@@ -118,7 +118,7 @@ def lawyer(db: SQLAlchemy, city) -> Lawyer:
         Specialization(specialization_name="Адміністративна"),
     ]
     lawyer = Lawyer(
-        city_id=1,
+        cities=1,
         lawyer_mail="emily@example.com",
         name="Emily",
         surname="string",
