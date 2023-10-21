@@ -34,6 +34,14 @@ def test_get_list_of_lawyers(
         db.session.add(lawyer)
         db.session.commit()
 
+    response = client.get(url_for("api.lawyers", specialization_id=1))
+    assert response.status_code == 400
+    assert response.get_json()["message"] == "City ID is required"
+
+    response = client.get(url_for("api.lawyers", city_id=1))
+    assert response.status_code == 400
+    assert response.get_json()["message"] == "Specialization ID is required"
+
     response = client.get(url_for("api.lawyers", city_id=1, specialization_id=1))
     assert response.status_code == 200
     data: List[Lawyer] = json.loads(response.data.decode("utf-8"))

@@ -32,5 +32,5 @@ def test_create_and_retrieve_token_blocklist(db: SQLAlchemy):
     assert retrieved_token_blocklist.jti, "token_jti"
     assert retrieved_token_blocklist.token_type, "access"
     assert retrieved_token_blocklist.user_id, 1
-    # assert retrieved_token_blocklist.revoked, False
+    assert not retrieved_token_blocklist.revoked
     assert retrieved_token_blocklist.expires, "2023-10-20 12:00:00"
