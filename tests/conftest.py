@@ -9,6 +9,7 @@ from calendarapi.models import User, City, Lawyer, Specialization
 from calendarapi.app import create_app
 from calendarapi.extensions import db as _db
 from pytest_factoryboy import register
+from click.testing import CliRunner
 from tests.factories import (
     UserFactory,
     CityFactory,
@@ -54,6 +55,11 @@ def admin_user(db: SQLAlchemy) -> User:
     db.session.commit()
 
     return user
+
+
+@pytest.fixture(scope="function")
+def runner(app):
+    return CliRunner()
 
 
 @pytest.fixture

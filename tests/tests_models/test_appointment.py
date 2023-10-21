@@ -10,8 +10,6 @@ def test_create_and_retrieve_appointment(
     visitor_factory: Factory,
     city_factory: Factory,
 ):
-    # Create a new Appointment object
-
     visitor = visitor_factory.create()
     lawyer = lawyers_factory.create()
     specs = specialization_factory.create()
@@ -42,3 +40,5 @@ def test_create_and_retrieve_appointment(
     assert retrieved_appointment.lawyer_id == 1
     assert str(retrieved_appointment.appointment_date) == "2023-10-20"
     assert str(retrieved_appointment.appointment_time) == "10:00:00"
+    expected_repr = f"Appointment: {retrieved_appointment.visitor_id}. Question: {retrieved_appointment.specialization_id}"
+    assert repr(appointment), expected_repr
