@@ -29,3 +29,10 @@ class VisitorModelView(AdminModelView):
         if model.is_beneficiary
         else "ні",
     }
+
+    column_searchable_list = [
+        "name",
+        "surname",
+        "email",
+        "phone_number",
+    ]

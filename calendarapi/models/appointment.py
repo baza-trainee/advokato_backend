@@ -5,12 +5,12 @@ class Appointment(db.Model):
     __tablename__ = "appointments"
 
     id = db.Column(db.Integer, primary_key=True)
-    visitor_id = db.Column(db.Integer, db.ForeignKey("visitors.id"))
-    city_id = db.Column(db.Integer, db.ForeignKey("cities.id"))
-    specialization_id = db.Column(db.Integer, db.ForeignKey("specializations.id"))
-    lawyer_id = db.Column(db.Integer, db.ForeignKey("lawyers.id"))
-    appointment_date = db.Column(db.Date)
-    appointment_time = db.Column(db.Time)
+    visitor = db.Column(db.String, nullable=False)
+    city = db.Column(db.String, nullable=False)
+    specialization = db.Column(db.String, nullable=False)
+    lawyer = db.Column(db.String, nullable=False)
+    appointment_date = db.Column(db.Date, nullable=False)
+    appointment_time = db.Column(db.Time, nullable=False)
 
     def __repr__(self):
-        return f"Appointment: {self.visitor_id}. Question: {self.specialization_id}"
+        return f"Appointment: {self.visitor}. Question: {self.specialization}"

@@ -1,12 +1,11 @@
 from typing import List
 
 from flask_restful import Resource
-from flask import request
-from sqlalchemy.exc import IntegrityError
+from flask_jwt_extended import jwt_required
 
 from calendarapi.api.schemas import CitySchema
-from calendarapi.extensions import db, ma
-from calendarapi.models import City, Lawyer
+from calendarapi.extensions import db
+from calendarapi.models import City
 
 
 class CityListResource(Resource):
@@ -37,6 +36,7 @@ class CityListResource(Resource):
           description: No city found.
     """
 
+    method_decorators = [jwt_required()]
     city_schema: CitySchema = CitySchema()
 
     def get(self):

@@ -207,7 +207,7 @@ class ScheduleModelView(AdminModelView):
     }
 
     form_extra_fields = {
-        "date": DateField(validators=[validate_lawyers_for_date]),
+        "date": DateField(label="Дата", validators=[validate_lawyers_for_date]),
     }
 
     column_formatters = {

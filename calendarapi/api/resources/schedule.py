@@ -1,8 +1,9 @@
-from flask_restful import Resource
 from flask import request
+from flask_restful import Resource
+from flask_jwt_extended import jwt_required
 
 from calendarapi.api.schemas import ScheduleSchema
-from calendarapi.extensions import db, ma
+from calendarapi.extensions import db
 from calendarapi.models import Schedule
 
 
@@ -38,6 +39,7 @@ class ScheduleResource(Resource):
           description: Schedule not found for the specified lawyer ID.
     """
 
+    method_decorators = [jwt_required()]
     schedule_schema: ScheduleSchema = ScheduleSchema()
 
     def get(self):
