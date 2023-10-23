@@ -59,7 +59,5 @@ class UserAdminModelView(AdminModelView):
                 EqualTo("password", message="Паролі повинні співпадати"),
             ],
         ),
-        "email": EmailField(
-            validators=[EmailValidator(), DataRequired("Це поле обов'язкове.")]
-        ),
+        "email": EmailField(label="Пошта", validators=[EmailValidator(), DataRequired("Це поле обов'язкове.")]),
     }

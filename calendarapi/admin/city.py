@@ -19,7 +19,7 @@ class CityAdminModelView(AdminModelView):
         )
         total_lawyers = len(lawyers)
         markup = f"<b style='font-size: 18px';>адвокатів у місті: {total_lawyers}</b>"
-        markup += "<hr>" if total_lawyers else ""
+        markup += "<hr style='background-color: #04202c;'>" if total_lawyers else ""
         markup += "<hr>".join(
             [
                 str(lawyer)
