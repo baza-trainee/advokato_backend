@@ -6,3 +6,4 @@ pytest-factoryboy
 pytest-celery
 factory_boy
 mock==5.1.0
+coverage==7.3.2

@@ -17,6 +17,10 @@ def test_get(
     db.session.add_all(lawyers_list)
     db.session.flush()
 
+    response = client.get(url_for("api.schedule", lawyer_id=1))
+    assert response.status_code == 404
+    assert response.get_json()["message"] == "No schedule found for the specified lawyer"
+
     i = 0
     for schedule in schedules:
         i += 1
@@ -25,5 +29,10 @@ def test_get(
 
     db.session.commit()
 
+    response = client.get(url_for("api.schedule"))
+    assert response.status_code == 400
+    assert response.get_json()["message"] == "Lawyer ID is required"
+
     response = client.get(url_for("api.schedule", lawyer_id=1))
     assert response.status_code == 200
+
