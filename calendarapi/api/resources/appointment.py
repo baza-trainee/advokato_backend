@@ -1,12 +1,20 @@
 from datetime import datetime
 
-from flask_restful import Resource
 from flask import request
+from flask_restful import Resource
+from flask_jwt_extended import jwt_required
 from sqlalchemy import exc
 
 from calendarapi.api.schemas import AppointmentSchema, VisitorSchema
 from calendarapi.extensions import db, ma
-from calendarapi.models import Visitor, Appointment, Schedule, Lawyer, Specialization
+from calendarapi.models import (
+    Visitor,
+    Appointment,
+    Schedule,
+    Lawyer,
+    Specialization,
+    City,
+)
 from calendarapi.services.send_email import send_email
 
 
@@ -97,13 +105,9 @@ class AppointmentResource(Resource):
                     type: string
     """
 
+    method_decorators = [jwt_required()]
     visitor_schema = VisitorSchema()
     appointment_schema = AppointmentSchema()
-
-    def get_lawyer_name_and_specialization(self, lawyer_id: int, spec_id: int) -> tuple:
-        lawer_name = Lawyer.query.filter_by(id=lawyer_id).first()
-        specialization = Specialization.query.filter_by(id=spec_id).first()
-        return (lawer_name, specialization)
 
     def get_lawyer_schedule(self, lawyer_id: int, date: str) -> Schedule:
         lawyer_schedule = Schedule.query.filter_by(
@@ -141,22 +145,41 @@ class AppointmentResource(Resource):
         try:
             validated_visitor_data: Visitor = self.visitor_schema.load(visitor_data)
             validated_appointment_data: Appointment = self.appointment_schema.load(
-                appointment_data
+                {
+                    "city": str(
+                        db.session.query(City)
+                        .filter(City.id == appointment_data.get("city_id"))
+                        .one_or_none()
+                    ),
+                    "specialization": str(
+                        db.session.query(Specialization)
+                        .filter(
+                            Specialization.id
+                            == appointment_data.get("specialization_id")
+                        )
+                        .one_or_none()
+                    ),
+                    "lawyer": str(
+                        db.session.query(Lawyer)
+                        .filter(Lawyer.id == appointment_data.get("lawyer_id"))
+                        .one_or_none()
+                    ),
+                    "appointment_date": appointment_data.get("appointment_date"),
+                    "appointment_time": appointment_data.get("appointment_time"),
+                }
             )
         except ma.ValidationError as e:
             return {"message": e.messages}, 400
-
-        visitor_data: dict = self.visitor_schema.dump(validated_visitor_data)
-        appointment_data: dict = self.appointment_schema.dump(
-            validated_appointment_data
-        )
-
-        existing_visitor = self.find_or_create_visitor(**visitor_data)
         appointment_date = validated_appointment_data.appointment_date
         appointment_time = validated_appointment_data.appointment_time
         lawyer_schedule = self.get_lawyer_schedule(
-            validated_appointment_data.lawyer_id, appointment_date
+            appointment_data.get("lawyer_id"), appointment_date
         )
+        appointment_data: dict = self.appointment_schema.dump(
+            validated_appointment_data
+        )
+        visitor_data: dict = self.visitor_schema.dump(validated_visitor_data)
+        existing_visitor = self.find_or_create_visitor(**visitor_data)
         if lawyer_schedule is None:
             return {"message": "Date not available for this lawyer"}, 400
         if not self.is_time_available(
@@ -165,16 +188,11 @@ class AppointmentResource(Resource):
             return {"message": "Time not available for this lawyer"}, 400
 
         try:
-            appointment = Appointment(
-                visitor_id=existing_visitor.id, **appointment_data
-            )
+            appointment = Appointment(visitor=str(existing_visitor), **appointment_data)
             db.session.add(appointment)
             lawyer_schedule.time = [str(t) for t in lawyer_schedule.time]
             lawyer_schedule.time.remove(
                 str(datetime.strptime(appointment_time, "%H:%M").time())
-            )
-            lawyer_data = self.get_lawyer_name_and_specialization(
-                lawyer_id=appointment.lawyer_id, spec_id=appointment.specialization_id
             )
             db.session.commit()
             send_email.delay(
@@ -184,8 +202,8 @@ class AppointmentResource(Resource):
                 visitor_phone_number=existing_visitor.phone_number,
                 appointment_date=appointment.appointment_date,
                 appointment_time=str(appointment.appointment_time)[:-3],
-                lawyer_name=str(lawyer_data[-2]),
-                specialization_name=str(lawyer_data[-1]),
+                lawyer_name=appointment.lawyer,
+                specialization_name=appointment.specialization,
             )
             return {"message": "Appointment created successfully"}, 201
 

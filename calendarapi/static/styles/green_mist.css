@@ -617,6 +617,7 @@ body {
   background: var(--table-background);
   border-width: 1.5px;
   border-color: var(--table-border);
+  font-family: "table_font";
 }
 
 .page-link:hover {

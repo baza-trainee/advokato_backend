@@ -6,13 +6,9 @@ time_pattern = r"^(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$"
 
 
 class AppointmentSchema(fm.SQLAlchemyAutoSchema):
-    specialization_id = ma.fields.Integer(
-        required=True, validate=ma.fields.validate.Range(min=1)
-    )
-    lawyer_id = ma.fields.Integer(
-        required=True, validate=ma.fields.validate.Range(min=1)
-    )
-    city_id = ma.fields.Integer(required=True, validate=ma.fields.validate.Range(min=1))
+    city = ma.fields.String(required=True)
+    specialization = ma.fields.String(required=True)
+    lawyer = ma.fields.String(required=True)
     appointment_date = ma.fields.Date(required=True, format="%Y-%m-%d")
     appointment_time = ma.fields.String(
         required=True,
@@ -23,7 +19,10 @@ class AppointmentSchema(fm.SQLAlchemyAutoSchema):
 
     class Meta:
         model = Appointment
-        exclude = ["id", "visitor_id"]
+        exclude = [
+            "id",
+            "visitor",
+        ]
         include_fk = True
         load_instance = True
         sqla_session = db.session

@@ -64,7 +64,7 @@ def init():
         lawyer = choice(fake_lawyers)
         schedule.lawyers = [lawyer]
         schedule.lawyer_id = lawyer.id
-        schedule.time = ['10:00', '11:00', '12:00', '14:00']
+        schedule.time = ["10:00", "11:00", "12:00", "14:00"]
 
     db.session.add_all([*fake_schedule, user])
     db.session.commit()

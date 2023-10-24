@@ -76,5 +76,8 @@ class LawyerAdminModelView(AdminModelView):
     }
 
     form_extra_fields = {
-        "lawyer_mail": EmailField(validators=[EmailValidator(), DataRequired("Це поле обов'язкове.")]),
+        "lawyer_mail": EmailField(
+            label="Пошта",
+            validators=[EmailValidator(), DataRequired("Це поле обов'язкове.")],
+        ),
     }

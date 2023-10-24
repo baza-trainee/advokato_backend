@@ -33,7 +33,6 @@ from calendarapi.models import (
     Visitor,
 )
 from calendarapi.api.schemas import (
-    UserSchema,
     VisitorSchema,
     CitySchema,
     LawyerSchema,
@@ -42,8 +41,6 @@ from calendarapi.api.schemas import (
     ScheduleSchema,
 )
 from calendarapi.api.resources import (
-    UserList,
-    UserResource,
     CityListResource,
     SpecializationListResource,
     LawyersListResource,
@@ -72,7 +69,6 @@ def create_app(testing=False):
     #     app.after_request(sql_debug)
 
     with app.app_context():
-        apispec.spec.components.schema("UserSchema", schema=UserSchema)
         apispec.spec.components.schema("VisitorSchema", schema=VisitorSchema)
         apispec.spec.components.schema("CitySchema", schema=CitySchema)
         apispec.spec.components.schema("LawyerSchema", schema=LawyerSchema)
@@ -86,8 +82,6 @@ def create_app(testing=False):
         apispec.spec.path(view=CityListResource, app=app)
         apispec.spec.path(view=LawyersListResource, app=app)
         apispec.spec.path(view=SpecializationListResource, app=app)
-        apispec.spec.path(view=UserResource, app=app)
-        apispec.spec.path(view=UserList, app=app)
         apispec.spec.path(view=login, app=app)
         apispec.spec.path(view=refresh, app=app)
         apispec.spec.path(view=revoke_access_token, app=app)
