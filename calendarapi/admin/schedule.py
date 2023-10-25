@@ -3,10 +3,10 @@ import json
 
 from flask import Response, abort, request, redirect, url_for
 from flask_admin import expose
+from flask_admin.form.validators import CustomFieldListInputRequired
 from sqlalchemy import and_, func, or_
 from wtforms import DateField, ValidationError
 from wtforms.validators import DataRequired
-
 from calendarapi.admin.common import AdminModelView
 from calendarapi.models.city import City
 from calendarapi.models.lawyer import Lawyer
@@ -114,7 +114,7 @@ class ScheduleModelView(AdminModelView):
 
     @expose("/ajax/lookup/")
     def ajax_lookup(self):
-        select_city = self.selected_city  # select city from path args
+        selected_city = self.selected_city  # select city from path args
         name = request.args.get("name")
         query = request.args.get("query")
         offset = request.args.get("offset", type=int)
@@ -123,14 +123,14 @@ class ScheduleModelView(AdminModelView):
         if not loader:
             abort(404)
 
-        if select_city is None or select_city == "all":
+        if selected_city is None or selected_city == "all":
             data = [loader.format(m) for m in loader.get_list(query, offset, limit)]
         else:
             sql_query = (
                 db.session.query(Lawyer)
                 .filter(
                     and_(
-                        Lawyer.cities.any(City.city_name == select_city),
+                        Lawyer.cities.any(City.city_name == selected_city),
                         or_(
                             Lawyer.name.ilike(f"%{query}%"),
                             Lawyer.surname.ilike(f"%{query}%"),
@@ -143,7 +143,7 @@ class ScheduleModelView(AdminModelView):
             lawyer_list_output = [
                 lawyer
                 for lawyer in sql_query
-                if select_city in [str(city) for city in lawyer.cities]
+                if selected_city in [str(city) for city in lawyer.cities]
             ]
             data = [loader.format(lawyer) for lawyer in lawyer_list_output]
 
@@ -173,6 +173,9 @@ class ScheduleModelView(AdminModelView):
         execute=True,
         page_size=None,
     ):
+        selected_city = request.args.get("city")
+        if selected_city and selected_city != "all":
+            filters = [(9, "Cities / City Name", selected_city)]
         if sort_column == "lawyers":
             self.sort_column = sort_column
             self.sort_desc = sort_desc
@@ -227,7 +230,10 @@ class ScheduleModelView(AdminModelView):
             ],
         },
         "time": {
-            "validators": [validate_time_format],
+            "validators": [
+                CustomFieldListInputRequired(),
+                validate_time_format,
+            ],
         },
     }
 

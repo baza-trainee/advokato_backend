@@ -19,7 +19,9 @@ def test_get(
 
     response = client.get(url_for("api.schedule", lawyer_id=1))
     assert response.status_code == 404
-    assert response.get_json()["message"] == "No schedule found for the specified lawyer"
+    assert (
+        response.get_json()["message"] == "No schedule found for the specified lawyer"
+    )
 
     i = 0
     for schedule in schedules:
@@ -35,4 +37,3 @@ def test_get(
 
     response = client.get(url_for("api.schedule", lawyer_id=1))
     assert response.status_code == 200
-

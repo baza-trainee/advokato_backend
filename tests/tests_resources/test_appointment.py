@@ -129,7 +129,8 @@ def test_create_appointment_correct(
 
         # Retrieve the visitor from the database
         retrieved_visitor = (
-            db.session.query(Visitor).filter_by(email=visitor.email).first())
+            db.session.query(Visitor).filter_by(email=visitor.email).first()
+        )
         assert retrieved_visitor is not None
 
         assert retrieved_visitor.name == visitor.name
