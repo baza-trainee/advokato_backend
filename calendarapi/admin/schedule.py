@@ -66,6 +66,12 @@ def validate_lawyers_for_date(form, field):
         )
 
 
+def validate_date_not_lower_than_current(form, field):
+    current_date = datetime.now().date()
+    if field.data < current_date:
+        raise ValidationError("Оберіть вірну дату.")
+
+
 class ScheduleModelView(AdminModelView):
     can_set_page_size = True
     list_template = "admin/custom_list.html"
@@ -210,7 +216,13 @@ class ScheduleModelView(AdminModelView):
     }
 
     form_extra_fields = {
-        "date": DateField(label="Дата", validators=[validate_lawyers_for_date]),
+        "date": DateField(
+            label="Дата",
+            validators=[
+                validate_lawyers_for_date,
+                validate_date_not_lower_than_current,
+            ],
+        ),
     }
 
     column_formatters = {
