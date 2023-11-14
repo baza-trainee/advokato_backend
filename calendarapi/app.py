@@ -3,6 +3,7 @@ from flask_sqlalchemy import record_queries
 from flask_admin import Admin
 from flask_babel import Babel
 from flask_mail import Mail
+from markupsafe import Markup
 
 from calendarapi import api, auth, manage
 from calendarapi.extensions import apispec, db, jwt, migrate, celery
@@ -88,11 +89,13 @@ def create_app(testing=False):
         apispec.spec.path(view=revoke_refresh_token, app=app)
     return app
 
-
 def register_adminsite(app):
+    base_url = app.config["MAIN_PAGE_URL"]
+    header = f'<a href="{base_url}" title="На домашню сторінку Status-AC">\
+               <img src="/static/interface/admin_logo.png" height="45px" width="140px" alt="admin_logo" style="margin-right: 30px;"></a>'
     admin = Admin(
         app,
-        name="CalendarAdmin",
+        Markup(header),
         index_view=CustomAdminIndexView(),
         base_template="master.html",
         template_mode="bootstrap4",
