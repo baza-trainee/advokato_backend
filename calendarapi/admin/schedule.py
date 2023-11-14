@@ -68,7 +68,7 @@ def validate_lawyers_for_date(form, field):
 
 def validate_date_not_lower_than_current(form, field):
     current_date = datetime.now().date()
-    if field.data < current_date:
+    if not field.data or field.data < current_date:
         raise ValidationError("Оберіть вірну дату.")
 
 
@@ -222,6 +222,7 @@ class ScheduleModelView(AdminModelView):
                 validate_lawyers_for_date,
                 validate_date_not_lower_than_current,
             ],
+            default=datetime.now().date()
         ),
     }
 

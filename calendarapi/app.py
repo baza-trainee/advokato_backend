@@ -92,7 +92,7 @@ def create_app(testing=False):
 def register_adminsite(app):
     base_url = app.config["MAIN_PAGE_URL"]
     header = f'<a href="{base_url}" title="На домашню сторінку Status-AC">\
-               <img src="/static/interface/admin_logo.png" height="45px" width="140px" alt="admin_logo" style="margin-right: 30px;"></a>'
+               <img src="/static/interface/admin_logo.png" height="40px" width="140px" alt="admin_logo" style="margin-right: 30px;"></a>'
     admin = Admin(
         app,
         Markup(header),
