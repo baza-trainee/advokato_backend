@@ -45,7 +45,9 @@ def _validate_time_format(time_list):
         return res
 
     except ValueError:
-        raise ValidationError("Невірний формат. Приймається час у вигляді 'HH:MM:SS' або 'HH:MM' або 'HH'.")
+        raise ValidationError(
+            "Невірний формат. Приймається час у вигляді 'HH:MM:SS' або 'HH:MM' або 'HH'."
+        )
 
 
 def validate_lawyers_for_date(form, field):
@@ -53,11 +55,17 @@ def validate_lawyers_for_date(form, field):
 
     lawyer_id = form.data["lawyers"][0].id if lawyers else None
     date = form.data.get("date")
-    schedule_id = form._obj.id if form._obj else None  # _obj - old object from edit form
-    existing_schedule = Schedule.query.filter_by(lawyer_id=lawyer_id, date=date).one_or_none()
+    schedule_id = (
+        form._obj.id if form._obj else None
+    )  # _obj - old object from edit form
+    existing_schedule = Schedule.query.filter_by(
+        lawyer_id=lawyer_id, date=date
+    ).one_or_none()
 
     if existing_schedule and existing_schedule.id != schedule_id:
-        raise ValidationError(f"У {existing_schedule.lawyers[0]} вже є створена запис на {date}")
+        raise ValidationError(
+            f"У {existing_schedule.lawyers[0]} вже є створена запис на {date}"
+        )
 
 
 def validate_date_not_lower_than_current(form, field):
@@ -87,12 +95,20 @@ class ScheduleModelView(AdminModelView):
             selected_city = None
 
         self.current_city = selected_city
-        return redirect(f"?city={selected_city}" if selected_city else url_for("schedule.get_selected_city"))
+        return redirect(
+            f"?city={selected_city}"
+            if selected_city
+            else url_for("schedule.get_selected_city")
+        )
 
     def get_query(self):
         self.selected_city = request.args.get("city")
         if self.selected_city:
-            self.query = db.session.query(Schedule).filter(Schedule.lawyers.any(Lawyer.cities.any(City.city_name == self.selected_city)))
+            self.query = db.session.query(Schedule).filter(
+                Schedule.lawyers.any(
+                    Lawyer.cities.any(City.city_name == self.selected_city)
+                )
+            )
         else:
             self._reset_current_city()
             self.query = db.session.query(Schedule)
@@ -126,7 +142,11 @@ class ScheduleModelView(AdminModelView):
                 .offset(offset)
                 .limit(limit)
             )
-            lawyer_list_output = [lawyer for lawyer in sql_query if selected_city in [str(city) for city in lawyer.cities]]
+            lawyer_list_output = [
+                lawyer
+                for lawyer in sql_query
+                if selected_city in [str(city) for city in lawyer.cities]
+            ]
             data = [loader.format(lawyer) for lawyer in lawyer_list_output]
 
         return Response(json.dumps(data), mimetype="application/json")
@@ -155,9 +175,20 @@ class ScheduleModelView(AdminModelView):
         execute=True,
         page_size=None,
     ):
-        return super().get_list(page, sort_column, sort_desc, search, filters, execute, page_size)
+        return super().get_list(
+            page, sort_column, sort_desc, search, filters, execute, page_size
+        )
 
-    def get_list(self, page, sort_column, sort_desc, search, filters, execute=True, page_size=None):
+    def get_list(
+        self,
+        page,
+        sort_column,
+        sort_desc,
+        search,
+        filters,
+        execute=True,
+        page_size=None,
+    ):
         selected_city = request.args.get("city")
 
         # Will contain join paths with optional aliased object
@@ -176,16 +207,26 @@ class ScheduleModelView(AdminModelView):
 
         # Apply search criteria
         if self._search_supported and search:
-            query, count_query, joins, count_joins = self._apply_search(query, count_query, joins, count_joins, search)
+            query, count_query, joins, count_joins = self._apply_search(
+                query, count_query, joins, count_joins, search
+            )
 
         # Apply filters
         if selected_city and selected_city != "all":
             count_query = (
                 self.session.query(func.count("*"))
                 .select_from(self.model)
-                .filter(Schedule.lawyers.any(Lawyer.cities.any(City.city_name == self.selected_city)))
+                .filter(
+                    Schedule.lawyers.any(
+                        Lawyer.cities.any(City.city_name == self.selected_city)
+                    )
+                )
             )
-            query = query.filter(Schedule.lawyers.any(Lawyer.cities.any(City.city_name == self.selected_city)))
+            query = query.filter(
+                Schedule.lawyers.any(
+                    Lawyer.cities.any(City.city_name == self.selected_city)
+                )
+            )
 
         # Calculate number of rows if necessary
         count = count_query.scalar() if count_query else None
@@ -254,7 +295,11 @@ class ScheduleModelView(AdminModelView):
     }
 
     column_formatters = {
-        "time": lambda view, context, model, name: [item.strftime("%H:%M") for item in model.time] if model.time else "",
+        "time": lambda view, context, model, name: [
+            item.strftime("%H:%M") for item in model.time
+        ]
+        if model.time
+        else "",
     }
 
     form_args = {

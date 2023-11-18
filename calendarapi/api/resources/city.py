@@ -1,6 +1,7 @@
 from typing import List
 
 from flask_restful import Resource
+
 # from flask_jwt_extended import jwt_required
 
 from calendarapi.api.schemas import CitySchema

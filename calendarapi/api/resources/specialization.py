@@ -1,4 +1,5 @@
 from flask_restful import Resource, request
+
 # from flask_jwt_extended import jwt_required
 
 from calendarapi.api.schemas import SpecializationSchema
