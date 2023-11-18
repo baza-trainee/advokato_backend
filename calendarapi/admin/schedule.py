@@ -222,7 +222,7 @@ class ScheduleModelView(AdminModelView):
                 validate_lawyers_for_date,
                 validate_date_not_lower_than_current,
             ],
-            default=datetime.now().date(),
+            default=datetime.now().date()
         ),
     }
 

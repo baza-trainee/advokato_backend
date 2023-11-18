@@ -1,6 +1,6 @@
-from calendarapi.extensions import celery
+# from calendarapi.extensions import celery
 
 
-@celery.task
+# @celery.task
 def dummy_task():
     return "OK"
