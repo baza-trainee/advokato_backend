@@ -5,20 +5,21 @@ from flask_babel import Babel
 from flask_mail import Mail
 from markupsafe import Markup
 
+from flask_cors import CORS
 from calendarapi import api, auth, manage
 from calendarapi.extensions import (
     apispec,
     db,
-    jwt,
     migrate,
+    # jwt,
     # celery,
 )
-from calendarapi.auth.views import (
-    login,
-    refresh,
-    revoke_access_token,
-    revoke_refresh_token,
-)
+# from calendarapi.auth.views import (
+#     login,
+#     refresh,
+#     revoke_access_token,
+#     revoke_refresh_token,
+# )
 from calendarapi.admin import (
     UserAdminModelView,
     CustomAdminIndexView,
@@ -59,6 +60,7 @@ from calendarapi.api.resources import (
 def create_app(testing=False):
     """Application factory, used to create application"""
     app = Flask("calendarapi")
+    CORS(app, resources={r"/*": {"origins": "*"}})
     app.config.from_object("calendarapi.config")
     Babel(app)
     if testing is True:
@@ -87,10 +89,10 @@ def create_app(testing=False):
         apispec.spec.path(view=CityListResource, app=app)
         apispec.spec.path(view=LawyersListResource, app=app)
         apispec.spec.path(view=SpecializationListResource, app=app)
-        apispec.spec.path(view=login, app=app)
-        apispec.spec.path(view=refresh, app=app)
-        apispec.spec.path(view=revoke_access_token, app=app)
-        apispec.spec.path(view=revoke_refresh_token, app=app)
+        # apispec.spec.path(view=login, app=app)
+        # apispec.spec.path(view=refresh, app=app)
+        # apispec.spec.path(view=revoke_access_token, app=app)
+        # apispec.spec.path(view=revoke_refresh_token, app=app)
     return app
 
 
@@ -117,7 +119,7 @@ def register_adminsite(app):
 def configure_extensions(app):
     """Configure flask extensions"""
     db.init_app(app)
-    jwt.init_app(app)
+    # jwt.init_app(app)
     migrate.init_app(app, db)
     # cache.init_app(app)
 
@@ -146,7 +148,7 @@ def configure_apispec(app):
 
 def register_blueprints(app):
     """Register all blueprints for application"""
-    app.register_blueprint(auth.views.blueprint)
+    # app.register_blueprint(auth.views.blueprint)
     app.register_blueprint(api.views.blueprint)
 
 
