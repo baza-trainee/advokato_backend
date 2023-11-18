@@ -89,6 +89,7 @@ def create_app(testing=False):
         apispec.spec.path(view=revoke_refresh_token, app=app)
     return app
 
+
 def register_adminsite(app):
     base_url = app.config["MAIN_PAGE_URL"]
     header = f'<a href="{base_url}" title="На домашню сторінку Status-AC">\

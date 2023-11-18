@@ -23,7 +23,6 @@ def init():
     click.echo("create user")
     user = db.session.query(User).one_or_none()
     if not user:
-
         user = User(
             username=current_app.config["ADMIN_DEFAULT_LOGIN"],
             email="admin@gmail.com",
