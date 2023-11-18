@@ -1,5 +1,6 @@
 from flask_restful import Resource, request
-from flask_jwt_extended import jwt_required
+
+# from flask_jwt_extended import jwt_required
 
 from calendarapi.api.schemas import SpecializationSchema
 from calendarapi.extensions import db
@@ -40,7 +41,7 @@ class SpecializationListResource(Resource):
           description: "City ID is required"
     """
 
-    method_decorators = [jwt_required()]
+    # method_decorators = [jwt_required()]
     specialization_schema: SpecializationSchema = SpecializationSchema()
 
     def get(self):

@@ -2,7 +2,8 @@ from datetime import datetime
 
 from flask import request
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required
+
+# from flask_jwt_extended import jwt_required
 from sqlalchemy import exc
 
 from calendarapi.api.schemas import AppointmentSchema, VisitorSchema
@@ -105,7 +106,7 @@ class AppointmentResource(Resource):
                     type: string
     """
 
-    method_decorators = [jwt_required()]
+    # method_decorators = [jwt_required()]
     visitor_schema = VisitorSchema()
     appointment_schema = AppointmentSchema()
 

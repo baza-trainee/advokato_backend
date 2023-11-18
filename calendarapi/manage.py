@@ -21,6 +21,8 @@ from flask.cli import with_appcontext
 def init():
     """Create a new admin user, fake lawyers, initial city and specializations lists."""
     pass
+
+
 #     click.echo("create user")
 #     user = db.session.query(User).one_or_none()
 #     if not user:

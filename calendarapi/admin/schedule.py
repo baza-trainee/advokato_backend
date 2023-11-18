@@ -7,6 +7,8 @@ from flask_admin.form.validators import CustomFieldListInputRequired
 from sqlalchemy import and_, func, or_
 from wtforms import DateField, ValidationError
 from wtforms.validators import DataRequired
+from sqlalchemy.orm import joinedload
+
 from calendarapi.admin.common import AdminModelView
 from calendarapi.models.city import City
 from calendarapi.models.lawyer import Lawyer
@@ -110,12 +112,6 @@ class ScheduleModelView(AdminModelView):
         else:
             self._reset_current_city()
             self.query = db.session.query(Schedule)
-
-        if getattr(self, "sort_column", None) == "lawyers":
-            if self.sort_desc:
-                self.query = self.query.order_by(self.model.lawyer_id.desc())
-            else:
-                self.query = self.query.order_by(self.model.lawyer_id)
         return self.query
 
     @expose("/ajax/lookup/")
@@ -179,16 +175,88 @@ class ScheduleModelView(AdminModelView):
         execute=True,
         page_size=None,
     ):
-        selected_city = request.args.get("city")
-        if selected_city and selected_city != "all":
-            filters = [(9, "Cities / City Name", selected_city)]
-        if sort_column == "lawyers":
-            self.sort_column = sort_column
-            self.sort_desc = sort_desc
-            sort_column = None
         return super().get_list(
             page, sort_column, sort_desc, search, filters, execute, page_size
         )
+
+    def get_list(
+        self,
+        page,
+        sort_column,
+        sort_desc,
+        search,
+        filters,
+        execute=True,
+        page_size=None,
+    ):
+        selected_city = request.args.get("city")
+
+        # Will contain join paths with optional aliased object
+        joins = {}
+        count_joins = {}
+
+        query = self.get_query()
+        count_query = self.get_count_query() if not self.simple_list_pager else None
+
+        # Ignore eager-loaded relations (prevent unnecessary joins)
+        # TODO: Separate join detection for query and count query?
+        if hasattr(query, "_join_entities"):
+            for entity in query._join_entities:
+                for table in entity.tables:
+                    joins[table] = None
+
+        # Apply search criteria
+        if self._search_supported and search:
+            query, count_query, joins, count_joins = self._apply_search(
+                query, count_query, joins, count_joins, search
+            )
+
+        # Apply filters
+        if selected_city and selected_city != "all":
+            count_query = (
+                self.session.query(func.count("*"))
+                .select_from(self.model)
+                .filter(
+                    Schedule.lawyers.any(
+                        Lawyer.cities.any(City.city_name == self.selected_city)
+                    )
+                )
+            )
+            query = query.filter(
+                Schedule.lawyers.any(
+                    Lawyer.cities.any(City.city_name == self.selected_city)
+                )
+            )
+
+        # Calculate number of rows if necessary
+        count = count_query.scalar() if count_query else None
+
+        # Auto join
+        for j in self._auto_joins:
+            query = query.options(joinedload(j))
+
+        # Sorting
+        if sort_column == "date":
+            if sort_desc:
+                query = query.order_by(self.model.date.desc())
+            else:
+                query = query.order_by(self.model.date)
+        elif sort_column == "lawyers":
+            if sort_desc:
+                query = query.order_by(self.model.lawyer_id.desc())
+            else:
+                query = query.order_by(self.model.lawyer_id)
+        else:
+            query, joins = self._apply_sorting(query, joins, sort_column, sort_desc)
+
+        # Pagination
+        query = self._apply_pagination(query, page, page_size)
+
+        # Execute if needed
+        if execute:
+            query = query.all()
+
+        return count, query
 
     column_sortable_list = [
         "id",
@@ -222,7 +290,7 @@ class ScheduleModelView(AdminModelView):
                 validate_lawyers_for_date,
                 validate_date_not_lower_than_current,
             ],
-            default=datetime.now().date()
+            default=datetime.now().date(),
         ),
     }
 
