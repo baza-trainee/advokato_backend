@@ -12,11 +12,11 @@ class AppointmentModelView(AdminModelView):
     can_export = True
     export_types = [
         "csv",
-        "xls",
-        "xlsx",
-        "json",
-        "yaml",
-        "html",
+        # "xls",
+        # "xlsx",
+        # "json",
+        # "yaml",
+        # "html",
     ]
 
     column_labels = {
