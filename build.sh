@@ -14,8 +14,5 @@ pip install --upgrade pip
 # install requirements in the virtual environment
 pip install -r requirements.txt
 
-flask db init
-flask db migrate
 flask db upgrade
 flask init
-flask run

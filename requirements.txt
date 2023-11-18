@@ -18,10 +18,10 @@ gunicorn==21.2.0
 passlib==1.7.4
 apispec[yaml]==6.3.0
 apispec-webframeworks==0.5.2
-tox==4.11.3
-celery[redis]==5.3.4
+# tox==4.11.3
+# celery[redis]==5.3.4
 psycopg2-binary==2.9.9
-flower==2.0.1
+# flower==2.0.1
 tablib[all]==3.5.0
-black
-factory_boy
+# black
+# factory_boy
