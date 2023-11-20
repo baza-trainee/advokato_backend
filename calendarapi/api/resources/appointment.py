@@ -112,24 +112,17 @@ class AppointmentResource(Resource):
     appointment_schema = AppointmentSchema()
 
     def get_lawyer_schedule(self, lawyer_id: int, date: str) -> Schedule:
-        lawyer_schedule = Schedule.query.filter_by(
-            lawyer_id=lawyer_id, date=date
-        ).first()
+        lawyer_schedule = Schedule.query.filter_by(lawyer_id=lawyer_id, date=date).first()
         return lawyer_schedule
 
-    def is_time_available(
-        self, lawyer_schedule: Schedule, date: str, time: str
-    ) -> bool:
+    def is_time_available(self, lawyer_schedule: Schedule, date: str, time: str) -> bool:
         appointment_time = datetime.strptime(time, "%H:%M").time()
         if lawyer_schedule.date == date and appointment_time in lawyer_schedule.time:
             return True
         return False
 
     def find_or_create_visitor(self, **kwargs) -> Visitor:
-        visitor = Visitor.query.filter(
-            (Visitor.email == kwargs["email"])
-            | (Visitor.phone_number == kwargs["phone_number"])
-        ).first()
+        visitor = Visitor.query.filter((Visitor.email == kwargs["email"]) | (Visitor.phone_number == kwargs["phone_number"])).first()
         if visitor:
             [setattr(visitor, key, value) for key, value in kwargs.items()]
             db.session.commit()
@@ -148,24 +141,13 @@ class AppointmentResource(Resource):
             validated_visitor_data: Visitor = self.visitor_schema.load(visitor_data)
             validated_appointment_data: Appointment = self.appointment_schema.load(
                 {
-                    "city": str(
-                        db.session.query(City)
-                        .filter(City.id == appointment_data.get("city_id"))
-                        .one_or_none()
-                    ),
+                    "city": str(db.session.query(City).filter(City.id == appointment_data.get("city_id")).one_or_none()),
                     "specialization": str(
                         db.session.query(Specialization)
-                        .filter(
-                            Specialization.id
-                            == appointment_data.get("specialization_id")
-                        )
+                        .filter(Specialization.id == appointment_data.get("specialization_id"))
                         .one_or_none()
                     ),
-                    "lawyer": str(
-                        db.session.query(Lawyer)
-                        .filter(Lawyer.id == appointment_data.get("lawyer_id"))
-                        .one_or_none()
-                    ),
+                    "lawyer": str(db.session.query(Lawyer).filter(Lawyer.id == appointment_data.get("lawyer_id")).one_or_none()),
                     "appointment_date": appointment_data.get("appointment_date"),
                     "appointment_time": appointment_data.get("appointment_time"),
                 }
@@ -174,53 +156,53 @@ class AppointmentResource(Resource):
             return {"message": e.messages}, 400
         appointment_date = validated_appointment_data.appointment_date
         appointment_time = validated_appointment_data.appointment_time
-        lawyer_schedule = self.get_lawyer_schedule(
-            appointment_data.get("lawyer_id"), appointment_date
-        )
-        appointment_data: dict = self.appointment_schema.dump(
-            validated_appointment_data
-        )
+        lawyer_schedule = self.get_lawyer_schedule(appointment_data.get("lawyer_id"), appointment_date)
+        appointment_data: dict = self.appointment_schema.dump(validated_appointment_data)
         visitor_data: dict = self.visitor_schema.dump(validated_visitor_data)
         existing_visitor = self.find_or_create_visitor(**visitor_data)
         if lawyer_schedule is None:
             return {"message": "Date not available for this lawyer"}, 400
-        if not self.is_time_available(
-            lawyer_schedule, appointment_date, str(appointment_time)
-        ):
+        if not self.is_time_available(lawyer_schedule, appointment_date, str(appointment_time)):
             return {"message": "Time not available for this lawyer"}, 400
 
         try:
             appointment = Appointment(visitor=str(existing_visitor), **appointment_data)
             db.session.add(appointment)
             lawyer_schedule.time = [str(t) for t in lawyer_schedule.time]
-            lawyer_schedule.time.remove(
-                str(datetime.strptime(appointment_time, "%H:%M").time())
-            )
+            lawyer_schedule.time.remove(str(datetime.strptime(appointment_time, "%H:%M").time()))
             db.session.commit()
 
-            @copy_current_request_context
-            def send_message(*message):
-                send_email(*message)
+            # @copy_current_request_context
+            # def send_message(*message):
+            #     send_email(*message)
 
-            sender = threading.Thread(
-                name="mail_sender",
-                target=send_message,
-                args=(
-                    existing_visitor.name,
-                    existing_visitor.email,
-                    existing_visitor.phone_number,
-                    existing_visitor.surname,
-                    appointment.appointment_date,
-                    str(appointment.appointment_time)[:-3],
-                    appointment.lawyer,
-                    appointment.specialization,
-                ),
+            send_email(
+                existing_visitor.name,
+                existing_visitor.email,
+                existing_visitor.phone_number,
+                existing_visitor.surname,
+                appointment.appointment_date,
+                str(appointment.appointment_time)[:-3],
+                appointment.lawyer,
+                appointment.specialization,
             )
-            sender.start()
+            # sender = threading.Thread(
+            #     name="mail_sender",
+            #     target=send_message,
+            #     args=(
+            #         existing_visitor.name,
+            #         existing_visitor.email,
+            #         existing_visitor.phone_number,
+            #         existing_visitor.surname,
+            #         appointment.appointment_date,
+            #         str(appointment.appointment_time)[:-3],
+            #         appointment.lawyer,
+            #         appointment.specialization,
+            #     ),
+            # )
+            # sender.start()
             return {"message": "Appointment created successfully"}, 201
 
         except exc.SQLAlchemyError as e:
             db.session.rollback()
-            return {
-                "message": f"An error occurred while creating the appointment: {str(e)}"
-            }, 500
+            return {"message": f"An error occurred while creating the appointment: {str(e)}"}, 500
