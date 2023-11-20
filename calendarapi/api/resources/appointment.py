@@ -198,25 +198,35 @@ class AppointmentResource(Resource):
             )
             db.session.commit()
 
-            @copy_current_request_context
-            def send_message(*message):
-                send_email(*message)
+            # @copy_current_request_context
+            # def send_message(*message):
+            #     send_email(*message)
 
-            sender = threading.Thread(
-                name="mail_sender",
-                target=send_message,
-                args=(
-                    existing_visitor.name,
-                    existing_visitor.email,
-                    existing_visitor.phone_number,
-                    existing_visitor.surname,
-                    appointment.appointment_date,
-                    str(appointment.appointment_time)[:-3],
-                    appointment.lawyer,
-                    appointment.specialization,
-                ),
+            send_email(
+                existing_visitor.name,
+                existing_visitor.email,
+                existing_visitor.phone_number,
+                existing_visitor.surname,
+                appointment.appointment_date,
+                str(appointment.appointment_time)[:-3],
+                appointment.lawyer,
+                appointment.specialization,
             )
-            sender.start()
+            # sender = threading.Thread(
+            #     name="mail_sender",
+            #     target=send_message,
+            #     args=(
+            #         existing_visitor.name,
+            #         existing_visitor.email,
+            #         existing_visitor.phone_number,
+            #         existing_visitor.surname,
+            #         appointment.appointment_date,
+            #         str(appointment.appointment_time)[:-3],
+            #         appointment.lawyer,
+            #         appointment.specialization,
+            #     ),
+            # )
+            # sender.start()
             return {"message": "Appointment created successfully"}, 201
 
         except exc.SQLAlchemyError as e:
