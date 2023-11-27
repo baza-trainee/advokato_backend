@@ -9,7 +9,8 @@ MAIN_PAGE_URL=https://statusac.com.ua
 CELERY_BROKER_URL=amqp://guest:guest@rabbitmq
 CELERY_RESULT_BACKEND_URL=redis://redis
 
-MAIL_USERNAME=calendar_api_dev@outlook.com
-MAIL_PASSWORD=Calendarapi123
-MAIL_PORT=587
-MAIL_SERVER=outlook.office365.com
+MAIL_SERVER = smtp.gmail.com
+MAIL_PORT = 587
+MAIL_USERNAME = syniava.roksolan1996@gmail.com
+MAIL_PASSWORD = uimxjctqcgexixvu
+
