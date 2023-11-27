@@ -116,7 +116,7 @@ class ScheduleModelView(AdminModelView):
 
     @expose("/ajax/lookup/")
     def ajax_lookup(self):
-        # selected_city = self.selected_city  # select city from path args
+        selected_city = self.selected_city  # select city from path args
         name = request.args.get("name")
         query = request.args.get("query")
         offset = request.args.get("offset", type=int)
@@ -125,30 +125,29 @@ class ScheduleModelView(AdminModelView):
         if not loader:
             abort(404)
 
-        # if selected_city is None or selected_city == "all":
-        if True:
+        if selected_city is None or selected_city == "all":
             data = [loader.format(m) for m in loader.get_list(query, offset, limit)]
-        # else:
-        #     sql_query = (
-        #         db.session.query(Lawyer)
-        #         .filter(
-        #             and_(
-        #                 Lawyer.cities.any(City.city_name == selected_city),
-        #                 or_(
-        #                     Lawyer.name.ilike(f"%{query}%"),
-        #                     Lawyer.surname.ilike(f"%{query}%"),
-        #                 ),
-        #             )
-        #         )
-        #         .offset(offset)
-        #         .limit(limit)
-        #     )
-        #     lawyer_list_output = [
-        #         lawyer
-        #         for lawyer in sql_query
-        #         if selected_city in [str(city) for city in lawyer.cities]
-        #     ]
-        #     data = [loader.format(lawyer) for lawyer in lawyer_list_output]
+        else:
+            sql_query = (
+                db.session.query(Lawyer)
+                .filter(
+                    and_(
+                        Lawyer.cities.any(City.city_name == selected_city),
+                        or_(
+                            Lawyer.name.ilike(f"%{query}%"),
+                            Lawyer.surname.ilike(f"%{query}%"),
+                        ),
+                    )
+                )
+                .offset(offset)
+                .limit(limit)
+            )
+            lawyer_list_output = [
+                lawyer
+                for lawyer in sql_query
+                if selected_city in [str(city) for city in lawyer.cities]
+            ]
+            data = [loader.format(lawyer) for lawyer in lawyer_list_output]
 
         return Response(json.dumps(data), mimetype="application/json")
 
@@ -165,20 +164,6 @@ class ScheduleModelView(AdminModelView):
         "date",
         "time",
     ]
-
-    def get_list(
-        self,
-        page,
-        sort_column,
-        sort_desc,
-        search,
-        filters,
-        execute=True,
-        page_size=None,
-    ):
-        return super().get_list(
-            page, sort_column, sort_desc, search, filters, execute, page_size
-        )
 
     def get_list(
         self,
