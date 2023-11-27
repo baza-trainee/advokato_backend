@@ -68,8 +68,6 @@ To debug the code, you can view the container logs using the command `docker log
         <img src="https://raw.githubusercontent.com/docker/compose/master/logo.png" alt="Docker Compose" align="left" width="200">
     </div>
     <br>
-    <br>
-    <br>
 </div>
 
 - `web` - The Flask application container.

@@ -2,10 +2,7 @@ from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
 from flask_login import UserMixin
 
-from calendarapi.extensions import (
-    db,
-    pwd_context,
-)
+from calendarapi.extensions import db, pwd_context
 
 
 class User(db.Model, UserMixin):

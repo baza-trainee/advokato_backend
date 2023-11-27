@@ -1,10 +1,8 @@
 from datetime import datetime
-import threading
 
-from flask import copy_current_request_context, request
+from flask import request
 from flask_restful import Resource
-
-# from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required
 from sqlalchemy import exc
 
 from calendarapi.api.schemas import AppointmentSchema, VisitorSchema
@@ -107,7 +105,7 @@ class AppointmentResource(Resource):
                     type: string
     """
 
-    # method_decorators = [jwt_required()]
+    method_decorators = [jwt_required()]
     visitor_schema = VisitorSchema()
     appointment_schema = AppointmentSchema()
 
@@ -197,36 +195,16 @@ class AppointmentResource(Resource):
                 str(datetime.strptime(appointment_time, "%H:%M").time())
             )
             db.session.commit()
-
-            # @copy_current_request_context
-            # def send_message(*message):
-            #     send_email(*message)
-
             send_email(
-                existing_visitor.name,
-                existing_visitor.email,
-                existing_visitor.phone_number,
-                existing_visitor.surname,
-                appointment.appointment_date,
-                str(appointment.appointment_time)[:-3],
-                appointment.lawyer,
-                appointment.specialization,
+                visitor_name=existing_visitor.name,
+                visitor_surname=existing_visitor.surname,
+                visitor_email=existing_visitor.email,
+                visitor_phone_number=existing_visitor.phone_number,
+                appointment_date=appointment.appointment_date,
+                appointment_time=str(appointment.appointment_time)[:-3],
+                lawyer_name=appointment.lawyer,
+                specialization_name=appointment.specialization,
             )
-            # sender = threading.Thread(
-            #     name="mail_sender",
-            #     target=send_message,
-            #     args=(
-            #         existing_visitor.name,
-            #         existing_visitor.email,
-            #         existing_visitor.phone_number,
-            #         existing_visitor.surname,
-            #         appointment.appointment_date,
-            #         str(appointment.appointment_time)[:-3],
-            #         appointment.lawyer,
-            #         appointment.specialization,
-            #     ),
-            # )
-            # sender.start()
             return {"message": "Appointment created successfully"}, 201
 
         except exc.SQLAlchemyError as e:
