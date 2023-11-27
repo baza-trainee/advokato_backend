@@ -9,7 +9,7 @@ from calendarapi import api, auth, manage
 from calendarapi.extensions import (
     apispec,
     db,
-    jwt,
+    # jwt,
     migrate,
     # celery,
 )
@@ -117,7 +117,7 @@ def register_adminsite(app):
 def configure_extensions(app):
     """Configure flask extensions"""
     db.init_app(app)
-    jwt.init_app(app)
+    # jwt.init_app(app)
     migrate.init_app(app, db)
     # cache.init_app(app)
 
