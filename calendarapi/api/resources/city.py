@@ -1,7 +1,7 @@
 from typing import List
 
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required
+# from flask_jwt_extended import jwt_required
 
 from calendarapi.api.schemas import CitySchema
 from calendarapi.extensions import db
@@ -36,7 +36,7 @@ class CityListResource(Resource):
           description: No city found.
     """
 
-    method_decorators = [jwt_required()]
+    # method_decorators = [jwt_required()]
     city_schema: CitySchema = CitySchema()
 
     def get(self):

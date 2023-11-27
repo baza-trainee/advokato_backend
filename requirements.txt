@@ -5,7 +5,7 @@ flask-restful==0.3.10
 flask-migrate==4.0.5
 flask-sqlalchemy==3.1.1
 flask-marshmallow==0.15.0
-flask-jwt-extended==4.5.3
+# flask-jwt-extended==4.5.3
 flask_login==0.6.2
 Flask-Babel==4.0.0
 Flask-Mail==0.9.1
@@ -17,8 +17,8 @@ passlib==1.7.4
 apispec[yaml]==6.3.0
 apispec-webframeworks==0.5.2
 psycopg2-binary==2.9.9
-# gunicorn
 factory_boy
+# gunicorn
 # Flask-Caching==2.1.0
 # tox==4.11.3
 # celery[redis]==5.3.4
