@@ -58,6 +58,7 @@ from calendarapi.api.resources import (
     ScheduleResource,
     AppointmentResource,
     OurTeamResource,
+    FeedbackResource
 )
 
 
@@ -96,6 +97,7 @@ def create_app(testing=False):
         apispec.spec.path(view=LawyersListResource, app=app)
         apispec.spec.path(view=SpecializationListResource, app=app)
         apispec.spec.path(view=OurTeamResource, app=app)
+        apispec.spec.path(view=FeedbackResource, app=app)
         # apispec.spec.path(view=login, app=app)
         # apispec.spec.path(view=refresh, app=app)
         # apispec.spec.path(view=revoke_access_token, app=app)
