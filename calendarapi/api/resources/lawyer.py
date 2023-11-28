@@ -2,6 +2,7 @@ from typing import List
 
 from flask import request
 from flask_restful import Resource
+
 # from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import joinedload
 
@@ -17,7 +18,7 @@ class LawyersListResource(Resource):
     ---
     get:
       tags:
-        - Lawyer
+        - Calendar
       summary: Get a list of lawyers.
       description: Get a list of lawyers.
       parameters:

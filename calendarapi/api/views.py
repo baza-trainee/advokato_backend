@@ -8,6 +8,7 @@ from calendarapi.api.resources import (
     LawyersListResource,
     ScheduleResource,
     AppointmentResource,
+    OurTeamResource,
 )
 
 
@@ -21,6 +22,7 @@ api.add_resource(
 api.add_resource(LawyersListResource, "/lawyers", endpoint="lawyers")
 api.add_resource(ScheduleResource, "/schedule", endpoint="schedule")
 api.add_resource(AppointmentResource, "/appointment", endpoint="appointment")
+api.add_resource(OurTeamResource, "/our-team", endpoint="our_team")
 
 
 @blueprint.errorhandler(ValidationError)

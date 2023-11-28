@@ -1,10 +1,12 @@
 .PHONY: init init-migration down build run db-migrate test tox
 
 init: down build run
-	docker compose exec web flask db init
-	docker compose exec web flask db migrate
-	docker compose exec web flask db upgrade
-	docker compose exec web flask init
+	# docker compose exec web flask db init
+	# docker compose exec web flask db migrate
+	# docker compose exec web flask db upgrade
+	# docker compose exec web flask init
+	flask db upgrade
+	flask init
 	@echo "Init done, containers running"
 
 build:
@@ -55,8 +57,8 @@ local_dev:
 		rm -r migrations; \
 	fi
 	docker compose down
-	docker compose build postgres pgadmin
-	docker compose up -d postgres pgadmin
+	docker compose build postgres
+	docker compose up -d postgres
 	flask db init
 	flask db migrate
 	flask db upgrade

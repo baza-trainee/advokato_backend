@@ -1,5 +1,6 @@
 from flask import request
 from flask_restful import Resource
+
 # from flask_jwt_extended import jwt_required
 
 from calendarapi.api.schemas import ScheduleSchema
@@ -14,7 +15,7 @@ class ScheduleResource(Resource):
     ---
     get:
       tags:
-        - Schedule
+        - Calendar
       summary: Get a lawyer's schedule.
       description: Get the schedule for a specific lawyer based on their ID.
       parameters:
