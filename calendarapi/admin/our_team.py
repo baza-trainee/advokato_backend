@@ -48,7 +48,14 @@ class OurTeamModelView(AdminModelView):
                 return ""
             # url = os.path.join(request.host_url, "static", "media", "team", model.photo_path)
             url = model.photo_path
-            if model.photo_path.split(".")[-1] in ["jpg", "jpeg", "png", "svg", "gif", 'webp']:
+            if model.photo_path.split(".")[-1] in [
+                "jpg",
+                "jpeg",
+                "png",
+                "svg",
+                "gif",
+                "webp",
+            ]:
                 return Markup(f"<img src={url} height=240>")
 
         return thumbnail_formatter
@@ -60,13 +67,13 @@ class OurTeamModelView(AdminModelView):
 
     # def generate_image_name(model, file_data):
     #     return f'{uuid.uuid4().hex[:16]}.{file_data.filename.split(".")[-1]}'
-    
+
     # def validate_directory(form, field):
     #     upload_folder = os.path.join(file_path, "calendarapi", "static", "media", "team")
     #     os.makedirs(upload_folder, exist_ok=True)
 
     form_extra_fields = {
-        "photo_path": FileField('Виберіть фото партнера'),
+        "photo_path": FileField("Виберіть фото партнера"),
         # "photo_path": form.ImageUploadField(
         #     "Виберіть фото партнера",
         #     base_path=os.path.join(file_path, "calendarapi", "static", "media", "team"),

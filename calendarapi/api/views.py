@@ -27,7 +27,6 @@ api.add_resource(OurTeamResource, "/our-team", endpoint="our_team")
 api.add_resource(FeedbackResource, "/feedback", endpoint="feedback")
 
 
-
 @blueprint.errorhandler(ValidationError)
 def handle_marshmallow_error(e):
     """Return json error for marshmallow validation errors.

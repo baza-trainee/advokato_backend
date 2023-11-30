@@ -58,7 +58,7 @@ from calendarapi.api.resources import (
     ScheduleResource,
     AppointmentResource,
     OurTeamResource,
-    FeedbackResource
+    FeedbackResource,
 )
 
 
