@@ -5,8 +5,10 @@ init: down build run
 	# docker compose exec web flask db migrate
 	# docker compose exec web flask db upgrade
 	# docker compose exec web flask init
+	sleep 2
 	flask db upgrade
 	flask init
+	flask --debug run
 	@echo "Init done, containers running"
 
 build:
@@ -18,8 +20,8 @@ down:
 run:
 	docker compose up -d
 
-dev:
-	docker compose restart web
+# dev:
+# 	docker compose restart web
 
 db-init:
 	docker compose exec web flask db init
@@ -51,16 +53,16 @@ lint:
 clean:
 	sudo find . | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs sudo rm -rf
 
-local_dev:
-	sed -i 's/:\/\/admin:admin@postgres:/:\/\/admin:admin@localhost:/g' .flaskenv
-	@if [ -d "migrations" ]; then \
-		rm -r migrations; \
-	fi
-	docker compose down
-	docker compose build postgres
-	docker compose up -d postgres
-	flask db init
-	flask db migrate
-	flask db upgrade
-	flask init
+dev:
+	# sed -i 's/:\/\/admin:admin@postgres:/:\/\/admin:admin@localhost:/g' .flaskenv
+	# @if [ -d "migrations" ]; then \
+	# 	rm -r migrations; \
+	# fi
+	# docker compose down
+	# docker compose build postgres
+	# docker compose up -d postgres
+	# flask db init
+	# flask db migrate
+	# flask db upgrade
+	# flask init
 	flask --debug run

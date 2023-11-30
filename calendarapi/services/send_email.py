@@ -24,7 +24,10 @@ def send_email(
     if feedback:
         lawyer_email_msg = Message(
             f"Новий фідбек. Клієнт {visitor_name}",
-            recipients=[current_app.config["MAIL_DEFAULT_SENDER"], "deadroll95@gmail.com"],
+            recipients=[
+                current_app.config["MAIL_DEFAULT_SENDER"],
+                "deadroll95@gmail.com",
+            ],
         )
         lawyer_email_msg.body = (
             f"{message}.\n\n"
