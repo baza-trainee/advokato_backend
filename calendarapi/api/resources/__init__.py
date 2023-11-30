@@ -3,6 +3,8 @@ from calendarapi.api.resources.specialization import SpecializationListResource
 from calendarapi.api.resources.lawyer import LawyersListResource
 from calendarapi.api.resources.schedule import ScheduleResource
 from calendarapi.api.resources.appointment import AppointmentResource
+from calendarapi.api.resources.our_team import OurTeamResource
+from calendarapi.api.resources.feedback import FeedbackResource
 
 __all__ = [
     "CityListResource",
@@ -10,4 +12,6 @@ __all__ = [
     "LawyersListResource",
     "ScheduleResource",
     "AppointmentResource",
+    "OurTeamResource",
+    "FeedbackResource",
 ]

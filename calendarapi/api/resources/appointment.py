@@ -2,6 +2,7 @@ from datetime import datetime
 
 from flask import request
 from flask_restful import Resource
+
 # from flask_jwt_extended import jwt_required
 from sqlalchemy import exc
 
@@ -21,11 +22,10 @@ from calendarapi.services.send_email import send_email
 class AppointmentResource(Resource):
     """
     Appointment Resource
-
     ---
     post:
       tags:
-        - Appointment
+        - Calendar
       summary: Create a new appointment.
       description: Create a new appointment by providing visitor and appointment data in the request body.
       requestBody:

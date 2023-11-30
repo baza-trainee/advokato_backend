@@ -9,6 +9,7 @@ from calendarapi.models.appointment import Appointment
 from calendarapi.models.visitor import Visitor
 from calendarapi.models.schedule import Schedule
 from calendarapi.models.layers_to_schedule import layersToSchedule
+from calendarapi.models.our_team import OurTeam
 
 __all__ = [
     "User",
@@ -22,4 +23,5 @@ __all__ = [
     "Schedule",
     "Appointment",
     "layersToSchedule",
+    "OurTeam",
 ]
