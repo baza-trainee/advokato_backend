@@ -14,3 +14,6 @@ MAIL_PORT = 587
 MAIL_USERNAME = syniava.roksolan1996@gmail.com
 MAIL_PASSWORD = uimxjctqcgexixvu
 
+CLOUD_NAME=asdasda
+API_KEY=123123123
+API_SECRET=7dsadasdasdasfdssfd

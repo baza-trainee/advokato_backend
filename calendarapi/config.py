@@ -3,7 +3,7 @@
 Use env var to override
 """
 import os
-
+import cloudinary
 
 ENV = os.getenv("FLASK_ENV")
 DEBUG = ENV == "development"
@@ -32,3 +32,9 @@ CELERY = {
     "result_backend": os.getenv("CELERY_RESULT_BACKEND_URL"),
     "broker_connection_retry_on_startup": True,
 }
+
+cloudinary.config(
+    cloud_name=os.environ.get("CLOUD_NAME"),
+    api_key=os.environ.get("API_KEY"),
+    api_secret=os.environ.get("API_SECRET"),
+)
