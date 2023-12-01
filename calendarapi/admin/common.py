@@ -1,4 +1,4 @@
-from flask import redirect, url_for, request, current_app
+from flask import redirect, url_for, request
 import flask_login as login
 from flask_admin import AdminIndexView, helpers, expose
 from flask_admin.contrib.sqla import ModelView
@@ -52,6 +52,24 @@ class LoginForm(form.Form):
         return db.session.query(User).filter_by(username=self.login.data).one_or_none()
 
 
+class ForgotForm(form.Form):
+    email = fields.EmailField(
+        "Введіть ваш e-mail",
+        validators=[
+            validators.DataRequired(),
+            validators.Email(),
+        ],
+    )
+
+
+class PasswordResetForm(form.Form):
+    new_password = fields.PasswordField(
+        "Password",
+        validators=[validators.DataRequired()],
+        render_kw={"placeholder": "Ваш новий текст"},
+    )
+
+
 class CustomAdminIndexView(AdminIndexView):
     extra_css = AdminModelView.extra_css
 
@@ -84,3 +102,17 @@ class CustomAdminIndexView(AdminIndexView):
     def logout_view(self):
         login.logout_user()
         return redirect(url_for(".index"))
+
+    @expose("/forgot_password/", methods=["GET", "POST"])
+    def forgot_password(self):
+        if request.method == "POST":
+            email = request.form.get("email")
+            record = db.session.query(User).filter_by(email=email).one_or_none()
+            if record:
+                return record.id
+            else:
+                return f"емейл {email} не знайдено"
+        # модель бд id : token
+        # коли користувач вводить емейл отримує посилання
+        form = ForgotForm(request.form)
+        return self.render("admin/reset_password.html", form=form)

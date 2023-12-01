@@ -20,8 +20,9 @@ from calendarapi.services.fake_data import (
     cities,
     contacts,
 )
-# from tests.factories import LawyersFactory, ScheduleFactory
 from calendarapi.extensions import db
+
+# from tests.factories import LawyersFactory, ScheduleFactory
 
 
 @click.command("init")

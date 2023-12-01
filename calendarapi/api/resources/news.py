@@ -2,6 +2,7 @@ from typing import List
 
 from flask_restful import Resource
 from sqlalchemy import desc
+
 # from flask_jwt_extended import jwt_required
 
 from calendarapi.api.schemas import NewsSchema
