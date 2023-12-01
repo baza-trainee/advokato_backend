@@ -6,6 +6,9 @@ from calendarapi.api.resources.appointment import AppointmentResource
 from calendarapi.api.resources.our_team import OurTeamResource
 from calendarapi.api.resources.feedback import FeedbackResource
 from calendarapi.api.resources.news import NewsResource
+from calendarapi.api.resources.reviews import ReviewsResource
+
+
 
 
 __all__ = [
@@ -18,4 +21,5 @@ __all__ = [
     "OurTeamResource",
     "FeedbackResource",
     "NewsResource",
+    "ReviewsResource",
 ]
