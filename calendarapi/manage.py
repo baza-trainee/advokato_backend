@@ -13,7 +13,7 @@ from calendarapi.models import (
     Schedule,
     OurTeam,
 )
-from calendarapi.services.fake_data import our_team_data
+from calendarapi.services.fake_data import our_team_data, specializations
 # from tests.factories import LawyersFactory, ScheduleFactory
 from calendarapi.extensions import db
 
@@ -37,20 +37,10 @@ def init():
     #         City(city_name="Одеса"),
     #         City(city_name="Миколаїв"),
     #     ]
-
     #     db.session.add_all(city_list)
     #     db.session.flush()
 
-    #     spec_list = [
-    #         Specialization(specialization_name="Цивільна"),
-    #         Specialization(specialization_name="Адміністративна"),
-    #         Specialization(specialization_name="Кримінальна"),
-    #         Specialization(specialization_name="Сімейна"),
-    #         Specialization(specialization_name="Військовий"),
-    #         Specialization(specialization_name="Зруйноване майно"),
-    #         Specialization(specialization_name="Порушення прав людини"),
-    #     ]
-
+    #     spec_list = [Specialization(**data) for data in specializations]
     #     db.session.add_all(spec_list)
     #     db.session.flush()
 

@@ -6,6 +6,8 @@ class Specialization(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     specialization_name = db.Column(db.String(255), nullable=False, unique=True)
+    specialization_photo = db.Column(db.String(300))
+    specialization_description = db.Column(db.String(1000))
 
     def __repr__(self):
         return f"{self.specialization_name}"
