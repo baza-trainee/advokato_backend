@@ -14,17 +14,16 @@ file_path = os.path.abspath(os.path.dirname(__name__))
 reviews_dir = os.path.join(file_path, "calendarapi", "static", "media", "reviews")
 
 
-
 class ReviewsAdminModelView(AdminModelView):
     can_set_page_size = True
 
-    
-    column_labels = {"name": "Ім'я Прізвище", 
-                     "position": "Посада",
-                     "description": "Опис",
-                     "photo_path": "Фото",
-                     "created_at": "Дата",
-                     }
+    column_labels = {
+        "name": "Ім'я Прізвище",
+        "position": "Посада",
+        "description": "Опис",
+        "photo_path": "Фото",
+        "created_at": "Дата",
+    }
     column_sortable_list = [
         "created_at",
     ]
@@ -34,7 +33,7 @@ class ReviewsAdminModelView(AdminModelView):
     column_default_sort = [
         ("id", False),
     ]
-    
+
     def _format_description(view, context, model, name):
         return Markup(model.description)
 
@@ -55,7 +54,7 @@ class ReviewsAdminModelView(AdminModelView):
                 return Markup(f"<img src={url} height=240>")
 
         return thumbnail_formatter
-    
+
     column_formatters = {
         "photo_path": _list_thumbnail(),
         "description": _format_description,
@@ -67,7 +66,7 @@ class ReviewsAdminModelView(AdminModelView):
     # def validate_directory(form, field):
     #     upload_folder = os.path.join(file_path, "calendarapi", "static", "media", "reviews")
     #     os.makedirs(upload_folder, exist_ok=True)
-    
+
     form_extra_fields = {
         "photo_path": FileField("Виберіть фото для відгуку"),
         # "photo_path": form.ImageUploadField(
@@ -82,7 +81,7 @@ class ReviewsAdminModelView(AdminModelView):
             "Опис", render_kw={"class": "form-control", "rows": 3}
         ),
     }
-    
+
     # def on_model_delete(self, model):
     #     file_path = f"{reviews_dir}/{model.photo_path}"
     #     if os.path.exists(file_path):
@@ -96,4 +95,3 @@ class ReviewsAdminModelView(AdminModelView):
         else:
             model.photo_path = form.photo_path.object_data
         return super().on_model_change(form, model, is_created)
-

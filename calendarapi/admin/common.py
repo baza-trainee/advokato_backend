@@ -54,12 +54,21 @@ class LoginForm(form.Form):
 
 class ForgotForm(form.Form):
     email = fields.EmailField(
-        "Введіть ваш e-mail", validators=[validators.DataRequired(), validators.Email(),], 
+        "Введіть ваш e-mail",
+        validators=[
+            validators.DataRequired(),
+            validators.Email(),
+        ],
     )
 
+
 class PasswordResetForm(form.Form):
-    new_password = fields.PasswordField("Password", validators=[validators.DataRequired()], render_kw={'placeholder': 'Ваш новий текст'}
+    new_password = fields.PasswordField(
+        "Password",
+        validators=[validators.DataRequired()],
+        render_kw={"placeholder": "Ваш новий текст"},
     )
+
 
 class CustomAdminIndexView(AdminIndexView):
     extra_css = AdminModelView.extra_css
@@ -94,10 +103,10 @@ class CustomAdminIndexView(AdminIndexView):
         login.logout_user()
         return redirect(url_for(".index"))
 
-    @expose("/forgot_password/", methods=['GET', 'POST'])
+    @expose("/forgot_password/", methods=["GET", "POST"])
     def forgot_password(self):
-        if request.method == 'POST':
-            email=request.form.get('email')
+        if request.method == "POST":
+            email = request.form.get("email")
             record = db.session.query(User).filter_by(email=email).one_or_none()
             if record:
                 return record.id

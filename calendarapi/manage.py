@@ -21,6 +21,7 @@ from calendarapi.services.fake_data import (
     contacts,
 )
 from calendarapi.extensions import db
+
 # from tests.factories import LawyersFactory, ScheduleFactory
 
 

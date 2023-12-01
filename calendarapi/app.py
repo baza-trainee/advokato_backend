@@ -106,7 +106,6 @@ def create_app(testing=False):
         apispec.spec.components.schema("NewsSchema", schema=NewsSchema)
         apispec.spec.components.schema("ReviewsSchema", schema=ReviewsSchema)
 
-
         apispec.spec.path(view=ScheduleResource, app=app)
         apispec.spec.path(view=AppointmentResource, app=app)
         apispec.spec.path(view=CityListResource, app=app)
@@ -164,7 +163,6 @@ def register_adminsite(app):
         )
     )
     admin.add_view(ReviewsAdminModelView(Reviews, db.session, name="Відгуки"))
-
 
 
 def configure_extensions(app):

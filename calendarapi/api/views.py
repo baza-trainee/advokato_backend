@@ -33,7 +33,9 @@ api.add_resource(OurTeamResource, "/our-team", endpoint="our_team")
 api.add_resource(FeedbackResource, "/feedback", endpoint="feedback")
 api.add_resource(NewsResource, "/news", endpoint="news")
 api.add_resource(ContactResource, "/contacts", endpoint="contacts")
-api.add_resource(AllSpecializationsResource, "/specializations", endpoint="specializations")
+api.add_resource(
+    AllSpecializationsResource, "/specializations", endpoint="specializations"
+)
 api.add_resource(ReviewsResource, "/reviews", endpoint="reviews")
 
 
