@@ -11,6 +11,7 @@ from calendarapi.api.resources import (
     AppointmentResource,
     OurTeamResource,
     FeedbackResource,
+    NewsResource
 )
 
 
@@ -26,6 +27,7 @@ api.add_resource(ScheduleResource, "/schedule", endpoint="schedule")
 api.add_resource(AppointmentResource, "/appointment", endpoint="appointment")
 api.add_resource(OurTeamResource, "/our-team", endpoint="our_team")
 api.add_resource(FeedbackResource, "/feedback", endpoint="feedback")
+api.add_resource(NewsResource, "/news", endpoint="news")
 api.add_resource(AllSpecializationsResource, "/specializations", endpoint="specializations")
 
 
