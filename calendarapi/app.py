@@ -32,6 +32,7 @@ from calendarapi.admin import (
     AppointmentModelView,
     VisitorModelView,
     NewsAdminModelView,
+    ContactModelView,
 )
 from calendarapi.models import (
     User,
@@ -43,6 +44,7 @@ from calendarapi.models import (
     Visitor,
     OurTeam,
     News,
+    Contact,
 )
 from calendarapi.api.schemas import (
     VisitorSchema,
@@ -64,6 +66,7 @@ from calendarapi.api.resources import (
     OurTeamResource,
     FeedbackResource,
     NewsResource,
+    ContactResource,
 )
 
 
@@ -107,6 +110,7 @@ def create_app(testing=False):
         apispec.spec.path(view=OurTeamResource, app=app)
         apispec.spec.path(view=FeedbackResource, app=app)
         apispec.spec.path(view=NewsResource, app=app)
+        apispec.spec.path(view=ContactResource, app=app)
 
         # apispec.spec.path(view=login, app=app)
         # apispec.spec.path(view=refresh, app=app)
@@ -127,11 +131,12 @@ def register_adminsite(app):
         template_mode="bootstrap4",
     )
     admin.add_view(
-        UserAdminModelView(User, db.session, name="Користувачі", category="Керування")
+        CityAdminModelView(City, db.session, name="Міста", category="Керування")
     )
-    admin.add_view(CityAdminModelView(City, db.session, name="Місто"))
     admin.add_view(
-        SpecializationAdminModelView(Specialization, db.session, name="Cпеціалізація")
+        SpecializationAdminModelView(
+            Specialization, db.session, name="Cпеціалізації", category="Керування"
+        )
     )
     admin.add_view(LawyerAdminModelView(Lawyer, db.session, name="Адвокати"))
     admin.add_view(ScheduleModelView(Schedule, db.session, name="Розклад"))
@@ -140,7 +145,17 @@ def register_adminsite(app):
     admin.add_view(
         OurTeamModelView(OurTeam, db.session, name="Команда", category="Керування")
     )
-    admin.add_view(NewsAdminModelView(News, db.session, name="Новини"))
+    admin.add_view(
+        NewsAdminModelView(News, db.session, name="Новини", category="Керування")
+    )
+    admin.add_view(
+        ContactModelView(Contact, db.session, name="Контакти", category="Керування")
+    )
+    admin.add_view(
+        UserAdminModelView(
+            User, db.session, name="облікові записи", category="Керування"
+        )
+    )
 
 
 def configure_extensions(app):

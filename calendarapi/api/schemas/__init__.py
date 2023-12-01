@@ -9,7 +9,6 @@ from calendarapi.api.schemas.our_team import OurTeamSchema
 from calendarapi.api.schemas.news import NewsSchema
 
 
-
 __all__ = [
     "UserSchema",
     "CitySchema",

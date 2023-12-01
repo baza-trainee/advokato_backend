@@ -22,7 +22,7 @@ class SpecializationAdminModelView(AdminModelView):
     column_default_sort = [
         ("id", False),
     ]
-    
+
     column_labels = {
         "specialization_photo": "Фото",
         "specialization_name": "Спеціалізація",

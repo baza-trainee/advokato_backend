@@ -14,16 +14,15 @@ file_path = os.path.abspath(os.path.dirname(__name__))
 our_news_dir = os.path.join(file_path, "calendarapi", "static", "media", "news")
 
 
-
 class NewsAdminModelView(AdminModelView):
     can_set_page_size = True
 
-    
-    column_labels = {"name": "Назва", 
-                     "description": "Опис",
-                     "photo_path": "Фото",
-                     "created_at": "Дата",
-                     }
+    column_labels = {
+        "name": "Назва",
+        "description": "Опис",
+        "photo_path": "Фото",
+        "created_at": "Дата",
+    }
     column_sortable_list = [
         "created_at",
     ]
@@ -33,7 +32,7 @@ class NewsAdminModelView(AdminModelView):
     column_default_sort = [
         ("id", False),
     ]
-    
+
     def _format_description(view, context, model, name):
         return Markup(model.description)
 
@@ -54,7 +53,7 @@ class NewsAdminModelView(AdminModelView):
                 return Markup(f"<img src={url} height=240>")
 
         return thumbnail_formatter
-    
+
     column_formatters = {
         "photo_path": _list_thumbnail(),
         "description": _format_description,
@@ -66,7 +65,7 @@ class NewsAdminModelView(AdminModelView):
     # def validate_directory(form, field):
     #     upload_folder = os.path.join(file_path, "calendarapi", "static", "media", "news")
     #     os.makedirs(upload_folder, exist_ok=True)
-    
+
     form_extra_fields = {
         "photo_path": FileField("Виберіть фото для новини"),
         # "photo_path": form.ImageUploadField(
@@ -81,7 +80,7 @@ class NewsAdminModelView(AdminModelView):
             "Опис", render_kw={"class": "form-control", "rows": 3}
         ),
     }
-    
+
     # def on_model_delete(self, model):
     #     file_path = f"{our_news_dir}/{model.photo_path}"
     #     if os.path.exists(file_path):
@@ -95,4 +94,3 @@ class NewsAdminModelView(AdminModelView):
         else:
             model.photo_path = form.photo_path.object_data
         return super().on_model_change(form, model, is_created)
-

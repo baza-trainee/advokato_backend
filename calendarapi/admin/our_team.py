@@ -38,6 +38,9 @@ class OurTeamModelView(AdminModelView):
         "description",
         "photo_path",
     ]
+    column_descriptions = {
+        "description": """Ви можете використовувати HTML-теги, щоб логічно розділити текст на блоки, створити список і т. д., для покращення зручності читання."""
+    }
 
     def _format_description(view, context, model, name):
         return Markup(model.description)

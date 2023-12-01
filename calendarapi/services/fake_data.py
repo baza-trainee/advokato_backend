@@ -99,3 +99,37 @@ specializations = [
         "specialization_description": 'Окремий напрямок діяльності нашої Адвокатської компанії - це "Status International" - українська філія англійської консалтингової групи "Trade Formation", а також Швейцарської компанії "SIGTAX".',
     },
 ]
+cities = [
+    {
+        "city_name": "Київ",
+        "address": "Вул. Велика Васильківська 21, офіс 307, Печерський район, м. Київ, Україна ",
+    },
+    {"city_name": "Одеса", "address": "Площа 10 квітня 1, м. Одеса, Україна"},
+    {"city_name": "Миколаїв", "address": "Вул. Нікольська 19, м. Миколаїв, Україна"},
+]
+contacts = [
+    {
+        "contact_type": "linkedin",
+        "value": "Значення",
+    },
+    {
+        "contact_type": "facebook",
+        "value": "https://www.facebook.com/status.ac",
+    },
+    {
+        "contact_type": "instagram",
+        "value": "https://www.instagram.com/status.ac/",
+    },
+    {
+        "contact_type": "telegram",
+        "value": "https://t.me/statusac",
+    },
+    {
+        "contact_type": "phone",
+        "value": "+38 (093) 373 73 03",
+    },
+    {
+        "contact_type": "mail",
+        "value": "acstatus.mk@gmail.com",
+    },
+]
