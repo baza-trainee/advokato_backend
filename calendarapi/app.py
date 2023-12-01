@@ -52,6 +52,7 @@ from calendarapi.api.schemas import (
     AppointmentSchema,
     ScheduleSchema,
     OurTeamSchema,
+    NewsSchema,
 )
 from calendarapi.api.resources import (
     CityListResource,
@@ -61,6 +62,7 @@ from calendarapi.api.resources import (
     AppointmentResource,
     OurTeamResource,
     FeedbackResource,
+    NewsResource,
 )
 
 
@@ -93,6 +95,8 @@ def create_app(testing=False):
         )
         apispec.spec.components.schema("AppointmentSchema", schema=AppointmentSchema)
         apispec.spec.components.schema("OurTeamSchema", schema=OurTeamSchema)
+        apispec.spec.components.schema("NewsSchema", schema=NewsSchema)
+
         apispec.spec.path(view=ScheduleResource, app=app)
         apispec.spec.path(view=AppointmentResource, app=app)
         apispec.spec.path(view=CityListResource, app=app)
@@ -100,6 +104,8 @@ def create_app(testing=False):
         apispec.spec.path(view=SpecializationListResource, app=app)
         apispec.spec.path(view=OurTeamResource, app=app)
         apispec.spec.path(view=FeedbackResource, app=app)
+        apispec.spec.path(view=NewsResource, app=app)
+
         # apispec.spec.path(view=login, app=app)
         # apispec.spec.path(view=refresh, app=app)
         # apispec.spec.path(view=revoke_access_token, app=app)
