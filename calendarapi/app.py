@@ -163,7 +163,6 @@ def register_adminsite(app):
             User, db.session, name="облікові записи", category="Керування"
         )
     )
-    admin.add_view(NewsAdminModelView(News, db.session, name="Новини"))
     admin.add_view(ReviewsAdminModelView(Reviews, db.session, name="Відгуки"))
 
 
