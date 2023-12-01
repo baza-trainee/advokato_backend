@@ -31,6 +31,7 @@ from calendarapi.admin import (
     SpecializationAdminModelView,
     AppointmentModelView,
     VisitorModelView,
+    NewsAdminModelView,
 )
 from calendarapi.models import (
     User,
@@ -41,6 +42,7 @@ from calendarapi.models import (
     Appointment,
     Visitor,
     OurTeam,
+    News,
 )
 from calendarapi.api.schemas import (
     VisitorSchema,
@@ -130,6 +132,7 @@ def register_adminsite(app):
     admin.add_view(
         OurTeamModelView(OurTeam, db.session, name="Команда", category="Керування")
     )
+    admin.add_view(NewsAdminModelView(News, db.session, name="Новини"))
 
 
 def configure_extensions(app):
