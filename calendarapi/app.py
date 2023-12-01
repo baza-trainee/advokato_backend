@@ -33,6 +33,7 @@ from calendarapi.admin import (
     VisitorModelView,
     NewsAdminModelView,
     ContactModelView,
+    ReviewsAdminModelView,
 )
 from calendarapi.models import (
     User,
@@ -45,6 +46,7 @@ from calendarapi.models import (
     OurTeam,
     News,
     Contact,
+    Reviews,
 )
 from calendarapi.api.schemas import (
     VisitorSchema,
@@ -55,6 +57,7 @@ from calendarapi.api.schemas import (
     ScheduleSchema,
     OurTeamSchema,
     NewsSchema,
+    ReviewsSchema,
 )
 from calendarapi.api.resources import (
     CityListResource,
@@ -67,6 +70,7 @@ from calendarapi.api.resources import (
     FeedbackResource,
     NewsResource,
     ContactResource,
+    ReviewsResource,
 )
 
 
@@ -100,6 +104,8 @@ def create_app(testing=False):
         apispec.spec.components.schema("AppointmentSchema", schema=AppointmentSchema)
         apispec.spec.components.schema("OurTeamSchema", schema=OurTeamSchema)
         apispec.spec.components.schema("NewsSchema", schema=NewsSchema)
+        apispec.spec.components.schema("ReviewsSchema", schema=ReviewsSchema)
+
 
         apispec.spec.path(view=ScheduleResource, app=app)
         apispec.spec.path(view=AppointmentResource, app=app)
@@ -111,6 +117,7 @@ def create_app(testing=False):
         apispec.spec.path(view=FeedbackResource, app=app)
         apispec.spec.path(view=NewsResource, app=app)
         apispec.spec.path(view=ContactResource, app=app)
+        apispec.spec.path(view=ReviewsResource, app=app)
 
         # apispec.spec.path(view=login, app=app)
         # apispec.spec.path(view=refresh, app=app)
@@ -156,6 +163,9 @@ def register_adminsite(app):
             User, db.session, name="облікові записи", category="Керування"
         )
     )
+    admin.add_view(NewsAdminModelView(News, db.session, name="Новини"))
+    admin.add_view(ReviewsAdminModelView(Reviews, db.session, name="Відгуки"))
+
 
 
 def configure_extensions(app):
