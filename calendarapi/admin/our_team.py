@@ -56,7 +56,7 @@ class OurTeamModelView(AdminModelView):
                 "gif",
                 "webp",
             ]:
-                return Markup(f"<img src={url} height=240>")
+                return Markup(f"<img src={url} width=240>")
 
         return thumbnail_formatter
 
