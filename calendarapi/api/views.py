@@ -4,7 +4,8 @@ from marshmallow import ValidationError
 
 from calendarapi.api.resources import (
     CityListResource,
-    SpecializationListResource,
+    SpecializationListByCityResource,
+    AllSpecializationsResource,
     LawyersListResource,
     ScheduleResource,
     AppointmentResource,
@@ -18,13 +19,14 @@ api = Api(blueprint)
 
 api.add_resource(CityListResource, "/cities", endpoint="cities")
 api.add_resource(
-    SpecializationListResource, "/specialization", endpoint="specialization"
+    SpecializationListByCityResource, "/specialization-by-city", endpoint="specialization"
 )
 api.add_resource(LawyersListResource, "/lawyers", endpoint="lawyers")
 api.add_resource(ScheduleResource, "/schedule", endpoint="schedule")
 api.add_resource(AppointmentResource, "/appointment", endpoint="appointment")
 api.add_resource(OurTeamResource, "/our-team", endpoint="our_team")
 api.add_resource(FeedbackResource, "/feedback", endpoint="feedback")
+api.add_resource(AllSpecializationsResource, "/specializations", endpoint="specializations")
 
 
 @blueprint.errorhandler(ValidationError)

@@ -60,42 +60,42 @@ our_team_data = [
 specializations = [
     {
         "specialization_name": "Корпоративне право",
-        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701429070/bxlxyssx7xvdmjje9trp.png",
+        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701431693/gv36ariwmuo96aqspfdp.jpg",
         "specialization_description": "Практика корпоративного права в роботі нашої юридичної фірми займає ключове місце. Надаючи юридичні послуги бізнесу по корпоративному праву, юристи компанії беруть на себе супровід реєстрації різних форм ведення бізнесу.",
     },
     {
         "specialization_name": "Цивільний процес",
-        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701429020/pnoogvndtrgp1oeosfqs.png",
+        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701431747/fwf4nqnarwh4tjmrnce2.jpg",
         "specialization_description": "Цивільне право - галузь права, предметом якого є майнові та особисті немайнові відносини в суспільстві.Вирішення спірних ситуацій в сфері цивільних правовідносин вимагає наявності професійного досвіду і знання правових норм.",
     },
     {
         "specialization_name": "Виконавче провадження",
-        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701428969/nvm9gkntcnw0hzcej0no.png",
+        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701431789/fzkg0ubykcvpsylc8igb.jpg",
         "specialization_description": "Вирішення спірних ситуацій в сфері цивільних правовідносин вимагає наявності професійного досвіду і знання правових норм. Відсутність таких може привести не тільки до марнування особистого часу і сил, а й до суттєвих матеріальних втрат.",
     },
     {
         "specialization_name": "Кримінальний процесс",
-        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701428898/kqosfhzhhvofbbhp45l0.png",
+        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701431845/iaorinlexu6pwcs5rmuw.jpg",
         "specialization_description": "Ми пропонуємо Вам повний правовий захист в кримінальних провадженнях, незалежно від Вашого процесуального статусу (підозрюваний, обвинувачений, свідок, потерпілий, цивільний позивач або відповідач) з розробкою і реалізацією повного плану дій.",
     },
     {
         "specialization_name": "Інтелектуальна власність",
-        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701428851/mcr2pdopkw5qoih1wffu.png",
+        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701432090/b9kepyzuleilly2rc9if.png",
         "specialization_description": "Наша практика інтелектуальної власності зосереджується на наданні послуг клієнтам щодо розвитку, придбання, використання та передачі їх інтелектуальної власності, такий як торгові марки і авторські права, патенти і технології, комерційні таємниці і конфіденційна інформація.",
     },
     {
         "specialization_name": "Сімейне право",
-        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701428144/etwnvzkvka0h6elz8s7g.svg",
+        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701431898/kdm4kumigh8qdzqkqozu.jpg",
         "specialization_description": "Адвокатська компанія 'STATUS' надає повний спектр послуг в сфері сімейного права українським і іноземним клієнтам, включаючи юридичне консультування, складання договорів, що регулюють сімейні і спадкові відносини.",
     },
     {
         "specialization_name": "Адміністративний процес",
-        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701428031/psgnira69e57mpt8ly7i.svg",
+        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701432122/cta7jiibvfomggnx3mc7.jpg",
         "specialization_description": "На жаль, все частіше простежується порушення прав громадян суб'єктами владних повноважень, які проявляються як в формі скоєння протиправних дій, так і бездіяльності, де якраз громадяни і є слабкою і незахищеною стороною.",
     },
     {
         "specialization_name": "Реєстрація та супровід бізнесу в ЄС",
-        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701428031/psgnira69e57mpt8ly7i.svg",
+        "specialization_photo": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701432147/sjrx268znskq4ezaqtdh.jpg",
         "specialization_description": 'Окремий напрямок діяльності нашої Адвокатської компанії - це "Status International" - українська філія англійської консалтингової групи "Trade Formation", а також Швейцарської компанії "SIGTAX".',
     },
 ]
