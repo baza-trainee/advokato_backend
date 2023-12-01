@@ -4,24 +4,24 @@ from flask_restful import Resource
 from sqlalchemy import desc
 # from flask_jwt_extended import jwt_required
 
-from calendarapi.api.schemas import NewsSchema
+from calendarapi.api.schemas import ReviewsSchema
 from calendarapi.extensions import db
-from calendarapi.models import News
+from calendarapi.models import Reviews
 
 
-class NewsResource(Resource):
+class ReviewsResource(Resource):
     """
-    News Resource
+    Reviews Resource
 
     ---
     get:
       tags:
         - Website content
-      summary: Get a list of news.
-      description: Get a list of news.
+      summary: Get a list of reviews.
+      description: Get a list of reviews.
       responses:
         200:
-          description: List of news
+          description: List of reviews
           content:
             application/json:
               schema:
@@ -37,15 +37,13 @@ class NewsResource(Resource):
                       type: string
                     photo_path:
                       type: string
-                    created_at:
-                        type: string
         404:
-          description: No news found.
+          description: No reviews found.
     """
 
     # method_decorators = [jwt_required()]
-    news_schema: NewsSchema = NewsSchema()
+    reviews_schema: ReviewsSchema = ReviewsSchema()
 
     def get(self):
-        news: List[News] = db.session.query(News).order_by(desc(News.created_at)).all()
-        return self.news_schema.dump(news, many=True), 200
+        reviews: List[Reviews] = db.session.query(Reviews).order_by(desc(Reviews.id)).all()
+        return self.reviews_schema.dump(reviews, many=True), 200
