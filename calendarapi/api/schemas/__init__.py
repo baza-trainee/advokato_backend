@@ -10,7 +10,6 @@ from calendarapi.api.schemas.news import NewsSchema
 from calendarapi.api.schemas.reviews import ReviewsSchema
 
 
-
 __all__ = [
     "UserSchema",
     "CitySchema",

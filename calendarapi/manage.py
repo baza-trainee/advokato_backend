@@ -12,8 +12,14 @@ from calendarapi.models import (
     City,
     Schedule,
     OurTeam,
+    Contact,
 )
-from calendarapi.services.fake_data import our_team_data, specializations
+from calendarapi.services.fake_data import (
+    our_team_data,
+    specializations,
+    cities,
+    contacts,
+)
 # from tests.factories import LawyersFactory, ScheduleFactory
 from calendarapi.extensions import db
 
@@ -32,21 +38,15 @@ def init():
     #         is_active=True,
     #         is_superuser=True,
     #     )
-    #     city_list = [
-    #         City(city_name="Київ"),
-    #         City(city_name="Одеса"),
-    #         City(city_name="Миколаїв"),
-    #     ]
-    #     db.session.add_all(city_list)
-    #     db.session.flush()
 
+    #     contact_list = [Contact(**data) for data in contacts]
+    #     city_list = [City(**data) for data in cities]
     #     spec_list = [Specialization(**data) for data in specializations]
-    #     db.session.add_all(spec_list)
+    #     db.session.add_all([*city_list, *spec_list, *contact_list])
     #     db.session.flush()
 
     #     fake_schedule: List[Schedule] = ScheduleFactory.create_batch(25)
     #     fake_lawyers: List[Lawyer] = LawyersFactory.create_batch(25)
-
     #     for lawyer in fake_lawyers:
     #         lawyer.cities = list(sample(city_list, randint(1, 2)))
     #         lawyer.specializations = sample(spec_list, randint(1, 3))
