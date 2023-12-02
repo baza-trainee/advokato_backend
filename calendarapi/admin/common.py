@@ -32,7 +32,9 @@ def configure_login(app):
 
 class LoginForm(form.Form):
     login = fields.StringField(label="Логін", validators=[validators.InputRequired()])
-    password = fields.PasswordField(label="Пароль", validators=[validators.InputRequired()])
+    password = fields.PasswordField(
+        label="Пароль", validators=[validators.InputRequired()]
+    )
 
     def validate_login(self, field):
         user = self.get_user()
@@ -62,7 +64,9 @@ class ForgotForm(form.Form):
 
 class PasswordResetForm(form.Form):
     password = fields.PasswordField("password", validators=[validators.DataRequired()])
-    confirm_password = fields.PasswordField("confirm password", validators=[validators.DataRequired()])
+    confirm_password = fields.PasswordField(
+        "confirm password", validators=[validators.DataRequired()]
+    )
 
 
 class CustomAdminIndexView(AdminIndexView):
@@ -105,7 +109,11 @@ class CustomAdminIndexView(AdminIndexView):
             user = db.session.query(User).filter_by(email=email).one_or_none()
             if user:
                 new_token = uuid.uuid4()
-                user_security = db.session.query(UserSecurity).filter_by(user_id=user.id).one_or_none()
+                user_security = (
+                    db.session.query(UserSecurity)
+                    .filter_by(user_id=user.id)
+                    .one_or_none()
+                )
                 if user_security:
                     user_security.token = new_token
                 else:
@@ -115,7 +123,9 @@ class CustomAdminIndexView(AdminIndexView):
                 db.session.commit()
 
                 message = f"Ви отримали цей лист через те, що зробили запит на перевстановлення пароля для облікового запису користувача на {request.host_url}admin"
-                message += "\nБудь ласка, перейдіть на цю сторінку, та оберіть новий пароль: "
+                message += (
+                    "\nБудь ласка, перейдіть на цю сторінку, та оберіть новий пароль: "
+                )
                 message += f"\n{request.host_url}admin/reset_password/?token={user_security.token}\n"
                 message += f"\nВаше користувацьке ім'я: {user.username}"
                 message += "\n\nДякуємо за користування нашим сайтом!"
@@ -128,7 +138,7 @@ class CustomAdminIndexView(AdminIndexView):
 
             flash(
                 "На ваш email було відправлено повідомлення з інструкціями для зміни паролю.",
-                "success"
+                "success",
             )
             return redirect(f"{request.host_url}admin")
         else:
@@ -147,9 +157,17 @@ class CustomAdminIndexView(AdminIndexView):
             if password == confirm_password:
                 token = request.args.get("token", default=None)
                 if token:
-                    user_security = db.session.query(UserSecurity).filter_by(token=token).one_or_none()
+                    user_security = (
+                        db.session.query(UserSecurity)
+                        .filter_by(token=token)
+                        .one_or_none()
+                    )
                     if user_security:
-                        user = db.session.query(User).filter_by(id=user_security.user_id).one_or_none()
+                        user = (
+                            db.session.query(User)
+                            .filter_by(id=user_security.user_id)
+                            .one_or_none()
+                        )
                         user.password = password
                         db.session.delete(user_security)
                         db.session.commit()
@@ -164,10 +182,16 @@ class CustomAdminIndexView(AdminIndexView):
         else:
             token = request.args.get("token", default=None)
             if token:
-                user_security = db.session.query(UserSecurity).filter_by(token=token).one_or_none()
+                user_security = (
+                    db.session.query(UserSecurity).filter_by(token=token).one_or_none()
+                )
                 if user_security:
                     form = PasswordResetForm(request.form)
-                    user = db.session.query(User).filter_by(id=user_security.user_id).one_or_none()
+                    user = (
+                        db.session.query(User)
+                        .filter_by(id=user_security.user_id)
+                        .one_or_none()
+                    )
                     flash("Введіть новий пароль", "info")
                     return self.render("admin/reset_password.html", form=form)
                 else:
