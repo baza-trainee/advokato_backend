@@ -54,7 +54,7 @@ class LoginForm(form.Form):
 
 class ForgotForm(form.Form):
     email = fields.EmailField(
-        "Введіть ваш e-mail",
+        "email",
         validators=[
             validators.DataRequired(),
             validators.Email(),
@@ -142,6 +142,10 @@ class CustomAdminIndexView(AdminIndexView):
             return redirect(request.base_url)
         else:
             form = ForgotForm(request.form)
+            flash(
+                f"Введіть ваш email, на який ми відправимо інструкцію для відновлення пароля.",
+                "info",
+            )
             return self.render("admin/reset_password.html", form=form)
 
     @expose("/reset_password/", methods=["GET", "POST"])

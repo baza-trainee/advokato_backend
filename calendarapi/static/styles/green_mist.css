@@ -148,7 +148,7 @@ input[type="password"][placeholder='confirm password']:focus-visible {
   border: solid 2px rgba(33, 37, 41, 0.9);
   outline: none;
 }
-input[name="email"] {
+input[type="email"][placeholder='email'] {
   height: 40px;
   width: 250px;
   background: rgba(255, 255, 255, 0.5);
@@ -157,11 +157,16 @@ input[name="email"] {
   font-size: 16px;
   font-family: "desc_font", sans-serif;
   text-align: center;
+  margin-top: 1px !important;
   padding: 10px;
-  margin-top: 10px;
+  margin-bottom: 10px;
+}
+input[type="email"]::placeholder {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 18px;
 }
 
-input[name="email"]:focus-visible {
+input[type="email"][placeholder='email']:focus-visible {
   transition: 0.1s;
   background: rgba(255, 255, 255, 0.6);
   border: solid 2px rgba(33, 37, 41, 0.9);
