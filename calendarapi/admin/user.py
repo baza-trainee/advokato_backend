@@ -1,3 +1,4 @@
+from flask import flash
 from flask_login import current_user
 from wtforms import EmailField, PasswordField
 from wtforms.validators import DataRequired, EqualTo, ValidationError
@@ -5,7 +6,8 @@ from wtforms.validators import DataRequired, EqualTo, ValidationError
 from calendarapi.admin.common import AdminModelView
 from calendarapi.admin.common import AdminModelView
 from calendarapi.api.schemas import LawyerSchema
-
+from calendarapi.extensions import db
+from calendarapi.models.user import User
 
 class EmailValidator:
     def __call__(self, form, field):
@@ -13,7 +15,6 @@ class EmailValidator:
         errors = schema.validate({"lawyer_mail": field.data})
         if errors.get("lawyer_mail"):
             raise ValidationError(errors["lawyer_mail"][0])
-
 
 class UserAdminModelView(AdminModelView):
     def is_accessible(self):
@@ -64,3 +65,22 @@ class UserAdminModelView(AdminModelView):
             validators=[EmailValidator(), DataRequired("Це поле обов'язкове.")],
         ),
     }
+
+    def delete_model(self, model):
+        if db.session.query(User).filter_by(is_superuser=True).count() == 1:
+            flash('Має залишитися хоча б один користувач із привілегією superuser', 'error')
+        else:
+            return super().delete_model(model)
+        
+    def on_model_change(self, form, model, is_created):
+        if form.is_superuser.object_data and not form.is_superuser.data:
+            if db.session.query(User).filter_by(is_superuser=True).count() <= 1:
+                flash('Має залишитися хоча б один користувач із привілегією superuser', 'error')
+                model.is_superuser = True
+        return super().on_model_change(form, model, is_created)
+    
+    def delete_model(self, model):
+        if db.session.query(User).filter_by(is_superuser=True).count() == 1:
+            flash('Має залишитися хоча б один користувач із привілегією superuser', 'error')
+        else:
+            return super().delete_model(model)

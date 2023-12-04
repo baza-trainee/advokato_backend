@@ -1,16 +1,14 @@
 import os
-import uuid
-from flask import request
+from wtforms.validators import DataRequired
 from markupsafe import Markup
-from calendarapi.admin.common import AdminModelView
-from flask_admin import form
+from calendarapi.admin.common import AdminModelView, validate_photo_path
 from wtforms import TextAreaField
 from cloudinary import uploader
 from wtforms import FileField
+from wtforms.fields.simple import FileField
 
 file_path = os.path.abspath(os.path.dirname(__name__))
 our_team_dir = os.path.join(file_path, "calendarapi", "static", "media", "team")
-
 
 class OurTeamModelView(AdminModelView):
     can_set_page_size = True
@@ -76,7 +74,10 @@ class OurTeamModelView(AdminModelView):
     #     os.makedirs(upload_folder, exist_ok=True)
 
     form_extra_fields = {
-        "photo_path": FileField("Виберіть фото партнера"),
+        "photo_path": FileField(
+            "Виберіть фото партнера",
+            validators=[validate_photo_path],
+        ),
         # "photo_path": form.ImageUploadField(
         #     "Виберіть фото партнера",
         #     base_path=os.path.join(file_path, "calendarapi", "static", "media", "team"),
@@ -84,9 +85,11 @@ class OurTeamModelView(AdminModelView):
         #     namegen=generate_image_name,
         #     allowed_extensions=["jpg", "png", "jpeg", "gif", "webp", "svg"],
         #     validators=[validate_directory],
-        # ),
+        # ), #TODO переробити ан filefield
         "description": TextAreaField(
-            "Опис", render_kw={"class": "form-control", "rows": 3}
+            "Опис",
+            render_kw={"class": "form-control", "rows": 5},
+            validators=[DataRequired(message="Це поле обов'язкове.")],
         ),
     }
 

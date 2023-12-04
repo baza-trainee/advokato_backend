@@ -3,10 +3,17 @@ from flask import redirect, url_for, request, flash
 import flask_login as login
 from flask_admin import AdminIndexView, helpers, expose
 from flask_admin.contrib.sqla import ModelView
-from wtforms import form, fields, validators
-from calendarapi.extensions import db, pwd_context, mail
+from wtforms import form, fields, validators, ValidationError
+from flask_mail import Message
+
+from calendarapi.extensions import db, mail
 from calendarapi.models import User, UserSecurity
 
+def validate_photo_path(form, field):
+    if not form.photo_path.object_data and not form.photo_path.data:
+        raise ValidationError(
+            "Це поле обов'язкове."
+        )
 
 class AdminModelView(ModelView):
     extra_css = ["/static/styles/green_mist.css"]
@@ -32,9 +39,7 @@ def configure_login(app):
 
 class LoginForm(form.Form):
     login = fields.StringField(label="Логін", validators=[validators.InputRequired()])
-    password = fields.PasswordField(
-        label="Пароль", validators=[validators.InputRequired()]
-    )
+    password = fields.PasswordField(label="Пароль", validators=[validators.InputRequired()])
 
     def validate_login(self, field):
         user = self.get_user()
@@ -64,9 +69,7 @@ class ForgotForm(form.Form):
 
 class PasswordResetForm(form.Form):
     password = fields.PasswordField("password", validators=[validators.DataRequired()])
-    confirm_password = fields.PasswordField(
-        "confirm password", validators=[validators.DataRequired()]
-    )
+    confirm_password = fields.PasswordField("confirm password", validators=[validators.DataRequired()])
 
 
 class CustomAdminIndexView(AdminIndexView):
@@ -109,11 +112,7 @@ class CustomAdminIndexView(AdminIndexView):
             user = db.session.query(User).filter_by(email=email).one_or_none()
             if user:
                 new_token = uuid.uuid4()
-                user_security = (
-                    db.session.query(UserSecurity)
-                    .filter_by(user_id=user.id)
-                    .one_or_none()
-                )
+                user_security = db.session.query(UserSecurity).filter_by(user_id=user.id).one_or_none()
                 if user_security:
                     user_security.token = new_token
                 else:
@@ -122,29 +121,24 @@ class CustomAdminIndexView(AdminIndexView):
 
                 db.session.commit()
 
-                message = f"Ви отримали цей лист через те, що зробили запит на перевстановлення пароля для облікового запису користувача на {request.host_url}admin"
-                message += (
-                    "\nБудь ласка, перейдіть на цю сторінку, та оберіть новий пароль: "
-                )
-                message += f"\n{request.host_url}admin/reset_password/?token={user_security.token}\n"
-                message += f"\nВаше користувацьке ім'я: {user.username}"
-                message += "\n\nДякуємо за користування нашим сайтом!"
+                text = f"Ви отримали цей лист через те, що зробили запит на перевстановлення пароля для облікового запису користувача на {request.host_url}admin"
+                text += "\n\nБудь ласка, перейдіть на цю сторінку, та оберіть новий пароль: "
+                text += f"\n{request.host_url}admin/reset_password/?token={user_security.token}\n"
+                text += f"\nВаше користувацьке ім'я: {user.username}"
+                text += "\n\nДякуємо за користування нашим сайтом!"
 
-                # mail.send(message=message)
-                flash(message, "success")  # TODO видалити
-            else:
-                flash(f"емейл {email} не знайдено", "error")  # TODO видалити
-                return redirect(request.base_url)
+                message = Message("Відновлення доступу до Advocato-admin", recipients=[user.email], body=text)
+                mail.send(message=message)
 
             flash(
-                "На ваш email було відправлено повідомлення з інструкціями для зміни паролю.",
+                "Якщо email вказано вірно, на нього буде відправлено повідомлення з інструкціями для відновлення доступу.",
                 "success",
             )
             return redirect(f"{request.host_url}admin")
         else:
             form = ForgotForm(request.form)
             flash(
-                f"Введіть ваш email, на який ми відправимо інструкцію для відновлення пароля.",
+                f"Введіть ваш email, на який ми відправимо з інструкціями для відновлення доступу.",
                 "info",
             )
             return self.render("admin/reset_password.html", form=form)
@@ -157,17 +151,9 @@ class CustomAdminIndexView(AdminIndexView):
             if password == confirm_password:
                 token = request.args.get("token", default=None)
                 if token:
-                    user_security = (
-                        db.session.query(UserSecurity)
-                        .filter_by(token=token)
-                        .one_or_none()
-                    )
+                    user_security = db.session.query(UserSecurity).filter_by(token=token).one_or_none()
                     if user_security:
-                        user = (
-                            db.session.query(User)
-                            .filter_by(id=user_security.user_id)
-                            .one_or_none()
-                        )
+                        user = db.session.query(User).filter_by(id=user_security.user_id).one_or_none()
                         user.password = password
                         db.session.delete(user_security)
                         db.session.commit()
@@ -182,16 +168,10 @@ class CustomAdminIndexView(AdminIndexView):
         else:
             token = request.args.get("token", default=None)
             if token:
-                user_security = (
-                    db.session.query(UserSecurity).filter_by(token=token).one_or_none()
-                )
+                user_security = db.session.query(UserSecurity).filter_by(token=token).one_or_none()
                 if user_security:
                     form = PasswordResetForm(request.form)
-                    user = (
-                        db.session.query(User)
-                        .filter_by(id=user_security.user_id)
-                        .one_or_none()
-                    )
+                    user = db.session.query(User).filter_by(id=user_security.user_id).one_or_none()
                     flash("Введіть новий пароль", "info")
                     return self.render("admin/reset_password.html", form=form)
                 else:
