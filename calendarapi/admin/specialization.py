@@ -1,11 +1,8 @@
 from markupsafe import Markup
-
 from wtforms.validators import DataRequired
 from calendarapi.admin.common import AdminModelView
-from calendarapi.extensions import db
 from markupsafe import Markup
 from calendarapi.admin.common import AdminModelView
-from flask_admin import form
 from wtforms import TextAreaField
 from cloudinary import uploader
 from wtforms import FileField
@@ -91,7 +88,7 @@ class SpecializationAdminModelView(AdminModelView):
         #     validators=[validate_directory],
         # ),
         "specialization_description": TextAreaField(
-            "Опис", render_kw={"class": "form-control", "rows": 3}
+            "Опис", render_kw={"class": "form-control", "rows": 5}
         ),
     }
 

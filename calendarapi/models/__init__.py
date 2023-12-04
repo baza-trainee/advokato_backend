@@ -13,7 +13,7 @@ from calendarapi.models.our_team import OurTeam
 from calendarapi.models.news import News
 from calendarapi.models.contacts import Contact
 from calendarapi.models.reviews import Reviews
-from calendarapi.models.user_tokens import UserSecurity
+from calendarapi.models.user_security import UserSecurity
 
 __all__ = [
     "User",

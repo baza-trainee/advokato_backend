@@ -110,7 +110,7 @@ cities = [
 contacts = [
     {
         "contact_type": "linkedin",
-        "value": "Значення",
+        "value": "https://www.linkedin.com/company/baza-trainee-ukraine/",
     },
     {
         "contact_type": "facebook",

@@ -6,7 +6,6 @@ from calendarapi.admin.common import AdminModelView
 from markupsafe import Markup
 from wtforms import TextAreaField
 from cloudinary import uploader
-from flask_admin import form
 from wtforms import FileField
 
 
@@ -20,8 +19,8 @@ class NewsAdminModelView(AdminModelView):
     column_labels = {
         "name": "Назва",
         "description": "Опис",
-        "photo_path": "Фото",
         "created_at": "Дата",
+        "photo_path": "Фото",
     }
     column_sortable_list = [
         "created_at",
@@ -55,8 +54,8 @@ class NewsAdminModelView(AdminModelView):
         return thumbnail_formatter
 
     column_formatters = {
-        "photo_path": _list_thumbnail(),
         "description": _format_description,
+        "photo_path": _list_thumbnail(),
     }
 
     # def generate_image_name(model, file_data):
@@ -67,6 +66,9 @@ class NewsAdminModelView(AdminModelView):
     #     os.makedirs(upload_folder, exist_ok=True)
 
     form_extra_fields = {
+        "description": TextAreaField(
+            "Опис", render_kw={"class": "form-control", "rows": 5}
+        ),
         "photo_path": FileField("Виберіть фото для новини"),
         # "photo_path": form.ImageUploadField(
         #     "Виберіть фото для новини",
@@ -75,10 +77,7 @@ class NewsAdminModelView(AdminModelView):
         #     namegen=generate_image_name,
         #     allowed_extensions=["jpg", "png", "jpeg", "gif", "webp", "svg"],
         #     validators=[validate_directory],
-        # ),
-        "description": TextAreaField(
-            "Опис", render_kw={"class": "form-control", "rows": 3}
-        ),
+        # ), #TODO переробити ан filefield
     }
 
     # def on_model_delete(self, model):

@@ -13,4 +13,15 @@
 <a class="btn" href="{{ url_for('admin.logout_view') }}" title="Вийти з панелі адміністратора"><img
         src="/static/interface/logout.png" height="25"></a>
 {% endif %}
+{% endblock%}
+
+{% block page_body %}
+{{ super() }}
+<script>
+    setTimeout(function() {
+      document.querySelectorAll('.alert').forEach(function(alert) {
+        alert.remove();
+      });
+    }, 4000);
+  </script>
 {% endblock %}

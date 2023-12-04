@@ -1,14 +1,14 @@
 import os
 import uuid
 
+from wtforms.validators import DataRequired
 from flask import request
-from calendarapi.admin.common import AdminModelView
 from markupsafe import Markup
 from wtforms import TextAreaField
 from cloudinary import uploader
-from flask_admin import form
 from wtforms import FileField
 
+from calendarapi.admin.common import AdminModelView, validate_photo_path
 
 file_path = os.path.abspath(os.path.dirname(__name__))
 reviews_dir = os.path.join(file_path, "calendarapi", "static", "media", "reviews")
@@ -68,7 +68,15 @@ class ReviewsAdminModelView(AdminModelView):
     #     os.makedirs(upload_folder, exist_ok=True)
 
     form_extra_fields = {
-        "photo_path": FileField("Виберіть фото для відгуку"),
+        "description": TextAreaField(
+            "Опис",
+            render_kw={"class": "form-control", "rows": 5},
+            validators=[DataRequired(message="Це поле обов'язкове.")],
+        ),
+        "photo_path": FileField(
+            "Виберіть фото для відгуку",
+            validators=[validate_photo_path],
+        ),
         # "photo_path": form.ImageUploadField(
         #     "Виберіть фото для відгуку",
         #     base_path=os.path.join(file_path, "calendarapi", "static", "media", "reviews"),
@@ -77,9 +85,9 @@ class ReviewsAdminModelView(AdminModelView):
         #     allowed_extensions=["jpg", "png", "jpeg", "gif", "webp", "svg"],
         #     validators=[validate_directory],
         # ),
-        "description": TextAreaField(
-            "Опис", render_kw={"class": "form-control", "rows": 3}
-        ),
+    }
+    form_args = {
+        "created_at": {"validators": [DataRequired(message="Це поле обов'язкове.")]},
     }
 
     # def on_model_delete(self, model):
