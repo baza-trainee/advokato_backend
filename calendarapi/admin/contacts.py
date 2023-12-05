@@ -35,3 +35,9 @@ class ContactModelView(AdminModelView):
         "value": """Посилання на відповідну соціальну мережу, пошта, один або декілька номерів телефонів. 
                     Використовуйте HTML теги щоб вказати декілька номерів телефону, наприклад &lt;br&gt;."""
     }
+
+    # form_extra_fields = {
+    #     "value": SelectMultipleField(
+    #         widget=TextArea()
+    #     ),
+    # } # TODO

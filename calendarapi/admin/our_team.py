@@ -1,14 +1,19 @@
 import os
-from wtforms.validators import DataRequired
-from markupsafe import Markup
-from calendarapi.admin.common import AdminModelView, validate_photo_path
-from wtforms import TextAreaField
-from cloudinary import uploader
-from wtforms import FileField
-from wtforms.fields.simple import FileField
 
-file_path = os.path.abspath(os.path.dirname(__name__))
-our_team_dir = os.path.join(file_path, "calendarapi", "static", "media", "team")
+from flask import request, current_app
+from markupsafe import Markup
+from wtforms.validators import DataRequired
+from wtforms import TextAreaField, FileField, ValidationError
+
+from calendarapi.admin.common import (
+    AdminModelView,
+    get_media_path,
+    custom_delete_file,
+    custom_save_file,
+)
+
+ABS_MEDIA_PATH = get_media_path(__name__.split(".")[-1])
+
 
 class OurTeamModelView(AdminModelView):
     can_set_page_size = True
@@ -37,27 +42,23 @@ class OurTeamModelView(AdminModelView):
         "photo_path",
     ]
     column_descriptions = {
-        "description": """Ви можете використовувати HTML-теги, щоб логічно розділити текст на блоки, створити список і т. д., для покращення зручності читання."""
+        "description": """Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д., для покращення зручності читання."""
     }
 
     def _format_description(view, context, model, name):
-        return Markup(model.description)
+        return Markup(f'<div style="text-align: left">{model.description}</div>')
 
-    def _list_thumbnail():
+    def _list_thumbnail(width: int = 240):
         def thumbnail_formatter(view, context, model, name):
             if not model.photo_path:
                 return ""
-            # url = os.path.join(request.host_url, "static", "media", "team", model.photo_path)
-            url = model.photo_path
-            if model.photo_path.split(".")[-1] in [
-                "jpg",
-                "jpeg",
-                "png",
-                "svg",
-                "gif",
-                "webp",
-            ]:
-                return Markup(f"<img src={url} width=240>")
+            if current_app.config["STORAGE"] == "STATIC":
+                url = os.path.join(request.host_url, model.photo_path)
+            else:
+                url = model.photo_path
+
+            if model.photo_path.split(".")[-1] in current_app.config["IMAGE_FORMATS"]:
+                return Markup(f"<img src={url} width={width}>")
 
         return thumbnail_formatter
 
@@ -66,26 +67,15 @@ class OurTeamModelView(AdminModelView):
         "description": _format_description,
     }
 
-    # def generate_image_name(model, file_data):
-    #     return f'{uuid.uuid4().hex[:16]}.{file_data.filename.split(".")[-1]}'
-
-    # def validate_directory(form, field):
-    #     upload_folder = os.path.join(file_path, "calendarapi", "static", "media", "team")
-    #     os.makedirs(upload_folder, exist_ok=True)
+    def _custom_validate_media(form, field):
+        if not form.photo_path.object_data and not form.photo_path.data:
+            raise ValidationError("Це поле обов'язкове.")
 
     form_extra_fields = {
         "photo_path": FileField(
             "Виберіть фото партнера",
-            validators=[validate_photo_path],
+            validators=[_custom_validate_media],
         ),
-        # "photo_path": form.ImageUploadField(
-        #     "Виберіть фото партнера",
-        #     base_path=os.path.join(file_path, "calendarapi", "static", "media", "team"),
-        #     url_relative_path=os.path.join('media', 'team', ''),
-        #     namegen=generate_image_name,
-        #     allowed_extensions=["jpg", "png", "jpeg", "gif", "webp", "svg"],
-        #     validators=[validate_directory],
-        # ), #TODO переробити ан filefield
         "description": TextAreaField(
             "Опис",
             render_kw={"class": "form-control", "rows": 5},
@@ -93,16 +83,15 @@ class OurTeamModelView(AdminModelView):
         ),
     }
 
-    # def on_model_delete(self, model):
-    #     file_path = f"{our_team_dir}/{model.photo_path}"
-    #     if os.path.exists(file_path):
-    #         os.remove(file_path)
-    #     return super().on_model_delete(model)
+    def on_model_delete(self, model):
+        custom_delete_file(ABS_MEDIA_PATH, model.photo_path)
+        return super().on_model_delete(model)
 
     def on_model_change(self, form, model, is_created):
         if model.photo_path:
-            upload_result = uploader.upload(model.photo_path)
-            model.photo_path = upload_result["url"]
+            if form.photo_path.object_data:
+                custom_delete_file(ABS_MEDIA_PATH, form.photo_path.object_data)
+            model.photo_path = custom_save_file(ABS_MEDIA_PATH, model.photo_path)
         else:
             model.photo_path = form.photo_path.object_data
         return super().on_model_change(form, model, is_created)
