@@ -22,11 +22,13 @@ from calendarapi.services.fake_data import (
 )
 from calendarapi.extensions import db
 
+
 try:
     from tests.factories import LawyersFactory, ScheduleFactory
 except ImportError:
     VERCEL = True
-
+else:
+    VERCEL = False
 
 @click.command("init")
 @with_appcontext
