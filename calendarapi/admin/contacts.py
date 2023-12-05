@@ -2,6 +2,7 @@ from markupsafe import Markup
 
 from calendarapi.admin.common import AdminModelView
 
+
 class ContactModelView(AdminModelView):
     can_set_page_size = True
     column_labels = {

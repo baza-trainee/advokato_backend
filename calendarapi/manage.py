@@ -30,6 +30,7 @@ except ImportError:
 else:
     VERCEL = False
 
+
 @click.command("init")
 @with_appcontext
 def init():
