@@ -31,13 +31,3 @@ class ContactModelView(AdminModelView):
     can_delete = False
     can_edit = True
     column_sortable_list = []
-    column_descriptions = {
-        "value": """Посилання на відповідну соціальну мережу, пошта, один або декілька номерів телефонів. 
-                    Використовуйте HTML теги щоб вказати декілька номерів телефону, наприклад &lt;br&gt;."""
-    }
-
-    # form_extra_fields = {
-    #     "value": SelectMultipleField(
-    #         widget=TextArea()
-    #     ),
-    # } # TODO
