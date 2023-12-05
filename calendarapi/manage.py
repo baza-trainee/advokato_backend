@@ -21,10 +21,12 @@ from calendarapi.services.fake_data import (
     contacts,
 )
 from calendarapi.extensions import db
+
 try:
     from tests.factories import LawyersFactory, ScheduleFactory
 except ImportError:
     VERCEL = True
+
 
 @click.command("init")
 @with_appcontext
@@ -77,4 +79,3 @@ def init():
             click.echo("Users is already exist")
     else:
         click.echo("VERCEL MODE ON")
-
