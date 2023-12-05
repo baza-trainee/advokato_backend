@@ -14,6 +14,16 @@ MAIN_PAGE_URL = os.getenv("MAIN_PAGE_URL")
 
 BABEL_DEFAULT_LOCALE = "uk_UA"
 
+STORAGE = "CLOUDINARY"  # "STATIC" or "CLOUDINARY"
+IMAGE_FORMATS = [
+    "jpg",
+    "jpeg",
+    "png",
+    "svg",
+    "gif",
+    "webp",
+]
+
 # CACHE_TYPE = "RedisCache"
 # CACHE_DEFAULT_TIMEOUT = 30
 # CACHE_REDIS_HOST = "redis"

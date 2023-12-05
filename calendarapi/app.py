@@ -155,6 +155,9 @@ def register_adminsite(app):
         NewsAdminModelView(News, db.session, name="Новини", category="Керування")
     )
     admin.add_view(
+        ReviewsAdminModelView(Reviews, db.session, name="Відгуки", category="Керування")
+    )
+    admin.add_view(
         ContactModelView(Contact, db.session, name="Контакти", category="Керування")
     )
     admin.add_view(
@@ -162,7 +165,6 @@ def register_adminsite(app):
             User, db.session, name="облікові записи", category="Керування"
         )
     )
-    admin.add_view(ReviewsAdminModelView(Reviews, db.session, name="Відгуки"))
 
 
 def configure_extensions(app):

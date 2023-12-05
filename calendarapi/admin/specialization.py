@@ -1,11 +1,18 @@
+import os
+from flask import current_app, request
+
 from markupsafe import Markup
 from wtforms.validators import DataRequired
-from calendarapi.admin.common import AdminModelView
-from markupsafe import Markup
-from calendarapi.admin.common import AdminModelView
-from wtforms import TextAreaField
-from cloudinary import uploader
-from wtforms import FileField
+from wtforms import TextAreaField, FileField, ValidationError
+
+from calendarapi.admin.common import (
+    AdminModelView,
+    get_media_path,
+    custom_delete_file,
+    custom_save_file,
+)
+
+ABS_MEDIA_PATH = get_media_path(__name__.split(".")[-1])
 
 
 class SpecializationAdminModelView(AdminModelView):
@@ -47,21 +54,20 @@ class SpecializationAdminModelView(AdminModelView):
     def _format_description(view, context, model, name):
         return Markup(model.specialization_description)
 
-    def _list_thumbnail():
+    def _list_thumbnail(width: int = 240):
         def thumbnail_formatter(view, context, model, name):
             if not model.specialization_photo:
                 return ""
-            # url = os.path.join(request.host_url, "static", "media", "team", model.specialization_photo)
-            url = model.specialization_photo
-            if model.specialization_photo.split(".")[-1] in [
-                "jpg",
-                "jpeg",
-                "png",
-                "svg",
-                "gif",
-                "webp",
-            ]:
-                return Markup(f"<img src={url} width=240>")
+            if current_app.config["STORAGE"] == "STATIC":
+                url = os.path.join(request.host_url, model.specialization_photo)
+            else:
+                url = model.specialization_photo
+
+            if (
+                model.specialization_photo.split(".")[-1]
+                in current_app.config["IMAGE_FORMATS"]
+            ):
+                return Markup(f"<img src={url} width={width}>")
 
         return thumbnail_formatter
 
@@ -70,38 +76,38 @@ class SpecializationAdminModelView(AdminModelView):
         "specialization_description": _format_description,
     }
 
-    # def generate_image_name(model, file_data):
-    #     return f'{uuid.uuid4().hex[:16]}.{file_data.filename.split(".")[-1]}'
-
-    # def validate_directory(form, field):
-    #     upload_folder = os.path.join(file_path, "calendarapi", "static", "media", "team")
-    #     os.makedirs(upload_folder, exist_ok=True)
+    def _custom_validate_media(form, field):
+        if (
+            not form.specialization_photo.object_data
+            and not form.specialization_photo.data
+        ):
+            raise ValidationError("Це поле обов'язкове.")
 
     form_extra_fields = {
-        "specialization_photo": FileField("Виберіть фото для спеціалізації"),
-        # "specialization_photo": form.ImageUploadField(
-        #     "Виберіть фото партнера",
-        #     base_path=os.path.join(file_path, "calendarapi", "static", "media", "team"),
-        #     url_relative_path=os.path.join('media', 'team', ''),
-        #     namegen=generate_image_name,
-        #     allowed_extensions=["jpg", "png", "jpeg", "gif", "webp", "svg"],
-        #     validators=[validate_directory],
-        # ),
+        "specialization_photo": FileField(
+            "Виберіть фото для спеціалізації",
+            validators=[_custom_validate_media],
+        ),
         "specialization_description": TextAreaField(
-            "Опис", render_kw={"class": "form-control", "rows": 5}
+            "Опис",
+            render_kw={"class": "form-control", "rows": 5},
+            validators=[DataRequired(message="Це поле обов'язкове.")],
         ),
     }
 
-    # def on_model_delete(self, model):
-    #     file_path = f"{our_team_dir}/{model.specialization_photo}"
-    #     if os.path.exists(file_path):
-    #         os.remove(file_path)
-    #     return super().on_model_delete(model)
+    def on_model_delete(self, model):
+        custom_delete_file(ABS_MEDIA_PATH, model.specialization_photo)
+        return super().on_model_delete(model)
 
     def on_model_change(self, form, model, is_created):
         if model.specialization_photo:
-            upload_result = uploader.upload(model.specialization_photo)
-            model.specialization_photo = upload_result["url"]
+            if form.specialization_photo.object_data:
+                custom_delete_file(
+                    ABS_MEDIA_PATH, form.specialization_photo.object_data
+                )
+            model.specialization_photo = custom_save_file(
+                ABS_MEDIA_PATH, model.specialization_photo
+            )
         else:
             model.specialization_photo = form.specialization_photo.object_data
         return super().on_model_change(form, model, is_created)

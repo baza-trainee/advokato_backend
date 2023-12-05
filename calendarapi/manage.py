@@ -22,55 +22,55 @@ from calendarapi.services.fake_data import (
 )
 from calendarapi.extensions import db
 
-# from tests.factories import LawyersFactory, ScheduleFactory
+from tests.factories import LawyersFactory, ScheduleFactory
 
 
 @click.command("init")
 @with_appcontext
 def init():
     pass
-    # if db.session.query(User).count() == 0:
-    #     """Create a new admin user, fake lawyers, initial city and specializations lists."""
-    #     click.echo("create user")
-    #     user = User(
-    #         username=current_app.config["ADMIN_DEFAULT_LOGIN"],
-    #         email="admin@gmail.com",
-    #         password=current_app.config["ADMIN_DEFAULT_PASSWORD"],
-    #         is_active=True,
-    #         is_superuser=True,
-    #     )
+    if db.session.query(User).count() == 0:
+        """Create a new admin user, fake lawyers, initial city and specializations lists."""
+        click.echo("create user")
+        user = User(
+            username=current_app.config["ADMIN_DEFAULT_LOGIN"],
+            email="admin@gmail.com",
+            password=current_app.config["ADMIN_DEFAULT_PASSWORD"],
+            is_active=True,
+            is_superuser=True,
+        )
 
-    #     contact_list = [Contact(**data) for data in contacts]
-    #     city_list = [City(**data) for data in cities]
-    #     spec_list = [Specialization(**data) for data in specializations]
-    #     db.session.add_all([*city_list, *spec_list, *contact_list])
-    #     db.session.flush()
+        contact_list = [Contact(**data) for data in contacts]
+        city_list = [City(**data) for data in cities]
+        spec_list = [Specialization(**data) for data in specializations]
+        db.session.add_all([*city_list, *spec_list, *contact_list])
+        db.session.flush()
 
-    #     fake_schedule: List[Schedule] = ScheduleFactory.create_batch(25)
-    #     fake_lawyers: List[Lawyer] = LawyersFactory.create_batch(25)
-    #     for lawyer in fake_lawyers:
-    #         lawyer.cities = list(sample(city_list, randint(1, 2)))
-    #         lawyer.specializations = sample(spec_list, randint(1, 3))
+        fake_schedule: List[Schedule] = ScheduleFactory.create_batch(25)
+        fake_lawyers: List[Lawyer] = LawyersFactory.create_batch(25)
+        for lawyer in fake_lawyers:
+            lawyer.cities = list(sample(city_list, randint(1, 2)))
+            lawyer.specializations = sample(spec_list, randint(1, 3))
 
-    #     db.session.add_all(fake_lawyers)
-    #     db.session.flush()
+        db.session.add_all(fake_lawyers)
+        db.session.flush()
 
-    #     our_team_members = [OurTeam(**data) for data in our_team_data]
-    #     db.session.add_all(our_team_members)
-    #     db.session.flush()
+        our_team_members = [OurTeam(**data) for data in our_team_data]
+        db.session.add_all(our_team_members)
+        db.session.flush()
 
-    #     for schedule in fake_schedule:
-    #         lawyer = choice(fake_lawyers)
-    #         schedule.lawyers = [lawyer]
-    #         schedule.lawyer_id = lawyer.id
-    #         schedule.time = ["10:00", "11:00", "12:00", "14:00"]
+        for schedule in fake_schedule:
+            lawyer = choice(fake_lawyers)
+            schedule.lawyers = [lawyer]
+            schedule.lawyer_id = lawyer.id
+            schedule.time = ["10:00", "11:00", "12:00", "14:00"]
 
-    #     db.session.add_all([*fake_schedule, user])
-    #     db.session.commit()
+        db.session.add_all([*fake_schedule, user])
+        db.session.commit()
 
-    #     click.echo("created user admin")
-    #     click.echo("Added fake cities")
-    #     click.echo("Added fake Lawyers")
-    #     click.echo("Added fake specializations")
-    # else:
-    #     click.echo("Users is already exist")
+        click.echo("created user admin")
+        click.echo("Added fake cities")
+        click.echo("Added fake Lawyers")
+        click.echo("Added fake specializations")
+    else:
+        click.echo("Users is already exist")
