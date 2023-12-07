@@ -31,7 +31,7 @@ class LawyersListResource(Resource):
         - name: specialization_id
           in: query
           description: ID of the specialization the lawyers should have.
-          required: true
+          required: false
           schema:
             type: integer
       responses:
@@ -57,14 +57,12 @@ class LawyersListResource(Resource):
         if not city_id:
             return {"message": "City ID is required"}, 400
 
-        if not specialization_id:
-            return {"message": "Specialization ID is required"}, 400
-
-        lawyers: List[Lawyer] = (
+        query = (
             db.session.query(Lawyer)
             .options(joinedload(Lawyer.specializations))
             .filter(Lawyer.cities.any(id=city_id))
-            .filter(Lawyer.specializations.any(id=specialization_id))
-            .all()
         )
+        if specialization_id:
+            query = query.filter(Lawyer.specializations.any(id=specialization_id))
+        lawyers: List[Lawyer] = query.all()
         return self.lawyer_schema.dump(lawyers, many=True), 200

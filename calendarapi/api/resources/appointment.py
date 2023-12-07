@@ -157,7 +157,7 @@ class AppointmentResource(Resource):
                             Specialization.id
                             == appointment_data.get("specialization_id")
                         )
-                        .one_or_none()
+                        .one_or_none() or "Не вказано"
                     ),
                     "lawyer": str(
                         db.session.query(Lawyer)
