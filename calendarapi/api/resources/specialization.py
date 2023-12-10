@@ -1,9 +1,8 @@
 from flask_restful import Resource, request
 
-# from flask_jwt_extended import jwt_required
-
 from calendarapi.api.schemas import SpecializationSchema
-from calendarapi.extensions import db
+from calendarapi.config import DAY
+from calendarapi.extensions import db, cache
 from calendarapi.models import Specialization, Lawyer
 
 
@@ -41,7 +40,6 @@ class SpecializationListByCityResource(Resource):
           description: "City ID is required"
     """
 
-    # method_decorators = [jwt_required()]
     specialization_schema: SpecializationSchema = SpecializationSchema()
 
     def get(self):
@@ -96,6 +94,7 @@ class AllSpecializationsResource(Resource):
 
     specialization_schema: SpecializationSchema = SpecializationSchema()
 
+    @cache.cached(key_prefix="specialization_list", timeout=DAY)
     def get(self):
         try:
             all_specializations = db.session.query(

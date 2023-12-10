@@ -1,14 +1,10 @@
 .PHONY: init init-migration down build run db-migrate test tox
 
 init: down build run
-	# docker compose exec web flask db init
-	# docker compose exec web flask db migrate
-	# docker compose exec web flask db upgrade
-	# docker compose exec web flask init
-	sleep 2
-	flask db upgrade
-	flask init
-	flask --debug run
+	docker compose exec web flask db init
+	docker compose exec web flask db migrate
+	docker compose exec web flask db upgrade
+	docker compose exec web flask init
 	@echo "Init done, containers running"
 
 build:
@@ -18,7 +14,7 @@ down:
 	docker compose down
 
 run:
-	docker compose up -d
+	docker compose --env-file ./.flaskenv up -d
 
 # dev:
 # 	docker compose restart web
@@ -33,7 +29,7 @@ db-upgrade:
 	docker compose exec web flask db upgrade
 
 open-redis:
-	docker exec -it $$(docker-compose ps -q redis) redis-cli
+	docker exec -it calendar-redis-1 redis-cli
 
 test:
 	docker compose stop celery # stop celery to avoid conflicts with celery tests

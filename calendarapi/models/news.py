@@ -1,6 +1,8 @@
 from calendarapi.extensions import db
 from datetime import datetime
 
+from calendarapi.services.cache_invalidator import invalidate_cache
+
 
 class News(db.Model):
     __tablename__ = "news"
@@ -10,3 +12,6 @@ class News(db.Model):
     description = db.Column(db.String(1000), nullable=False, unique=True)
     photo_path = db.Column(db.String(300), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+invalidate_cache(News, "news_list")

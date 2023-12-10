@@ -69,7 +69,7 @@ class FeedbackResource(Resource):
         for field in required_fields:
             if field not in data:
                 return {"error": f"Missing required field: {field}"}, 400
-        send_email(
+        send_email.delay(
             feedback=True,
             visitor_name=data["name"],
             visitor_email=data["mail"],

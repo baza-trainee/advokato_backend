@@ -2,10 +2,9 @@ from typing import List
 
 from flask_restful import Resource
 
-# from flask_jwt_extended import jwt_required
-
 from calendarapi.api.schemas import OurTeamSchema
-from calendarapi.extensions import db
+from calendarapi.config import DAY
+from calendarapi.extensions import db, cache
 from calendarapi.models import OurTeam
 
 
@@ -41,9 +40,9 @@ class OurTeamResource(Resource):
           description: No lawyers found.
     """
 
-    # method_decorators = [jwt_required()]
     city_schema: OurTeamSchema = OurTeamSchema()
 
+    @cache.cached(key_prefix="team_list", timeout=DAY)
     def get(self):
         cities: List[OurTeam] = db.session.query(OurTeam).all()
         return self.city_schema.dump(cities, many=True), 200

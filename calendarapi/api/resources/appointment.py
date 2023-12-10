@@ -2,8 +2,6 @@ from datetime import datetime
 
 from flask import request
 from flask_restful import Resource
-
-# from flask_jwt_extended import jwt_required
 from sqlalchemy import exc
 
 from calendarapi.api.schemas import AppointmentSchema, VisitorSchema
@@ -105,7 +103,6 @@ class AppointmentResource(Resource):
                     type: string
     """
 
-    # method_decorators = [jwt_required()]
     visitor_schema = VisitorSchema()
     appointment_schema = AppointmentSchema()
 
@@ -157,7 +154,8 @@ class AppointmentResource(Resource):
                             Specialization.id
                             == appointment_data.get("specialization_id")
                         )
-                        .one_or_none() or "Не вказано"
+                        .one_or_none()
+                        or "Не вказано"
                     ),
                     "lawyer": str(
                         db.session.query(Lawyer)
@@ -195,7 +193,7 @@ class AppointmentResource(Resource):
                 str(datetime.strptime(appointment_time, "%H:%M").time())
             )
             db.session.commit()
-            send_email(
+            send_email.delay(
                 visitor_name=existing_visitor.name,
                 visitor_surname=existing_visitor.surname,
                 visitor_email=existing_visitor.email,

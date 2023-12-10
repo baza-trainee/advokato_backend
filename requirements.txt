@@ -19,12 +19,10 @@ apispec-webframeworks==0.5.2
 psycopg2-binary==2.9.9
 cloudinary==1.36.0
 # Pillow==10.1.0
-# factory_boy
-# gunicorn
-# flask-jwt-extended==4.5.3
-# Flask-Caching==2.1.0
+factory_boy
+Flask-Caching==2.1.0
 # tox==4.11.3
-# celery[redis]==5.3.4
-# flower==2.0.1
+celery[redis]==5.3.4
+flower==2.0.1
 # tablib[all]==3.5.0
-# gunicorn==21.2.0
+gunicorn==21.2.0

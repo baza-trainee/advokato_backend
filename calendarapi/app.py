@@ -5,22 +5,15 @@ from flask_babel import Babel
 from flask_mail import Mail
 from markupsafe import Markup
 
-from calendarapi import api, auth, manage
+from calendarapi import api, manage
 from calendarapi.admin.our_team import OurTeamModelView
 from calendarapi.extensions import (
     apispec,
     db,
-    # jwt,
     migrate,
-    # celery,
+    celery,
+    cache,
 )
-
-# from calendarapi.auth.views import (
-#     login,
-#     refresh,
-#     revoke_access_token,
-#     revoke_refresh_token,
-# )
 from calendarapi.admin import (
     UserAdminModelView,
     CustomAdminIndexView,
@@ -89,9 +82,7 @@ def create_app(testing=False):
     configure_apispec(app)
     configure_mails(app)
     register_blueprints(app)
-    # init_celery(app)
-    # if app.config["DEBUG"]:
-    #     app.after_request(sql_debug)
+    init_celery(app)
 
     with app.app_context():
         apispec.spec.components.schema("VisitorSchema", schema=VisitorSchema)
@@ -117,11 +108,6 @@ def create_app(testing=False):
         apispec.spec.path(view=NewsResource, app=app)
         apispec.spec.path(view=ContactResource, app=app)
         apispec.spec.path(view=ReviewsResource, app=app)
-
-        # apispec.spec.path(view=login, app=app)
-        # apispec.spec.path(view=refresh, app=app)
-        # apispec.spec.path(view=revoke_access_token, app=app)
-        # apispec.spec.path(view=revoke_refresh_token, app=app)
     return app
 
 
@@ -170,9 +156,8 @@ def register_adminsite(app):
 def configure_extensions(app):
     """Configure flask extensions"""
     db.init_app(app)
-    # jwt.init_app(app)
     migrate.init_app(app, db)
-    # cache.init_app(app)
+    cache.init_app(app)
 
 
 def configure_cli(app):
@@ -201,23 +186,22 @@ def configure_apispec(app):
 
 def register_blueprints(app):
     """Register all blueprints for application"""
-    # app.register_blueprint(auth.views.blueprint)
     app.register_blueprint(api.views.blueprint)
 
 
-# def init_celery(app=None):
-#     app = app or create_app()
-#     celery.conf.update(app.config.get("CELERY", {}))
+def init_celery(app=None):
+    app = app or create_app()
+    celery.conf.update(app.config.get("CELERY", {}))
 
-#     class ContextTask(celery.Task):
-#         """Make celery tasks work with Flask app context"""
+    class ContextTask(celery.Task):
+        """Make celery tasks work with Flask app context"""
 
-#         def __call__(self, *args, **kwargs):
-#             with app.app_context():
-#                 return self.run(*args, **kwargs)
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
 
-#     celery.Task = ContextTask
-#     return celery
+    celery.Task = ContextTask
+    return celery
 
 
 def sql_debug(response):
