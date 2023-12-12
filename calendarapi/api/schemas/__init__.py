@@ -8,6 +8,8 @@ from calendarapi.api.schemas.schedule import ScheduleSchema
 from calendarapi.api.schemas.our_team import OurTeamSchema
 from calendarapi.api.schemas.news import NewsSchema
 from calendarapi.api.schemas.reviews import ReviewsSchema
+from calendarapi.api.schemas.about_company import AboutCompanySchema
+from calendarapi.api.schemas.possibilities import PossibilitiesSchema
 
 
 __all__ = [
@@ -21,4 +23,6 @@ __all__ = [
     "OurTeamSchema",
     "NewsSchema",
     "ReviewsSchema",
+    "AboutCompanySchema",
+    "PossibilitiesSchema",
 ]

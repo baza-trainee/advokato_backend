@@ -34,6 +34,8 @@ from calendarapi.admin import (
     NewsAdminModelView,
     ContactModelView,
     ReviewsAdminModelView,
+    AboutCompanyModelView,
+    PossibilitiesModelView
 )
 from calendarapi.models import (
     User,
@@ -47,6 +49,8 @@ from calendarapi.models import (
     News,
     Contact,
     Reviews,
+    AboutCompany,
+    Possibilities
 )
 from calendarapi.api.schemas import (
     VisitorSchema,
@@ -71,6 +75,7 @@ from calendarapi.api.resources import (
     NewsResource,
     ContactResource,
     ReviewsResource,
+    PossibilitiesResource
 )
 
 
@@ -117,6 +122,7 @@ def create_app(testing=False):
         apispec.spec.path(view=NewsResource, app=app)
         apispec.spec.path(view=ContactResource, app=app)
         apispec.spec.path(view=ReviewsResource, app=app)
+        apispec.spec.path(view=PossibilitiesResource, app=app)
 
         # apispec.spec.path(view=login, app=app)
         # apispec.spec.path(view=refresh, app=app)
@@ -165,7 +171,16 @@ def register_adminsite(app):
             User, db.session, name="облікові записи", category="Керування"
         )
     )
-
+    admin.add_view(
+        AboutCompanyModelView(
+            AboutCompany, db.session, name="Про компанію", category="Керування"
+        )
+    )
+    admin.add_view(
+        PossibilitiesModelView(
+            Possibilities, db.session, name="Сильні сторони", category="Керування"
+        )
+    )
 
 def configure_extensions(app):
     """Configure flask extensions"""
