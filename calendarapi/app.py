@@ -34,6 +34,8 @@ from calendarapi.admin import (
     NewsAdminModelView,
     ContactModelView,
     ReviewsAdminModelView,
+    AboutCompanyModelView,
+    PossibilitiesModelView
     ClientsAdminModelView,
     ProBonoAdminModelView,
 )
@@ -49,6 +51,8 @@ from calendarapi.models import (
     News,
     Contact,
     Reviews,
+    AboutCompany,
+    Possibilities
     Client,
     ProBono,
 )
@@ -77,6 +81,7 @@ from calendarapi.api.resources import (
     NewsResource,
     ContactResource,
     ReviewsResource,
+    PossibilitiesResource
     ClientResource,
     ProBonoResource
 )
@@ -125,9 +130,9 @@ def create_app(testing=False):
         apispec.spec.path(view=NewsResource, app=app)
         apispec.spec.path(view=ContactResource, app=app)
         apispec.spec.path(view=ReviewsResource, app=app)
+        apispec.spec.path(view=PossibilitiesResource, app=app)
         apispec.spec.path(view=ClientResource, app=app)
         apispec.spec.path(view=ProBonoResource, app=app)
-
 
 
         # apispec.spec.path(view=login, app=app)
@@ -181,6 +186,16 @@ def register_adminsite(app):
     admin.add_view(
         UserAdminModelView(
             User, db.session, name="облікові записи", category="Керування"
+        )
+    )
+    admin.add_view(
+        AboutCompanyModelView(
+            AboutCompany, db.session, name="Про компанію", category="Керування"
+        )
+    )
+    admin.add_view(
+        PossibilitiesModelView(
+            Possibilities, db.session, name="Сильні сторони", category="Керування"
         )
     )
    

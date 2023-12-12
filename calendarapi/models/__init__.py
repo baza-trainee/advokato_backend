@@ -14,9 +14,10 @@ from calendarapi.models.news import News
 from calendarapi.models.contacts import Contact
 from calendarapi.models.reviews import Reviews
 from calendarapi.models.user_security import UserSecurity
+from calendarapi.models.possibilities import Possibilities
+from calendarapi.models.about_company import AboutCompany
 from calendarapi.models.clients import Client
 from calendarapi.models.pro_bono import ProBono
-
 
 
 __all__ = [
@@ -36,6 +37,8 @@ __all__ = [
     "Contact",
     "Reviews",
     "UserSecurity",
+    "Possibilities",
+    "AboutCompany",
     "Client",
     "ProBono",
 ]
