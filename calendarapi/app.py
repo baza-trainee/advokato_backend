@@ -35,7 +35,7 @@ from calendarapi.admin import (
     ContactModelView,
     ReviewsAdminModelView,
     AboutCompanyModelView,
-    PossibilitiesModelView
+    PossibilitiesModelView,
     ClientsAdminModelView,
     ProBonoAdminModelView,
 )
@@ -52,7 +52,7 @@ from calendarapi.models import (
     Contact,
     Reviews,
     AboutCompany,
-    Possibilities
+    Possibilities,
     Client,
     ProBono,
 )
@@ -81,7 +81,7 @@ from calendarapi.api.resources import (
     NewsResource,
     ContactResource,
     ReviewsResource,
-    PossibilitiesResource
+    PossibilitiesResource,
     ClientResource,
     ProBonoResource
 )
