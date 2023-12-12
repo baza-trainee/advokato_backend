@@ -16,6 +16,9 @@ from calendarapi.models.reviews import Reviews
 from calendarapi.models.user_security import UserSecurity
 from calendarapi.models.possibilities import Possibilities
 from calendarapi.models.about_company import AboutCompany
+from calendarapi.models.clients import Client
+from calendarapi.models.pro_bono import ProBono
+
 
 __all__ = [
     "User",
@@ -36,4 +39,6 @@ __all__ = [
     "UserSecurity",
     "Possibilities",
     "AboutCompany",
+    "Client",
+    "ProBono",
 ]

@@ -15,6 +15,8 @@ from calendarapi.api.resources import (
     ContactResource,
     ReviewsResource,
     PossibilitiesResource
+    ClientResource,
+    ProBonoResource,
 )
 
 
@@ -39,6 +41,8 @@ api.add_resource(
 )
 api.add_resource(ReviewsResource, "/reviews", endpoint="reviews")
 api.add_resource(PossibilitiesResource, "/possibilities", endpoint="possibilities")
+api.add_resource(ClientResource, "/clients", endpoint="clients")
+api.add_resource(ProBonoResource, "/pro_bono", endpoint="pro_bono")
 
 
 @blueprint.errorhandler(ValidationError)

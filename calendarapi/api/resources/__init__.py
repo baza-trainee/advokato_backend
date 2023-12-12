@@ -12,6 +12,9 @@ from calendarapi.api.resources.news import NewsResource
 from calendarapi.api.resources.contact import ContactResource
 from calendarapi.api.resources.reviews import ReviewsResource
 from calendarapi.api.resources.possibilities import PossibilitiesResource
+from calendarapi.api.resources.clients import ClientResource
+from calendarapi.api.resources.pro_bono import ProBonoResource
+
 
 
 __all__ = [
@@ -27,4 +30,6 @@ __all__ = [
     "ContactResource",
     "ReviewsResource",
     "PossibilitiesResource",
+    "ClientResource",
+    "ProBonoResource",
 ]
