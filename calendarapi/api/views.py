@@ -14,7 +14,7 @@ from calendarapi.api.resources import (
     NewsResource,
     ContactResource,
     ReviewsResource,
-    PossibilitiesResource
+    PossibilitiesResource,
     ClientResource,
     ProBonoResource,
 )
