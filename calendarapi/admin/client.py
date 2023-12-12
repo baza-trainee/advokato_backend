@@ -20,11 +20,10 @@ class ClientsAdminModelView(AdminModelView):
     can_set_page_size = True
 
     column_labels = {
-   
         "photo_path": "Фото",
         "link": "Посилання",
     }
-    
+
     def _list_thumbnail(width: int = 240):
         def thumbnail_formatter(view, context, model, name):
             if not model.photo_path:
@@ -38,11 +37,11 @@ class ClientsAdminModelView(AdminModelView):
                 return Markup(f"<img src={url} width={width}>")
 
         return thumbnail_formatter
-    
+
     column_formatters = {
         "photo_path": _list_thumbnail(),
     }
-    
+
     def _custom_validate_media(form, field):
         if not form.photo_path.object_data and not form.photo_path.data:
             raise ValidationError("Це поле обов'язкове.")
@@ -53,7 +52,7 @@ class ClientsAdminModelView(AdminModelView):
             validators=[_custom_validate_media],
         ),
     }
-    
+
     def on_model_delete(self, model):
         custom_delete_file(ABS_MEDIA_PATH, model.photo_path)
         return super().on_model_delete(model)
@@ -66,4 +65,3 @@ class ClientsAdminModelView(AdminModelView):
         else:
             model.photo_path = form.photo_path.object_data
         return super().on_model_change(form, model, is_created)
-

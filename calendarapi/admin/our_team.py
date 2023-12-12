@@ -19,7 +19,9 @@ class OurTeamModelView(AdminModelView):
     can_set_page_size = True
     column_labels = {
         "photo_path": "Фото",
+        "slider_photo_path": "Слайдер",
         "name": "Ім'я",
+        "position": "Посада",
         "description": "Опис",
     }
     column_sortable_list = [
@@ -33,16 +35,22 @@ class OurTeamModelView(AdminModelView):
     ]
     column_list = [
         "photo_path",
+        "slider_photo_path",
         "name",
+        "position",
         "description",
     ]
     form_columns = [
         "name",
+        "position",
         "description",
+        "slider_photo_path",
         "photo_path",
     ]
     column_descriptions = {
-        "description": """Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д., для покращення зручності читання."""
+        "photo_path": """Фото для сторінки "Наша команда".""",
+        "slider_photo_path": """Фото для слайдеру на головній сторінці. Якщо залишити це поле пустим, відповідний спеціаліст не відображатиметься в слайдері.""",
+        "description": """Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д., для покращення зручності читання.""",
     }
 
     def _format_description(view, context, model, name):
@@ -62,8 +70,25 @@ class OurTeamModelView(AdminModelView):
 
         return thumbnail_formatter
 
+    def _list_thumbnail(width: int = 240, field_name: str = "photo_path"):
+        def thumbnail_formatter(view, context, model, name):
+            field_value = getattr(model, field_name)
+            if not field_value:
+                return ""
+
+            if current_app.config["STORAGE"] == "STATIC":
+                url = os.path.join(request.host_url, field_value)
+            else:
+                url = field_value
+
+            if field_value.split(".")[-1] in current_app.config["IMAGE_FORMATS"]:
+                return Markup(f"<img src={url} width={width}>")
+
+        return thumbnail_formatter
+
     column_formatters = {
-        "photo_path": _list_thumbnail(),
+        "photo_path": _list_thumbnail(field_name="photo_path"),
+        "slider_photo_path": _list_thumbnail(field_name="slider_photo_path"),
         "description": _format_description,
     }
 
@@ -76,6 +101,7 @@ class OurTeamModelView(AdminModelView):
             "Виберіть фото партнера",
             validators=[_custom_validate_media],
         ),
+        "slider_photo_path": FileField("Виберіть фото партнера для слайдеру."),
         "description": TextAreaField(
             "Опис",
             render_kw={"class": "form-control", "rows": 5},
@@ -84,7 +110,10 @@ class OurTeamModelView(AdminModelView):
     }
 
     def on_model_delete(self, model):
-        custom_delete_file(ABS_MEDIA_PATH, model.photo_path)
+        if model.photo_path:
+            custom_delete_file(ABS_MEDIA_PATH, model.photo_path)
+        if model.slider_photo_path:
+            custom_delete_file(ABS_MEDIA_PATH, model.slider_photo_path)
         return super().on_model_delete(model)
 
     def on_model_change(self, form, model, is_created):
@@ -94,4 +123,14 @@ class OurTeamModelView(AdminModelView):
             model.photo_path = custom_save_file(ABS_MEDIA_PATH, model.photo_path)
         else:
             model.photo_path = form.photo_path.object_data
+
+        if model.slider_photo_path:
+            if form.slider_photo_path.object_data:
+                custom_delete_file(ABS_MEDIA_PATH, form.slider_photo_path.object_data)
+            model.slider_photo_path = custom_save_file(
+                ABS_MEDIA_PATH, model.slider_photo_path
+            )
+        else:
+            model.slider_photo_path = form.slider_photo_path.object_data
+
         return super().on_model_change(form, model, is_created)

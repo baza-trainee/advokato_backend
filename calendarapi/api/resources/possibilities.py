@@ -40,6 +40,7 @@ class PossibilitiesResource(Resource):
         404:
           description: No possibilities found.
     """
+
     possibilities_schema: PossibilitiesSchema = PossibilitiesSchema()
 
     def get(self):

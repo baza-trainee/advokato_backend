@@ -16,7 +16,6 @@ from calendarapi.api.resources.clients import ClientResource
 from calendarapi.api.resources.pro_bono import ProBonoResource
 
 
-
 __all__ = [
     "CityListResource",
     "SpecializationListByCityResource",
