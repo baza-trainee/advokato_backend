@@ -87,6 +87,7 @@ from calendarapi.api.resources import (
 )
 
 
+
 def create_app(testing=False):
     """Application factory, used to create application"""
     app = Flask("calendarapi")
