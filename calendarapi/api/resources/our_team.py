@@ -67,7 +67,7 @@ class OurTeamResource(Resource):
     company_schema: AboutCompanySchema = AboutCompanySchema()
 
     def get(self):
-        is_slider = request.args.get("is_slider", False, type=bool)
+        is_slider = request.args.get("is_slider", "false").lower() == "true"
         company: AboutCompany = db.session.query(AboutCompany).first()
         team: List[OurTeam] = db.session.query(OurTeam).all()
         if is_slider:
