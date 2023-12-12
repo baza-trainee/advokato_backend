@@ -6,7 +6,13 @@ class OurTeamSchema(fm.SQLAlchemyAutoSchema):
     name = ma.fields.String(
         required=True, validate=ma.fields.validate.Length(min=4, max=100)
     )
+    position = ma.fields.String(
+        required=True, validate=ma.fields.validate.Length(min=4, max=100)
+    )
     photo_path = ma.fields.String(
+        required=True, validate=ma.fields.validate.Length(min=2, max=300)
+    )
+    slider_photo_path = ma.fields.String(
         required=True, validate=ma.fields.validate.Length(min=2, max=300)
     )
     description = ma.fields.String(

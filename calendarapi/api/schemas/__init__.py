@@ -14,7 +14,6 @@ from calendarapi.api.schemas.client import ClientSchema
 from calendarapi.api.schemas.pro_bono import ProBonoSchema
 
 
-
 __all__ = [
     "UserSchema",
     "CitySchema",

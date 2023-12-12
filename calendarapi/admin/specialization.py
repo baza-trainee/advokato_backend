@@ -59,6 +59,7 @@ class SpecializationAdminModelView(AdminModelView):
     column_descriptions = {
         "specialization_description_full": """Доповнення до опису. Відображається при натисканні на кнопку "Детальніше" при перегляді практик."""
     }
+
     def _format_description(view, context, model, name):
         return Markup(model.specialization_description_full)
 

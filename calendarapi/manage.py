@@ -14,7 +14,7 @@ from calendarapi.models import (
     OurTeam,
     Contact,
     AboutCompany,
-    Possibilities
+    Possibilities,
 )
 from calendarapi.services.fake_data import (
     our_team_data,
@@ -22,7 +22,7 @@ from calendarapi.services.fake_data import (
     cities,
     contacts,
     about_company,
-    possibilities
+    possibilities,
 )
 from calendarapi.extensions import db
 

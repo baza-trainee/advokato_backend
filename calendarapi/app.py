@@ -83,9 +83,8 @@ from calendarapi.api.resources import (
     ReviewsResource,
     PossibilitiesResource,
     ClientResource,
-    ProBonoResource
+    ProBonoResource,
 )
-
 
 
 def create_app(testing=False):
@@ -135,7 +134,6 @@ def create_app(testing=False):
         apispec.spec.path(view=ClientResource, app=app)
         apispec.spec.path(view=ProBonoResource, app=app)
 
-
         # apispec.spec.path(view=login, app=app)
         # apispec.spec.path(view=refresh, app=app)
         # apispec.spec.path(view=revoke_access_token, app=app)
@@ -179,10 +177,14 @@ def register_adminsite(app):
         ContactModelView(Contact, db.session, name="Контакти", category="Керування")
     )
     admin.add_view(
-        ClientsAdminModelView(Client, db.session, name="Замовники", category="Керування")
+        ClientsAdminModelView(
+            Client, db.session, name="Замовники", category="Керування"
+        )
     )
     admin.add_view(
-        ProBonoAdminModelView(ProBono, db.session, name="Благодійність", category="Керування")
+        ProBonoAdminModelView(
+            ProBono, db.session, name="Благодійність", category="Керування"
+        )
     )
     admin.add_view(
         UserAdminModelView(
@@ -199,8 +201,6 @@ def register_adminsite(app):
             Possibilities, db.session, name="Сильні сторони", category="Керування"
         )
     )
-   
- 
 
 
 def configure_extensions(app):
