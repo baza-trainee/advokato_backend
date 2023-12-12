@@ -14,6 +14,7 @@ from calendarapi.admin.our_team import OurTeamModelView
 from calendarapi.admin.news import NewsAdminModelView
 from calendarapi.admin.contacts import ContactModelView
 from calendarapi.admin.reviews import ReviewsAdminModelView
+from calendarapi.admin.client import ClientsAdminModelView
 
 
 __all__ = [
@@ -31,4 +32,5 @@ __all__ = [
     "NewsAdminModelView",
     "ContactModelView",
     "ReviewsAdminModelView",
+    "ClientsAdminModelView",
 ]
