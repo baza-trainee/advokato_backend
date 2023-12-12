@@ -9,6 +9,7 @@ from calendarapi.api.schemas.our_team import OurTeamSchema
 from calendarapi.api.schemas.news import NewsSchema
 from calendarapi.api.schemas.reviews import ReviewsSchema
 from calendarapi.api.schemas.client import ClientSchema
+from calendarapi.api.schemas.pro_bono import ProBonoSchema
 
 
 
@@ -25,4 +26,5 @@ __all__ = [
     "NewsSchema",
     "ReviewsSchema",
     "ClientSchema",
+    "ProBonoSchema",
 ]

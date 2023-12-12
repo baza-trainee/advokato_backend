@@ -35,6 +35,7 @@ from calendarapi.admin import (
     ContactModelView,
     ReviewsAdminModelView,
     ClientsAdminModelView,
+    ProBonoAdminModelView,
 )
 from calendarapi.models import (
     User,
@@ -49,6 +50,7 @@ from calendarapi.models import (
     Contact,
     Reviews,
     Client,
+    ProBono,
 )
 from calendarapi.api.schemas import (
     VisitorSchema,
@@ -61,6 +63,7 @@ from calendarapi.api.schemas import (
     NewsSchema,
     ReviewsSchema,
     ClientSchema,
+    ProBonoSchema,
 )
 from calendarapi.api.resources import (
     CityListResource,
@@ -75,6 +78,7 @@ from calendarapi.api.resources import (
     ContactResource,
     ReviewsResource,
     ClientResource,
+    ProBonoResource
 )
 
 
@@ -122,6 +126,8 @@ def create_app(testing=False):
         apispec.spec.path(view=ContactResource, app=app)
         apispec.spec.path(view=ReviewsResource, app=app)
         apispec.spec.path(view=ClientResource, app=app)
+        apispec.spec.path(view=ProBonoResource, app=app)
+
 
 
         # apispec.spec.path(view=login, app=app)
@@ -168,6 +174,9 @@ def register_adminsite(app):
     )
     admin.add_view(
         ClientsAdminModelView(Client, db.session, name="Замовники", category="Керування")
+    )
+    admin.add_view(
+        ProBonoAdminModelView(ProBono, db.session, name="Благодійність", category="Керування")
     )
     admin.add_view(
         UserAdminModelView(

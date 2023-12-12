@@ -1,28 +1,27 @@
 from typing import List
 
 from flask_restful import Resource
-from flask import request
 
 # from flask_jwt_extended import jwt_required
 
-from calendarapi.api.schemas import ClientSchema
+from calendarapi.api.schemas import ProBonoSchema
 from calendarapi.extensions import db
-from calendarapi.models import Client
+from calendarapi.models import ProBono
 
 
-class ClientResource(Resource):
+class ProBonoResource(Resource):
     """
-    Client Resource
+    Pro Bono Resource
 
     ---
     get:
       tags:
         - Website content
-      summary: Get a list of clients with photo_path and link.
-      description: Get a list of clients with photo_path and link.
+      summary: Get a list of Pro Bono.
+      description: Get a list of Pro Bono.
       responses:
         200:
-          description: List of clients
+          description: List of Pro Bono
           content:
             application/json:
               schema:
@@ -34,15 +33,15 @@ class ClientResource(Resource):
                       type: integer
                     photo_path:
                       type: string
-                    link:
+                    description:
                       type: string
         404:
-          description: No clients found.
+          description: No data found.
     """
 
     # method_decorators = [jwt_required()]
-    client_schema: ClientSchema = ClientSchema()
+    city_schema: ProBonoSchema = ProBonoSchema()
 
     def get(self):
-        clients: List[Client] = db.session.query(Client).all()
-        return self.client_schema.dump(clients, many=True), 200
+        data_list: List[ProBono] = db.session.query(ProBono).all()
+        return self.city_schema.dump(data_list, many=True), 200

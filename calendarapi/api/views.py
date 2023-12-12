@@ -15,6 +15,7 @@ from calendarapi.api.resources import (
     ContactResource,
     ReviewsResource,
     ClientResource,
+    ProBonoResource,
 )
 
 
@@ -39,6 +40,7 @@ api.add_resource(
 )
 api.add_resource(ReviewsResource, "/reviews", endpoint="reviews")
 api.add_resource(ClientResource, "/clients", endpoint="clients")
+api.add_resource(ProBonoResource, "/pro_bono", endpoint="pro_bono")
 
 
 
