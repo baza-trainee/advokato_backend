@@ -3,10 +3,10 @@ from datetime import datetime
 from flask import request
 from flask_restful import Resource
 
-# from flask_jwt_extended import jwt_required
 from sqlalchemy import exc
 
 from calendarapi.api.schemas import AppointmentSchema, VisitorSchema
+from calendarapi.services.send_email import send_email
 from calendarapi.extensions import db, ma
 from calendarapi.models import (
     Visitor,
@@ -14,9 +14,7 @@ from calendarapi.models import (
     Schedule,
     Lawyer,
     Specialization,
-    City,
 )
-from calendarapi.services.send_email import send_email
 
 
 class AppointmentResource(Resource):
@@ -38,33 +36,22 @@ class AppointmentResource(Resource):
                 visitor:
                   type: object
                   required:
-                    - name
-                    - surname
-                    - email
                     - phone_number
-                    - is_beneficiary
                   properties:
                     name:
-                      type: string
-                    surname:
                       type: string
                     email:
                       type: string
                     phone_number:
                       type: string
-                    is_beneficiary:
-                      type: boolean
                 appointment:
                   type: object
                   required:
-                    - city_id
                     - specialization_id
                     - lawyer_id
                     - appointment_date
                     - appointment_time
                   properties:
-                    city_id:
-                      type: integer
                     specialization_id:
                       type: integer
                     lawyer_id:
@@ -105,7 +92,6 @@ class AppointmentResource(Resource):
                     type: string
     """
 
-    # method_decorators = [jwt_required()]
     visitor_schema = VisitorSchema()
     appointment_schema = AppointmentSchema()
 
@@ -146,11 +132,6 @@ class AppointmentResource(Resource):
             validated_visitor_data: Visitor = self.visitor_schema.load(visitor_data)
             validated_appointment_data: Appointment = self.appointment_schema.load(
                 {
-                    "city": str(
-                        db.session.query(City)
-                        .filter(City.id == appointment_data.get("city_id"))
-                        .one_or_none()
-                    ),
                     "specialization": str(
                         db.session.query(Specialization)
                         .filter(
@@ -195,10 +176,11 @@ class AppointmentResource(Resource):
             lawyer_schedule.time.remove(
                 str(datetime.strptime(appointment_time, "%H:%M").time())
             )
+            if not lawyer_schedule.time:
+                db.session.delete(lawyer_schedule)
             db.session.commit()
             send_email(
                 visitor_name=existing_visitor.name,
-                visitor_surname=existing_visitor.surname,
                 visitor_email=existing_visitor.email,
                 visitor_phone_number=existing_visitor.phone_number,
                 appointment_date=appointment.appointment_date,

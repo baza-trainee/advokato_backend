@@ -51,7 +51,6 @@ def test_create_appointment_correct(
             "is_beneficiary": visitor.is_beneficiary,
             "phone_number": "+380961245359",
             "name": visitor.name,
-            "surname": visitor.surname,
         },
     }
 
@@ -67,7 +66,6 @@ def test_create_appointment_correct(
             "is_beneficiary": visitor.is_beneficiary,
             "phone_number": "+380961245359",
             "name": visitor.name,
-            "surname": visitor.surname,
         },
     }
 
@@ -84,7 +82,6 @@ def test_create_appointment_correct(
             "is_beneficiary": visitor.is_beneficiary,
             "phone_number": "+380961245359",
             "name": visitor.name,
-            "surname": visitor.surname,
         },
     }
 
@@ -101,7 +98,6 @@ def test_create_appointment_correct(
             "is_beneficiary": visitor.is_beneficiary,
             "phone_number": "+380961245359",
             "name": visitor.name,
-            "surname": visitor.surname,
         },
     }
 
@@ -134,7 +130,6 @@ def test_create_appointment_correct(
         assert retrieved_visitor is not None
 
         assert retrieved_visitor.name == visitor.name
-        assert retrieved_visitor.surname == visitor.surname
         assert retrieved_visitor.phone_number == visitor.phone_number
         assert retrieved_visitor.is_beneficiary == visitor.is_beneficiary
 

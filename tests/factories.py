@@ -48,8 +48,7 @@ class LawyersFactory(factory.Factory):
 
     _id_counter = 0
 
-    name = factory.Faker("first_name")
-    surname = factory.Faker("last_name")
+    name = factory.Faker("name")
     lawyer_mail = factory.Faker("email")
 
 
@@ -62,8 +61,7 @@ class ScheduleFactory(factory.Factory):
 
 
 class VisitorFactory(factory.Factory):
-    name = factory.Faker("first_name")
-    surname = factory.Faker("last_name")
+    name = factory.Faker("name")
     email = factory.Faker("email")
     is_beneficiary = False
 

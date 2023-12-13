@@ -11,9 +11,8 @@ class LawyerSchema(fm.SQLAlchemyAutoSchema):
         ],
     )
     name = ma.fields.String(
-        required=True, validate=ma.fields.validate.Length(min=2, max=30)
+        required=True, validate=ma.fields.validate.Length(min=2, max=100)
     )
-    surname = ma.fields.String(validate=ma.fields.validate.Length(min=2, max=30))
     specializations = ma.fields.List(
         ma.fields.Nested("SpecializationSchema", only=("specialization_name",))
     )

@@ -18,7 +18,6 @@ class VisitorModelView(AdminModelView):
     column_labels = {
         "id": "ID Клієнта",
         "name": "ім'я",
-        "surname": "Прізвище",
         "phone_number": "Мобільний",
         "email": "Пошта",
         "is_beneficiary": "Пільговик",
@@ -32,7 +31,6 @@ class VisitorModelView(AdminModelView):
 
     column_searchable_list = [
         "name",
-        "surname",
         "email",
         "phone_number",
     ]

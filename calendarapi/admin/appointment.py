@@ -23,14 +23,12 @@ class AppointmentModelView(AdminModelView):
         "lawyers": "Адвокати",
         "visitor": "Клієнт",
         "lawyer": "Адвокат",
-        "city": "Місто",
         "specialization": "Спеціалізація",
         "appointment_date": "Дата",
         "appointment_time": "Час",
     }
 
     column_list = [
-        "city",
         "specialization",
         "lawyer",
         "visitor",
@@ -49,7 +47,6 @@ class AppointmentModelView(AdminModelView):
     }
 
     column_searchable_list = [
-        "city",
         "specialization",
         "lawyer",
         "visitor",

@@ -6,7 +6,6 @@ class Lawyer(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    surname = db.Column(db.String(100), nullable=False)
     lawyer_mail = db.Column(db.String(100), nullable=False, unique=True)
 
     specializations = db.relationship(
@@ -31,4 +30,4 @@ class Lawyer(db.Model):
     )
 
     def __repr__(self):
-        return f"{self.name} {self.surname}"
+        return f"{self.name}"
