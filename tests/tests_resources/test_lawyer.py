@@ -53,5 +53,4 @@ def test_get_list_of_lawyers(
 
     for response_lawyer, factory_lawyer in zip(data, lawyers_list):
         assert response_lawyer["name"] == factory_lawyer.name
-        assert response_lawyer["surname"] == factory_lawyer.surname
         assert response_lawyer["lawyer_mail"] == factory_lawyer.lawyer_mail

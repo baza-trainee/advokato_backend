@@ -1,6 +1,5 @@
-from calendarapi.api.resources.city import CityListResource
 from calendarapi.api.resources.specialization import (
-    SpecializationListByCityResource,
+    SpecializationListResource,
     AllSpecializationsResource,
 )
 from calendarapi.api.resources.lawyer import LawyersListResource
@@ -17,8 +16,7 @@ from calendarapi.api.resources.pro_bono import ProBonoResource
 
 
 __all__ = [
-    "CityListResource",
-    "SpecializationListByCityResource",
+    "SpecializationListResource",
     "AllSpecializationsResource",
     "LawyersListResource",
     "ScheduleResource",

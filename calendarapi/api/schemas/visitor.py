@@ -5,15 +5,13 @@ phone_number_pattern = r"(\+\d{12}|\d{9})"
 
 
 class VisitorSchema(fm.SQLAlchemyAutoSchema):
-    email = ma.fields.String(required=True, validate=ma.fields.validate.Email())
-    name = ma.fields.String(
-        required=True, validate=ma.fields.validate.Length(min=2, max=100)
-    )
-    surname = ma.fields.String(validate=ma.fields.validate.Length(min=2, max=100))
+    email = ma.fields.String(validate=ma.fields.validate.Email())
+    name = ma.fields.String(validate=ma.fields.validate.Length(min=2, max=100))
     phone_number = ma.fields.String(
+        required=True,
         validate=ma.fields.validate.Regexp(
             phone_number_pattern, error="Invalid phone number format"
-        )
+        ),
     )
     is_beneficiary = ma.fields.Boolean()
 

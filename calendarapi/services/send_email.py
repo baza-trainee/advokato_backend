@@ -12,7 +12,6 @@ def send_email(
     visitor_name: str = None,
     visitor_email: str = None,
     visitor_phone_number: str = None,
-    visitor_surname: str = None,
     appointment_date=None,
     appointment_time=None,
     lawyer_name: str = None,
@@ -38,7 +37,7 @@ def send_email(
         return "Повідомлення відправлено"
     if not reminder:
         lawyer_email_msg = Message(
-            f"Нова зустріч. Клієнт {visitor_name } {visitor_surname}",
+            f"Нова зустріч. Клієнт {visitor_name }",
             recipients=[current_app.config["MAIL_DEFAULT_SENDER"]],
         )
         user_email_msg = Message(
@@ -46,18 +45,18 @@ def send_email(
             recipients=[visitor_email],
         )
         user_email_msg.body = (
-            f"Вітаю {visitor_name} {visitor_surname}!\n"
+            f"Вітаю {visitor_name if visitor_name else ''}!\n"
             f"У вас заплановано зустріч на {appointment_date} за темою: {specialization_name}.\n"
             f"Юрист {lawyer_name} буде очікувати вас о {appointment_time} годині."
         )
         lawyer_email_msg.body = (
             f"Вітаю {lawyer_name}!\n"
-            f"{visitor_name} {visitor_surname} залишив(ла) заявку на отримання консультації за темою: {specialization_name}.\n"
+            f"{visitor_name} залишив(ла) заявку на отримання консультації за темою: {specialization_name}.\n"
             f"Зустріч заплановано на {appointment_date} о {appointment_time} годині.\n"
             f"Телефон клієнта: {visitor_phone_number}"
         )
-
-        mail.send(user_email_msg)
+        if visitor_email:
+            mail.send(user_email_msg)
         mail.send(lawyer_email_msg)
         return "Повідомлення відправлено"
 

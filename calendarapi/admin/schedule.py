@@ -136,7 +136,6 @@ class ScheduleModelView(AdminModelView):
         #                 Lawyer.cities.any(City.city_name == selected_city),
         #                 or_(
         #                     Lawyer.name.ilike(f"%{query}%"),
-        #                     Lawyer.surname.ilike(f"%{query}%"),
         #                 ),
         #             )
         #         )
@@ -155,7 +154,6 @@ class ScheduleModelView(AdminModelView):
     column_labels = {
         "lawyers": "Адвокат",
         "lawyers.name": "Ім'я",
-        "lawyers.surname": "Прізвище",
         "time": "Доступний час",
         "date": "Дата",
     }
@@ -253,7 +251,6 @@ class ScheduleModelView(AdminModelView):
 
     column_searchable_list = [
         "lawyers.name",
-        "lawyers.surname",
     ]
 
     form_columns = [
