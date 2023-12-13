@@ -6,7 +6,6 @@ time_pattern = r"^(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$"
 
 
 class AppointmentSchema(fm.SQLAlchemyAutoSchema):
-    city = ma.fields.String(required=True)
     specialization = ma.fields.String(required=True)
     lawyer = ma.fields.String(required=True)
     appointment_date = ma.fields.Date(required=True, format="%Y-%m-%d")

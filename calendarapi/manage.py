@@ -13,12 +13,16 @@ from calendarapi.models import (
     Schedule,
     OurTeam,
     Contact,
+    AboutCompany,
+    Possibilities,
 )
 from calendarapi.services.fake_data import (
     our_team_data,
     specializations,
     cities,
     contacts,
+    about_company,
+    possibilities,
 )
 from calendarapi.extensions import db
 
@@ -49,7 +53,16 @@ def init():
             contact_list = [Contact(**data) for data in contacts]
             city_list = [City(**data) for data in cities]
             spec_list = [Specialization(**data) for data in specializations]
-            db.session.add_all([*city_list, *spec_list, *contact_list])
+            possibilities_list = [Possibilities(**data) for data in possibilities]
+            db.session.add_all(
+                [
+                    *city_list,
+                    *spec_list,
+                    *contact_list,
+                    *possibilities_list,
+                    AboutCompany(**about_company),
+                ]
+            )
             db.session.flush()
 
             fake_schedule: List[Schedule] = ScheduleFactory.create_batch(25)

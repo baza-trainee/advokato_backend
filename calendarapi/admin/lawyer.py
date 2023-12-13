@@ -17,7 +17,6 @@ class LawyerAdminModelView(AdminModelView):
     can_set_page_size = True
     column_labels = {
         "name": "Ім'я",
-        "surname": "Прізвище",
         "cities": "Місто",
         "specializations": "Спеціалізації",
         "specializations.specialization_name": "Спец...",
@@ -26,12 +25,10 @@ class LawyerAdminModelView(AdminModelView):
     }
     column_sortable_list = [
         "name",
-        "surname",
         "lawyer_mail",
     ]
     column_searchable_list = [
         "name",
-        "surname",
         "lawyer_mail",
         "cities.city_name",
         "specializations.specialization_name",
@@ -39,14 +36,12 @@ class LawyerAdminModelView(AdminModelView):
 
     column_list = [
         "name",
-        "surname",
         "lawyer_mail",
         "cities",
         "specializations",
     ]
     form_columns = [
         "name",
-        "surname",
         "lawyer_mail",
         "cities",
         "specializations",

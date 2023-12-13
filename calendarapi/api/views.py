@@ -3,8 +3,7 @@ from flask_restful import Api
 from marshmallow import ValidationError
 
 from calendarapi.api.resources import (
-    CityListResource,
-    SpecializationListByCityResource,
+    SpecializationListResource,
     AllSpecializationsResource,
     LawyersListResource,
     ScheduleResource,
@@ -14,18 +13,16 @@ from calendarapi.api.resources import (
     NewsResource,
     ContactResource,
     ReviewsResource,
+    PossibilitiesResource,
+    ClientResource,
+    ProBonoResource,
 )
 
 
 blueprint = Blueprint("api", __name__, url_prefix="/api/v1")
 api = Api(blueprint)
 
-api.add_resource(CityListResource, "/cities", endpoint="cities")
-api.add_resource(
-    SpecializationListByCityResource,
-    "/specialization-by-city",
-    endpoint="specialization",
-)
+api.add_resource(SpecializationListResource, "/lawyer-specs", endpoint="specialization")
 api.add_resource(LawyersListResource, "/lawyers", endpoint="lawyers")
 api.add_resource(ScheduleResource, "/schedule", endpoint="schedule")
 api.add_resource(AppointmentResource, "/appointment", endpoint="appointment")
@@ -37,6 +34,9 @@ api.add_resource(
     AllSpecializationsResource, "/specializations", endpoint="specializations"
 )
 api.add_resource(ReviewsResource, "/reviews", endpoint="reviews")
+api.add_resource(PossibilitiesResource, "/possibilities", endpoint="possibilities")
+api.add_resource(ClientResource, "/clients", endpoint="clients")
+api.add_resource(ProBonoResource, "/pro_bono", endpoint="pro_bono")
 
 
 @blueprint.errorhandler(ValidationError)

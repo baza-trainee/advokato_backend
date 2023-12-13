@@ -1,13 +1,11 @@
-from flask_restful import Resource, request
-
-# from flask_jwt_extended import jwt_required
+from flask_restful import Resource
 
 from calendarapi.api.schemas import SpecializationSchema
 from calendarapi.extensions import db
 from calendarapi.models import Specialization, Lawyer
 
 
-class SpecializationListByCityResource(Resource):
+class SpecializationListResource(Resource):
     """
     Specialization Resource
 
@@ -17,12 +15,6 @@ class SpecializationListByCityResource(Resource):
         - Calendar
       summary: Get a list of specializations.
       description: Get a list of specializations.
-      parameters:
-        - in: query
-          name: city_id
-          required: true
-          type: integer
-          description: "City ID for filtering specializations"
       responses:
         200:
           description: List of specializations.
@@ -35,26 +27,18 @@ class SpecializationListByCityResource(Resource):
                   properties:
                     id:
                       type: integer
-                    question:
+                    specialization_name:
                       type: string
-        400:
-          description: "City ID is required"
     """
 
-    # method_decorators = [jwt_required()]
     specialization_schema: SpecializationSchema = SpecializationSchema()
 
     def get(self):
-        city_id = request.args.get("city_id")
-
-        if not city_id:
-            return {"message": "City ID is required"}, 400
-
         specializations = (
             db.session.query(Specialization.specialization_name, Specialization.id)
             .join(Lawyer.specializations)
-            .filter(Lawyer.cities.any(id=city_id))
             .distinct()
+            .order_by("id")
             .all()
         )
         return self.specialization_schema.dump(specializations, many=True), 200

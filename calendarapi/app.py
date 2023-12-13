@@ -34,6 +34,10 @@ from calendarapi.admin import (
     NewsAdminModelView,
     ContactModelView,
     ReviewsAdminModelView,
+    AboutCompanyModelView,
+    PossibilitiesModelView,
+    ClientsAdminModelView,
+    ProBonoAdminModelView,
 )
 from calendarapi.models import (
     User,
@@ -47,6 +51,10 @@ from calendarapi.models import (
     News,
     Contact,
     Reviews,
+    AboutCompany,
+    Possibilities,
+    Client,
+    ProBono,
 )
 from calendarapi.api.schemas import (
     VisitorSchema,
@@ -58,10 +66,11 @@ from calendarapi.api.schemas import (
     OurTeamSchema,
     NewsSchema,
     ReviewsSchema,
+    ClientSchema,
+    ProBonoSchema,
 )
 from calendarapi.api.resources import (
-    CityListResource,
-    SpecializationListByCityResource,
+    SpecializationListResource,
     AllSpecializationsResource,
     LawyersListResource,
     ScheduleResource,
@@ -71,6 +80,9 @@ from calendarapi.api.resources import (
     NewsResource,
     ContactResource,
     ReviewsResource,
+    PossibilitiesResource,
+    ClientResource,
+    ProBonoResource,
 )
 
 
@@ -108,15 +120,17 @@ def create_app(testing=False):
 
         apispec.spec.path(view=ScheduleResource, app=app)
         apispec.spec.path(view=AppointmentResource, app=app)
-        apispec.spec.path(view=CityListResource, app=app)
         apispec.spec.path(view=LawyersListResource, app=app)
-        apispec.spec.path(view=SpecializationListByCityResource, app=app)
+        apispec.spec.path(view=SpecializationListResource, app=app)
         apispec.spec.path(view=AllSpecializationsResource, app=app)
         apispec.spec.path(view=OurTeamResource, app=app)
         apispec.spec.path(view=FeedbackResource, app=app)
         apispec.spec.path(view=NewsResource, app=app)
         apispec.spec.path(view=ContactResource, app=app)
         apispec.spec.path(view=ReviewsResource, app=app)
+        apispec.spec.path(view=PossibilitiesResource, app=app)
+        apispec.spec.path(view=ClientResource, app=app)
+        apispec.spec.path(view=ProBonoResource, app=app)
 
         # apispec.spec.path(view=login, app=app)
         # apispec.spec.path(view=refresh, app=app)
@@ -161,8 +175,28 @@ def register_adminsite(app):
         ContactModelView(Contact, db.session, name="Контакти", category="Керування")
     )
     admin.add_view(
+        ClientsAdminModelView(
+            Client, db.session, name="Замовники", category="Керування"
+        )
+    )
+    admin.add_view(
+        ProBonoAdminModelView(
+            ProBono, db.session, name="Благодійність", category="Керування"
+        )
+    )
+    admin.add_view(
         UserAdminModelView(
             User, db.session, name="облікові записи", category="Керування"
+        )
+    )
+    admin.add_view(
+        AboutCompanyModelView(
+            AboutCompany, db.session, name="Про компанію", category="Керування"
+        )
+    )
+    admin.add_view(
+        PossibilitiesModelView(
+            Possibilities, db.session, name="Сильні сторони", category="Керування"
         )
     )
 

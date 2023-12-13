@@ -127,7 +127,6 @@ def lawyer(db: SQLAlchemy, city) -> Lawyer:
         cities=1,
         lawyer_mail="emily@example.com",
         name="Emily",
-        surname="string",
         specializations=specializations,
     )
     db.session.add(lawyer)

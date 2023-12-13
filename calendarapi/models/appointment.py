@@ -6,7 +6,6 @@ class Appointment(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     visitor = db.Column(db.String, nullable=False)
-    city = db.Column(db.String, nullable=False)
     specialization = db.Column(db.String, nullable=False)
     lawyer = db.Column(db.String, nullable=False)
     appointment_date = db.Column(db.Date, nullable=False)

@@ -21,6 +21,7 @@ class SpecializationAdminModelView(AdminModelView):
         "specialization_photo",
         "specialization_name",
         "specialization_description",
+        "specialization_description_full",
     ]
 
     column_default_sort = [
@@ -31,6 +32,7 @@ class SpecializationAdminModelView(AdminModelView):
         "specialization_photo": "Фото",
         "specialization_name": "Спеціалізація",
         "specialization_description": "Опис",
+        "specialization_description_full": "Детальніше",
     }
 
     form_args = {
@@ -38,6 +40,9 @@ class SpecializationAdminModelView(AdminModelView):
             "validators": [DataRequired(message="Це поле обов'язкове.")],
         },
         "specialization_description": {
+            "validators": [DataRequired(message="Це поле обов'язкове.")],
+        },
+        "specialization_description_full": {
             "validators": [DataRequired(message="Це поле обов'язкове.")],
         },
         "specialization_photo": {
@@ -48,11 +53,15 @@ class SpecializationAdminModelView(AdminModelView):
     form_columns = [
         "specialization_name",
         "specialization_description",
+        "specialization_description_full",
         "specialization_photo",
     ]
+    column_descriptions = {
+        "specialization_description_full": """Доповнення до опису. Відображається при натисканні на кнопку "Детальніше" при перегляді практик."""
+    }
 
     def _format_description(view, context, model, name):
-        return Markup(model.specialization_description)
+        return Markup(model.specialization_description_full)
 
     def _list_thumbnail(width: int = 240):
         def thumbnail_formatter(view, context, model, name):
@@ -73,7 +82,7 @@ class SpecializationAdminModelView(AdminModelView):
 
     column_formatters = {
         "specialization_photo": _list_thumbnail(),
-        "specialization_description": _format_description,
+        "specialization_description_full": _format_description,
     }
 
     def _custom_validate_media(form, field):
@@ -90,6 +99,11 @@ class SpecializationAdminModelView(AdminModelView):
         ),
         "specialization_description": TextAreaField(
             "Опис",
+            render_kw={"class": "form-control", "rows": 5},
+            validators=[DataRequired(message="Це поле обов'язкове.")],
+        ),
+        "specialization_description_full": TextAreaField(
+            "Детальніше",
             render_kw={"class": "form-control", "rows": 5},
             validators=[DataRequired(message="Це поле обов'язкове.")],
         ),

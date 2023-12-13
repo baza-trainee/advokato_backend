@@ -3,9 +3,6 @@ from typing import List
 from flask import request
 from flask_restful import Resource
 
-# from flask_jwt_extended import jwt_required
-from sqlalchemy.orm import joinedload
-
 from calendarapi.api.schemas import LawyerSchema
 from calendarapi.extensions import db
 from calendarapi.models import Lawyer
@@ -22,12 +19,6 @@ class LawyersListResource(Resource):
       summary: Get a list of lawyers.
       description: Get a list of lawyers.
       parameters:
-        - name: city_id
-          in: query
-          description: ID of the city where the lawyers work.
-          required: true
-          schema:
-            type: integer
         - name: specialization_id
           in: query
           description: ID of the specialization the lawyers should have.
@@ -39,30 +30,35 @@ class LawyersListResource(Resource):
           description: List of lawyers
           content:
             application/json:
+              example:
+                - id: 1
+                  name: John Doe
+                - id: 2
+                  name: Jane Smith
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/LawyerSchema'
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: The ID of the lawyer.
+                    name:
+                      type: string
+                      description: The name of the lawyer.
         404:
           description: No lawyers found
     """
 
-    # method_decorators = [jwt_required()]
     lawyer_schema: LawyerSchema = LawyerSchema()
 
     def get(self):
-        city_id = request.args.get("city_id")
         specialization_id = request.args.get("specialization_id")
 
-        if not city_id:
-            return {"message": "City ID is required"}, 400
+        query = db.session.query(Lawyer.id, Lawyer.name).filter(Lawyer.schedules.any())
 
-        query = (
-            db.session.query(Lawyer)
-            .options(joinedload(Lawyer.specializations))
-            .filter(Lawyer.cities.any(id=city_id))
-        )
         if specialization_id:
             query = query.filter(Lawyer.specializations.any(id=specialization_id))
-        lawyers: List[Lawyer] = query.all()
+
+        lawyers: List[Lawyer] = query.order_by("id").all()
         return self.lawyer_schema.dump(lawyers, many=True), 200
