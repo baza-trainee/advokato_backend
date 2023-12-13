@@ -53,12 +53,12 @@
     <form action="" method="post" class="nav-item dropdown ml-auto">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true"
         aria-expanded="false">
-        {{admin_view.current_city}}
+        {{admin_view.current_lawyer}}
     </a>
-    <div class="dropdown-menu">
-        <input class="dropdown-item" type="submit" name="city" value="Усі міста" />
-        {% for city in admin_view.get_cities() %}
-        <input class="dropdown-item" type="submit" name="city" value="{{city.city_name}}" />
+    <div class="dropdown-menu" style="max-height: 800%; overflow-y: auto;">
+        <input class="dropdown-item" type="submit" name="lawyer" value="Усі юристи" />
+        {% for lawyer in admin_view.get_lawyers() %}
+        <input class="dropdown-item" type="submit" name="lawyer" value="{{lawyer.name}}" />
         {% endfor %}
     </div>
 </form>
