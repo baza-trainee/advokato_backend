@@ -1,12 +1,14 @@
 from calendarapi.models import Visitor
 from calendarapi.extensions import fm, db, ma
 
-phone_number_pattern = r"(\+\d{12}|\d{9})"
+phone_number_pattern = r"^(\+?\d{1,3}|\d{1,4})[0-9]{9}$"
 
 
 class VisitorSchema(fm.SQLAlchemyAutoSchema):
-    email = ma.fields.String(validate=ma.fields.validate.Email())
-    name = ma.fields.String(validate=ma.fields.validate.Length(min=2, max=100))
+    email = ma.fields.String(validate=ma.fields.validate.Email(), allow_none=True)
+    name = ma.fields.String(
+        validate=ma.fields.validate.Length(min=2, max=100), allow_none=True
+    )
     phone_number = ma.fields.String(
         required=True,
         validate=ma.fields.validate.Regexp(

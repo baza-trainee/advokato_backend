@@ -1,7 +1,13 @@
-from flask import request
-from flask_restful import Resource
+from smtplib import SMTPException
 
+from flask_restful import Resource, request
+from sqlalchemy import exc
+from marshmallow import ValidationError
+
+from calendarapi.api.schemas.visitor import VisitorSchema
 from calendarapi.services.send_email import send_email
+from calendarapi.models import Visitor
+from calendarapi.extensions import db
 
 
 class FeedbackResource(Resource):
@@ -24,20 +30,19 @@ class FeedbackResource(Resource):
                 name:
                   type: string
                   description: Visitor's name.
-                mail:
+                email:
                   type: string
                   format: email
                   description: Visitor's email address.
-                phone:
+                phone_number:
                   type: string
                   description: Visitor's phone number.
+                  example: "+380123456789"
                 message:
                   type: string
                   description: Feedback message.
               required:
-                - name
-                - mail
-                - message
+                - phone_number
       responses:
         200:
           description: Feedback submitted successfully.
@@ -61,19 +66,49 @@ class FeedbackResource(Resource):
                     description: Error message.
     """
 
+    visitor_schema = VisitorSchema()
+
+    def find_or_create_visitor(self, **kwargs) -> Visitor:
+        try:
+            visitor = Visitor.query.filter(
+                (Visitor.phone_number == kwargs["phone_number"])
+                | (Visitor.email == kwargs["email"])
+            ).first()
+            if visitor:
+                [setattr(visitor, key, value) for key, value in kwargs.items() if value]
+                db.session.commit()
+                return
+            new_visitor = Visitor(**kwargs)
+            db.session.add(new_visitor)
+            db.session.commit()
+            return
+        except exc.SQLAlchemyError as e:
+            db.session.rollback()
+            return {"error": f"Database error: {str(e)}"}, 500
+
     def post(self):
         if not request.is_json:
             return {"error": "Invalid JSON"}, 400
         data = request.get_json()
-        required_fields = ["name", "mail", "message"]
-        for field in required_fields:
-            if field not in data:
-                return {"error": f"Missing required field: {field}"}, 400
-        send_email(
-            feedback=True,
-            visitor_name=data["name"],
-            visitor_email=data["mail"],
-            visitor_phone_number=data["phone"],
-            message=data["message"],
-        )
+        try:
+            validated_visitor_data: Visitor = self.visitor_schema.load(
+                {
+                    "email": data.get("email"),
+                    "name": data.get("name"),
+                    "phone_number": data.get("phone_number"),
+                }
+            )
+        except ValidationError as e:
+            return {"error": str(e)}, 400
+        self.find_or_create_visitor(**self.visitor_schema.dump(validated_visitor_data))
+        try:
+            send_email(
+                feedback=True,
+                visitor_name=data.get("name", "Не вказано"),
+                visitor_email=data.get("email", "Не вказана"),
+                visitor_phone_number=data.get("phone_number"),
+                message=data.get("message", "Без повідомлення"),
+            )
+        except SMTPException as e:
+            return {"error": f"Email sending error: {str(e)}"}, 500
         return {"success": True}, 200

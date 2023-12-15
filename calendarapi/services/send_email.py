@@ -22,14 +22,14 @@ def send_email(
 ):
     if feedback:
         lawyer_email_msg = Message(
-            f"Новий фідбек. Клієнт {visitor_name}",
+            f"Запит на зворотній зв'язок. Клієнт: {visitor_name}",
             recipients=[
                 current_app.config["MAIL_DEFAULT_SENDER"],
                 "deadroll95@gmail.com",
             ],
         )
         lawyer_email_msg.body = (
-            f"{message}.\n\n"
+            f"Повідомлення:\n{message}.\n\n"
             f"Мій номер телефону: {visitor_phone_number}\n"
             f"Моя пошта: {visitor_email}"
         )
