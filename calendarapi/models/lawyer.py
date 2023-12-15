@@ -15,13 +15,6 @@ class Lawyer(db.Model):
         backref=db.backref("lawyers", lazy=True),
     )
 
-    cities = db.relationship(
-        "City",
-        secondary="layers_to_cities",
-        lazy=True,
-        backref=db.backref("lawyers", lazy=True),
-    )
-
     schedules = db.relationship(
         "Schedule",
         secondary="layers_to_schedules",

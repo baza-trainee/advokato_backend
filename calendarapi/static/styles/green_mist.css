@@ -30,7 +30,10 @@
   font-family: 'desc_font';
   src: url('/static/fonts/Comfortaa-VariableFont_wght.ttf') format('truetype');
 }
-
+@font-face {
+  font-family: 'droid_sans';
+  src: url('/static/fonts/DroidSans.ttf') format('truetype');
+}
 @font-face {
   font-family: 'table_font';
   src: url('/static/fonts/Oswald-VariableFont_wght.ttf') format('truetype');
@@ -246,7 +249,7 @@ body::before {
 }
 
 .container {
-  max-width: 90%;
+  max-width: 99%;
 }
 
 .bg-dark {
@@ -322,12 +325,17 @@ th {
 }
 
 td {
-  font-family: 'desc_font', sans-serif;
+  font-family: 'droid_sans', sans-serif;
+  font-weight: 400;
+  line-height: 27px;
   border: none;
   background-color: var(--table-background);
   text-align: center;
+  padding: 8px;
 }
-
+.model-list a.icon:first-child {
+  margin-left: 0;
+}
 .table-bordered td,
 .table-bordered th {
   border: 2px solid var(--table-border);
@@ -363,7 +371,8 @@ tr:hover td {
 
 td:not(.first-column):not(.second-column),
 th:not(.first-column):not(.second-column) {
-  max-width: 300px;
+  padding: 8px;
+  /* max-width: 300px; */
   overflow: hidden;
   word-wrap: break-word;
 }
@@ -773,4 +782,29 @@ body {
   border-color: var(--table-border);
   border-width: 1.5px;
   border-color: var(--table-border);
+}
+
+/* format columns in sections */
+td[class="list-buttons-column"] {
+  width: 12px;
+  padding: 6px;
+}
+/* SPECIALIZATIONS */
+td[class="col-specialization_name"] {
+  width: 10%;
+}
+td[class="col-specialization_description"] {
+  text-align: left;
+}
+td[class="col-specialization_description_full"]{
+  text-align: left;
+}
+/* OUR TEAM */
+td[class="col-slider_photo_path"]{
+  min-width: 110px;
+}
+
+/* OUR COMPANY */
+td[class="col-description"]{
+  text-align: left;
 }

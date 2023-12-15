@@ -40,7 +40,7 @@ class AboutCompanyModelView(AdminModelView):
     can_delete = False
 
     def _format_description(view, context, model, name):
-        return Markup(f'<div style="text-align: left">{model.description}</div>')
+        return Markup(model.description)
 
     def _list_thumbnail(width: int = 240):
         def thumbnail_formatter(view, context, model, name):

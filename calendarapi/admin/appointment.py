@@ -1,9 +1,6 @@
 from datetime import datetime
 
 from calendarapi.admin.common import AdminModelView
-from calendarapi.models import Lawyer, City, Specialization, Visitor
-from calendarapi.extensions import db
-
 
 class AppointmentModelView(AdminModelView):
     can_set_page_size = True
@@ -20,7 +17,7 @@ class AppointmentModelView(AdminModelView):
     ]
 
     column_labels = {
-        "lawyers": "Адвокати",
+        "lawyers": "Спеціалісти",
         "visitor": "Клієнт",
         "lawyer": "Адвокат",
         "specialization": "Спеціалізація",

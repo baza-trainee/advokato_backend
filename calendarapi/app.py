@@ -151,14 +151,11 @@ def register_adminsite(app):
         template_mode="bootstrap4",
     )
     admin.add_view(
-        CityAdminModelView(City, db.session, name="Міста", category="Керування")
-    )
-    admin.add_view(
         SpecializationAdminModelView(
             Specialization, db.session, name="Cпеціалізації", category="Керування"
         )
     )
-    admin.add_view(LawyerAdminModelView(Lawyer, db.session, name="Адвокати"))
+    admin.add_view(LawyerAdminModelView(Lawyer, db.session, name="Спеціалісти"))
     admin.add_view(ScheduleModelView(Schedule, db.session, name="Розклад"))
     admin.add_view(AppointmentModelView(Appointment, db.session, name="Записи"))
     admin.add_view(VisitorModelView(Visitor, db.session, name="Клієнти"))
@@ -170,6 +167,9 @@ def register_adminsite(app):
     )
     admin.add_view(
         ReviewsAdminModelView(Reviews, db.session, name="Відгуки", category="Керування")
+    )
+    admin.add_view(
+        CityAdminModelView(City, db.session, name="Адреси", category="Керування")
     )
     admin.add_view(
         ContactModelView(Contact, db.session, name="Контакти", category="Керування")
