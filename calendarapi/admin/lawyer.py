@@ -17,10 +17,8 @@ class LawyerAdminModelView(AdminModelView):
     can_set_page_size = True
     column_labels = {
         "name": "Ім'я",
-        "cities": "Місто",
         "specializations": "Спеціалізації",
         "specializations.specialization_name": "Спец...",
-        "cities.city_name": "Місто",
         "lawyer_mail": "Пошта",
     }
     column_sortable_list = [
@@ -30,20 +28,17 @@ class LawyerAdminModelView(AdminModelView):
     column_searchable_list = [
         "name",
         "lawyer_mail",
-        "cities.city_name",
         "specializations.specialization_name",
     ]
 
     column_list = [
         "name",
         "lawyer_mail",
-        "cities",
         "specializations",
     ]
     form_columns = [
         "name",
         "lawyer_mail",
-        "cities",
         "specializations",
     ]
 
@@ -53,19 +48,10 @@ class LawyerAdminModelView(AdminModelView):
             "placeholder": "Оберіть спеціалізацію",
             "minimum_input_length": 0,
         },
-        "cities": {
-            "fields": ("city_name",),
-            "placeholder": "Оберіть місто",
-            "minimum_input_length": 0,
-        },
     }
     form_args = {
         "specializations": {
             "label": "Спеціалізації",
-            "validators": [DataRequired(message="Це поле обов'язкове.")],
-        },
-        "cities": {
-            "label": "Місто",
             "validators": [DataRequired(message="Це поле обов'язкове.")],
         },
     }

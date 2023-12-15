@@ -68,7 +68,6 @@ def init():
             fake_schedule: List[Schedule] = ScheduleFactory.create_batch(25)
             fake_lawyers: List[Lawyer] = LawyersFactory.create_batch(25)
             for lawyer in fake_lawyers:
-                lawyer.cities = list(sample(city_list, randint(1, 2)))
                 lawyer.specializations = sample(spec_list, randint(1, 3))
 
             db.session.add_all(fake_lawyers)

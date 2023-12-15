@@ -125,3 +125,14 @@ class SpecializationAdminModelView(AdminModelView):
         else:
             model.specialization_photo = form.specialization_photo.object_data
         return super().on_model_change(form, model, is_created)
+
+    # column_formatters = {
+    #     "specialization_name": lambda v, c, m, p: Markup(
+    #         (
+    #             f'''<span style="display:inline-block;
+    #                  max-width:100%;max-height:500px;
+    #                  overflow:hidden">{m.specialization_name}</span>'''
+    #         )
+    #     ),
+
+    # }

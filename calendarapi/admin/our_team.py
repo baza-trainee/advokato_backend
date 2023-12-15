@@ -2,7 +2,7 @@ import os
 
 from flask import request, current_app
 from markupsafe import Markup
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length
 from wtforms import BooleanField, TextAreaField, FileField, ValidationError
 from flask_admin.form import rules
 from calendarapi.admin.common import (
@@ -117,8 +117,7 @@ class OurTeamModelView(AdminModelView):
         "slider_photo_path": FileField("Виберіть фото партнера для слайдеру."),
         "description": TextAreaField(
             "Опис",
-            render_kw={"class": "form-control", "rows": 5},
-            validators=[DataRequired(message="Це поле обов'язкове.")],
+            render_kw={"class": "form-control", "rows": 5, "maxlength": 3000},
         ),
         "delete_slider_photo": BooleanField("Видалити фото зі слайдеру"),
     }
