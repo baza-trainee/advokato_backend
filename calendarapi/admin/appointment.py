@@ -2,6 +2,7 @@ from datetime import datetime
 
 from calendarapi.admin.common import AdminModelView
 
+
 class AppointmentModelView(AdminModelView):
     can_set_page_size = True
     can_create = False

@@ -19,8 +19,8 @@ class PossibilitiesModelView(AdminModelView):
     can_set_page_size = True
     column_labels = {
         "photo_path": "Фото",
-        "title": "Заголовок",
-        "short_text": "короткий опис",
+        "title": "Гасло",
+        "short_text": "Короткий опис",
         "description": "Опис",
     }
     column_default_sort = [

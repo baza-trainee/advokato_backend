@@ -171,15 +171,13 @@ def register_adminsite(app):
         ReviewsAdminModelView(Reviews, db.session, name="Відгуки", category="Керування")
     )
     admin.add_view(
-        CityAdminModelView(City, db.session, name="Адреси", category="Керування")
+        CityAdminModelView(City, db.session, name="Філіали", category="Керування")
     )
     admin.add_view(
         ContactModelView(Contact, db.session, name="Контакти", category="Керування")
     )
     admin.add_view(
-        ClientsAdminModelView(
-            Client, db.session, name="Партнери", category="Керування"
-        )
+        ClientsAdminModelView(Client, db.session, name="Партнери", category="Керування")
     )
     admin.add_view(
         ProBonoAdminModelView(ProBono, db.session, name="ProBono", category="Керування")

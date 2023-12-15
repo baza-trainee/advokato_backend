@@ -2,7 +2,7 @@ import os
 
 from flask import request, current_app
 from markupsafe import Markup
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired
 from wtforms import BooleanField, TextAreaField, FileField, ValidationError
 from flask_admin.form import rules
 from calendarapi.admin.common import (
@@ -11,6 +11,7 @@ from calendarapi.admin.common import (
     custom_delete_file,
     custom_save_file,
 )
+from calendarapi.config import IMAGE_FORMATS, IMAGE_SIZE
 
 ABS_MEDIA_PATH = get_media_path(__name__.split(".")[-1])
 
@@ -50,7 +51,7 @@ class OurTeamModelView(AdminModelView):
     ]
     column_descriptions = {
         "photo_path": """Фото для сторінки "Наша команда".""",
-        "slider_photo_path": """Фото для слайдеру на головній сторінці. Якщо залишити це поле пустим, відповідний спеціаліст не відображатиметься в слайдері.""",
+        "slider_photo_path": """Фото для слайдеру на головній сторінці. Якщо залишити це поле пустим, відповідний спеціаліст не відображатиметься у слайдері.""",
         "description": """Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д., для покращення зручності читання.""",
     }
     form_rules = [
@@ -108,6 +109,13 @@ class OurTeamModelView(AdminModelView):
     def _custom_validate_media(form, field):
         if not form.photo_path.object_data and not form.photo_path.data:
             raise ValidationError("Це поле обов'язкове.")
+        file_format = field.data.filename.split(".")[-1]
+        if file_format not in IMAGE_FORMATS:
+            raise ValidationError(
+                f"Формат файлу {file_format} не підтримується. Завантажте фото у наступних форматах: {', '.join(IMAGE_FORMATS)}."
+            )
+        if len(form.photo_path.data.read()) < 10:
+            raise ValidationError(f"Розмір перевищує {IMAGE_SIZE}.")
 
     form_extra_fields = {
         "photo_path": FileField(
@@ -117,6 +125,7 @@ class OurTeamModelView(AdminModelView):
         "slider_photo_path": FileField("Виберіть фото партнера для слайдеру."),
         "description": TextAreaField(
             "Опис",
+            validators=[DataRequired(message="Це поле обов'язкове.")],
             render_kw={"class": "form-control", "rows": 5, "maxlength": 3000},
         ),
         "delete_slider_photo": BooleanField("Видалити фото зі слайдеру"),

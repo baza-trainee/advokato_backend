@@ -1,7 +1,7 @@
+from datetime import datetime
 from flask import request
 from flask_restful import Resource
-
-# from flask_jwt_extended import jwt_required
+from sqlalchemy import and_
 
 from calendarapi.api.schemas import ScheduleSchema
 from calendarapi.extensions import db
@@ -47,8 +47,11 @@ class ScheduleResource(Resource):
         lawyer_id = request.args.get("lawyer_id")
         if not lawyer_id:
             return {"message": "Lawyer ID is required"}, 400
+        current_date = datetime.now().date()
         lawyer_schedule = (
-            db.session.query(Schedule).filter_by(lawyer_id=lawyer_id).all()
+            db.session.query(Schedule)
+            .where(and_(Schedule.lawyer_id == lawyer_id, Schedule.date >= current_date))
+            .all()
         )
         if not lawyer_schedule:
             return {"message": "No schedule found for the specified lawyer"}, 404

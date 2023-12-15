@@ -64,7 +64,7 @@ class ReviewsAdminModelView(AdminModelView):
         return thumbnail_formatter
 
     column_formatters = {
-        "photo_path": _list_thumbnail(width = 80),
+        "photo_path": _list_thumbnail(width=80),
         "description": _format_description,
     }
 
