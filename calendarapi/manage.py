@@ -15,6 +15,10 @@ from calendarapi.models import (
     Contact,
     AboutCompany,
     Possibilities,
+    ProBono,
+    News,
+    Client,
+    Reviews,
 )
 from calendarapi.services.fake_data import (
     our_team_data,
@@ -23,6 +27,10 @@ from calendarapi.services.fake_data import (
     contacts,
     about_company,
     possibilities,
+    probono,
+    news,
+    clients,
+    reviews,
 )
 from calendarapi.extensions import db
 
@@ -54,12 +62,21 @@ def init():
             city_list = [City(**data) for data in cities]
             spec_list = [Specialization(**data) for data in specializations]
             possibilities_list = [Possibilities(**data) for data in possibilities]
+            probono_list = [ProBono(**data) for data in probono]
+            news_list = [News(**data) for data in news]
+            clients_list = [Client(**data) for data in clients]
+            reviews_list = [Reviews(**data) for data in reviews]
+            
             db.session.add_all(
                 [
                     *city_list,
                     *spec_list,
                     *contact_list,
                     *possibilities_list,
+                    *probono_list,
+                    *news_list,
+                    *clients_list,
+                    *reviews_list,
                     AboutCompany(**about_company),
                 ]
             )
@@ -90,7 +107,12 @@ def init():
             click.echo("created user admin")
             click.echo("Added fake cities")
             click.echo("Added fake Lawyers")
-            click.echo("Added fake specializations")
+            click.echo("Added fake ProBono_data")
+            click.echo("Added fake news")
+            click.echo("Added fake clients")
+            click.echo("Added fake reviews")
+
+
         else:
             click.echo("Users is already exist")
     else:
