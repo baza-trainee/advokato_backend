@@ -195,7 +195,7 @@ class AppointmentResource(Resource):
                 visitor_phone_number=existing_visitor.phone_number,
                 appointment_date=appointment.appointment_date,
                 appointment_time=str(appointment.appointment_time)[:-3],
-                lawyer_email=lawyer.lawyer_mail,
+                # lawyer_email=lawyer.lawyer_mail,
                 lawyer_name=appointment.lawyer,
                 specialization_name=appointment.specialization,
             )
