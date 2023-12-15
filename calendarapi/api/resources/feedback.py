@@ -70,10 +70,16 @@ class FeedbackResource(Resource):
 
     def find_or_create_visitor(self, **kwargs) -> Visitor:
         try:
-            visitor = Visitor.query.filter(
-                (Visitor.phone_number == kwargs["phone_number"])
-                | (Visitor.email == kwargs["email"])
-            ).first()
+            phone_number = kwargs.get("phone_number")
+            email = kwargs.get("email")
+
+            if email is not None:
+                visitor = Visitor.query.filter(
+                    (Visitor.phone_number == phone_number) | (Visitor.email == email)
+                ).first()
+            else:
+                visitor = Visitor.query.filter_by(phone_number=phone_number).first()
+
             if visitor:
                 [setattr(visitor, key, value) for key, value in kwargs.items() if value]
                 db.session.commit()
