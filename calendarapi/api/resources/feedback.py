@@ -106,14 +106,14 @@ class FeedbackResource(Resource):
         except ValidationError as e:
             return {"error": str(e)}, 400
         self.find_or_create_visitor(**self.visitor_schema.dump(validated_visitor_data))
-        try:
-            send_email(
-                feedback=True,
-                visitor_name=data.get("name", "Не вказано"),
-                visitor_email=data.get("email", "Не вказана"),
-                visitor_phone_number=data.get("phone_number"),
-                message=data.get("message", "Без повідомлення"),
-            )
-        except SMTPException as e:
-            return {"error": f"Email sending error: {str(e)}"}, 500
+        # try:
+        #     send_email(
+        #         feedback=True,
+        #         visitor_name=data.get("name", "Не вказано"),
+        #         visitor_email=data.get("email", "Не вказана"),
+        #         visitor_phone_number=data.get("phone_number"),
+        #         message=data.get("message", "Без повідомлення"),
+        #     )
+        # except SMTPException as e:
+        #     return {"error": f"Email sending error: {str(e)}"}, 500
         return {"success": True}, 200

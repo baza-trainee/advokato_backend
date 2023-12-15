@@ -1,7 +1,7 @@
 from calendarapi.models import Visitor
 from calendarapi.extensions import fm, db, ma
 
-phone_number_pattern = r"^(\+?\d{1,3}|\d{1,4})[0-9]{9}$"
+phone_number_pattern = r"^(?:\+?380|\b380|0)[0-9]{9,13}$"
 
 
 class VisitorSchema(fm.SQLAlchemyAutoSchema):
