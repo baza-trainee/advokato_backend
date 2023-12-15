@@ -19,7 +19,7 @@ class NewsAdminModelView(AdminModelView):
     can_set_page_size = True
 
     column_labels = {
-        "name": "Назва",
+        "name": "Новина",
         "description": "Опис",
         "created_at": "Дата",
         "photo_path": "Фото",
@@ -32,6 +32,15 @@ class NewsAdminModelView(AdminModelView):
     ]
     column_default_sort = [
         ("id", False),
+    ]
+    column_descriptions = {
+        "description": """Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д., для покращення зручності читання."""
+    }
+    column_list = [
+        "photo_path",
+        "name",
+        "description",
+        "created_at",
     ]
 
     def _format_description(view, context, model, name):

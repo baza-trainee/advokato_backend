@@ -117,6 +117,8 @@ def create_app(testing=False):
         apispec.spec.components.schema("OurTeamSchema", schema=OurTeamSchema)
         apispec.spec.components.schema("NewsSchema", schema=NewsSchema)
         apispec.spec.components.schema("ReviewsSchema", schema=ReviewsSchema)
+        apispec.spec.components.schema("ClientSchema", schema=ClientSchema)
+        apispec.spec.components.schema("ProBonoSchema", schema=ProBonoSchema)
 
         apispec.spec.path(view=ScheduleResource, app=app)
         apispec.spec.path(view=AppointmentResource, app=app)
@@ -176,13 +178,11 @@ def register_adminsite(app):
     )
     admin.add_view(
         ClientsAdminModelView(
-            Client, db.session, name="Замовники", category="Керування"
+            Client, db.session, name="Партнери", category="Керування"
         )
     )
     admin.add_view(
-        ProBonoAdminModelView(
-            ProBono, db.session, name="Благодійність", category="Керування"
-        )
+        ProBonoAdminModelView(ProBono, db.session, name="ProBono", category="Керування")
     )
     admin.add_view(
         UserAdminModelView(

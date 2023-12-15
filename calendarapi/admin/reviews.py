@@ -35,6 +35,16 @@ class ReviewsAdminModelView(AdminModelView):
     column_default_sort = [
         ("id", False),
     ]
+    column_descriptions = {
+        "description": """Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д., для покращення зручності читання."""
+    }
+    column_list = [
+        "photo_path",
+        "name",
+        "position",
+        "description",
+        "created_at",
+    ]
 
     def _format_description(view, context, model, name):
         return Markup(model.description)
@@ -54,7 +64,7 @@ class ReviewsAdminModelView(AdminModelView):
         return thumbnail_formatter
 
     column_formatters = {
-        "photo_path": _list_thumbnail(),
+        "photo_path": _list_thumbnail(width = 80),
         "description": _format_description,
     }
 
