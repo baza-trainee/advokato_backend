@@ -31,21 +31,34 @@ def validate_date(form, field):
 
     list_dates = [form.data["date"]]
     if form.data["end_date"]:
-        list_dates += [form.data["date"] + timedelta(days=day) for day in range((form.data["end_date"] - form.data["date"]).days + 1)]
+        list_dates += [
+            form.data["date"] + timedelta(days=day)
+            for day in range((form.data["end_date"] - form.data["date"]).days + 1)
+        ]
 
     lawyers_shedule = []
     shedule_error = []
     if list_times:
         form._fields["time"].data = [time.strftime("%H:%M") for time in list_times]
         for lawyer in form.data["lawyers"]:
-            existing_schedule = db.session.query(Schedule).where(and_(Schedule.lawyer_id == lawyer.id, Schedule.date.in_(list_dates))).all()
+            existing_schedule = (
+                db.session.query(Schedule)
+                .where(
+                    and_(Schedule.lawyer_id == lawyer.id, Schedule.date.in_(list_dates))
+                )
+                .all()
+            )
             existing_schedule = set(lawyer.date for lawyer in existing_schedule)
             success_shedule = set(list_dates) - existing_schedule
-            if not success_shedule and (form._obj and form._obj.date in existing_schedule):
+            if not success_shedule and (
+                form._obj and form._obj.date in existing_schedule
+            ):
                 success_shedule = [form._obj.date]
                 existing_schedule -= {form._obj.date}
             for date in success_shedule:
-                shedule = Schedule(lawyer_id=lawyer.id, time=list_times, date=date, lawyers=[lawyer])
+                shedule = Schedule(
+                    lawyer_id=lawyer.id, time=list_times, date=date, lawyers=[lawyer]
+                )
                 lawyers_shedule.append(shedule)
             if existing_schedule:
                 shedule_error.append(
@@ -59,7 +72,9 @@ def validate_date(form, field):
             for shedule in shedule_error:
                 if shedule != shedule_error[0]:
                     err += "<li>"
-                err += f"У спеціаліста <b>{shedule['lawyer']}</b> вже були записи на:<br>"
+                err += (
+                    f"У спеціаліста <b>{shedule['lawyer']}</b> вже були записи на:<br>"
+                )
                 for date in shedule["existing_schedule"]:
                     err += f"- {date}<br>"
                 if shedule != shedule_error[0]:
@@ -107,7 +122,9 @@ def _validate_time_format(time_list: list, skip_raise=False) -> list[time]:
             raise ValidationError(f"{exc.msg} <start_HH> не може бути менше <end_HH>")
     except ValueError:
         if not skip_raise:
-            raise ValidationError("Невірний формат. Приймається час у вигляді 'HH:MM:SS' або 'HH:MM' або 'HH' або start_HH-end_HH.")
+            raise ValidationError(
+                "Невірний формат. Приймається час у вигляді 'HH:MM:SS' або 'HH:MM' або 'HH' або start_HH-end_HH."
+            )
 
 
 class ScheduleModelView(AdminModelView):
@@ -144,7 +161,9 @@ class ScheduleModelView(AdminModelView):
 
     def get_query(self):
         current_date = datetime.now().date()
-        old_shedules = db.session.query(Schedule).where(Schedule.date < current_date).all()
+        old_shedules = (
+            db.session.query(Schedule).where(Schedule.date < current_date).all()
+        )
         for shedule in old_shedules:
             db.session.delete(shedule)
         db.session.commit()
@@ -228,7 +247,9 @@ class ScheduleModelView(AdminModelView):
         # Apply search criteria
         if self._search_supported and search:
             search = search.strip()
-            query, count_query, joins, count_joins = self._apply_search(query, count_query, joins, count_joins, search)
+            query, count_query, joins, count_joins = self._apply_search(
+                query, count_query, joins, count_joins, search
+            )
 
         # Apply filters
         # if selected_lawyer and selected_lawyer != "all": #TODO (для відображення кількості в СПИСОК)
@@ -312,13 +333,20 @@ class ScheduleModelView(AdminModelView):
     }
 
     column_formatters = {
-        "time": lambda view, context, model, name: [item.strftime("%H:%M") for item in model.time] if model.time else "",
+        "time": lambda view, context, model, name: [
+            item.strftime("%H:%M") for item in model.time
+        ]
+        if model.time
+        else "",
     }
 
     form_args = {
         "lawyers": {
             "label": "Спеціалісти",
-            "validators": [DataRequired(message="Це поле обов'язкове."), validate_lawyers],
+            "validators": [
+                DataRequired(message="Це поле обов'язкове."),
+                validate_lawyers,
+            ],
         },
         "time": {
             "validators": [
@@ -342,6 +370,10 @@ class ScheduleModelView(AdminModelView):
 
     def on_form_prefill(self, form, id):
         if form._fields["time"].data and isinstance(form._fields["time"].data[0], time):
-            form._fields["time"].data = [time.strftime("%H:%M") for time in form.time.data] if form.time.data else []
+            form._fields["time"].data = (
+                [time.strftime("%H:%M") for time in form.time.data]
+                if form.time.data
+                else []
+            )
         del form._fields["end_date"]
         return super().on_form_prefill(form, id)
