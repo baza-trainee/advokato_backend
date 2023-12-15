@@ -86,11 +86,16 @@ class FeedbackResource(Resource):
             db.session.rollback()
             return {"error": f"Database error: {str(e)}"}, 500
 
+    def validate_message_length(self, message):
+        if len(message) > 2000:
+            raise ValidationError("Message length cannot exceed 2000 characters.")
+
     def post(self):
         if not request.is_json:
             return {"error": "Invalid JSON"}, 400
         data = request.get_json()
         try:
+            self.validate_message_length(data.get("message", ""))
             validated_visitor_data: Visitor = self.visitor_schema.load(
                 {
                     "email": data.get("email"),
