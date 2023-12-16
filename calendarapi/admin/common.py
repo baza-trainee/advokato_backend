@@ -1,47 +1,21 @@
 import os
 import uuid
+from io import BytesIO
 
 from flask import current_app, redirect, url_for, request, flash
 import flask_login as login
 from flask_admin import AdminIndexView, helpers, expose
 from flask_admin.contrib.sqla import ModelView
-from wtforms import ValidationError, form, fields, validators
 from flask_mail import Message
+from markupsafe import Markup
+from wtforms import ValidationError, form, fields, validators
+from werkzeug.datastructures.file_storage import FileStorage
 from cloudinary import uploader
-from calendarapi.config import IMAGE_FORMATS, IMAGE_SIZE
 
+from calendarapi.config import IMAGE_FORMATS, IMAGE_SIZE
 from calendarapi.extensions import db, mail
 from calendarapi.models import User, UserSecurity
 from calendarapi.models.user_permissions import Permission
-
-
-def get_media_path(view_file_name: str):
-    media_path = os.path.join(
-        os.getcwd(), "calendarapi", "static", "media", view_file_name
-    )
-    return media_path
-
-
-def custom_save_file(abs_media_path, file):
-    if current_app.config["STORAGE"] == "STATIC":
-        os.makedirs(abs_media_path, exist_ok=True)
-        url_media_path = os.path.join(*abs_media_path.split(os.path.sep)[-3:])
-        file_name = f'{uuid.uuid4().hex[:16]}.{file.filename.split(".")[-1]}'
-        abs_file_path = os.path.join(abs_media_path, file_name)
-        url_file_path = os.path.join(url_media_path, file_name)
-        file.save(abs_file_path)
-        return url_file_path
-    else:
-        upload_result = uploader.upload(file)
-        return upload_result["url"]
-
-
-def custom_delete_file(abs_media_path, file_path):
-    if current_app.config["STORAGE"] == "STATIC":
-        file_name = file_path.split(os.path.sep)[-1:][0]
-        abs_file_path = os.path.join(abs_media_path, file_name)
-        if os.path.exists(abs_file_path):
-            os.remove(abs_file_path)
 
 
 class AdminModelView(ModelView):
@@ -243,3 +217,79 @@ class CustomAdminIndexView(AdminIndexView):
                 flash("Не знайдено аргумент: token", "error")
 
         return redirect(f"{request.host_url}admin")
+
+
+def get_media_path(view_file_name: str):
+    media_path = os.path.join(
+        os.getcwd(), "calendarapi", "static", "media", view_file_name
+    )
+    return media_path
+
+
+def custom_save_file(abs_media_path, file):
+    if current_app.config["STORAGE"] == "STATIC":
+        os.makedirs(abs_media_path, exist_ok=True)
+        url_media_path = os.path.join(*abs_media_path.split(os.path.sep)[-3:])
+        file_name = f'{uuid.uuid4().hex[:16]}.{file.filename.split(".")[-1]}'
+        abs_file_path = os.path.join(abs_media_path, file_name)
+        url_file_path = os.path.join(url_media_path, file_name)
+        file.save(abs_file_path)
+        return url_file_path
+    else:
+        upload_result = uploader.upload(file)
+        return upload_result["url"]
+
+
+def custom_delete_file(abs_media_path, file_path):
+    if current_app.config["STORAGE"] == "STATIC":
+        file_name = file_path.split(os.path.sep)[-1:][0]
+        abs_file_path = os.path.join(abs_media_path, file_name)
+        if os.path.exists(abs_file_path):
+            os.remove(abs_file_path)
+
+
+def validate_image(required: bool = True):
+    def _validate_image(form, field):
+        "validate image formats and image with IMAGE_FORMATS and IMAGE_SIZE from config"
+
+        if required and not field.object_data and not field.data:
+            raise ValidationError("Це поле обов'язкове.")
+        if field.data:
+            file_format = field.data.filename.split(".")[-1]
+            if file_format not in IMAGE_FORMATS:
+                raise ValidationError(
+                    f"Формат файлу {file_format} не підтримується. Завантажте фото у наступних форматах: {', '.join(IMAGE_FORMATS)}."
+                )
+            buffer = field.data.stream.read()
+            content_length = round(len(buffer) / 1024 / 1024, 2)
+            if content_length > IMAGE_SIZE:
+                raise ValidationError(
+                    f"Розмір файлу {content_length} мб. перевищує максимально допустимий {IMAGE_SIZE} мб."
+                )
+            field.data = FileStorage(
+                stream=BytesIO(buffer),
+                content_length=content_length,
+                content_type=field.data.content_type,
+                filename=field.data.filename,
+                name=field.data.name,
+                headers=field.data.headers,
+            )
+
+    return _validate_image
+
+
+def thumbnail_formatter(width: int = 240, field_name: str = "photo_path"):
+    def _thumbnail_formatter(view, context, model, name):
+        field_value = getattr(model, field_name)
+        if not field_value:
+            return ""
+
+        if current_app.config["STORAGE"] == "STATIC":
+            url = os.path.join(request.host_url, field_value)
+        else:
+            url = field_value
+
+        if field_value.split(".")[-1] in current_app.config["IMAGE_FORMATS"]:
+            return Markup(f"<img src={url} width={width}>")
+
+    return _thumbnail_formatter

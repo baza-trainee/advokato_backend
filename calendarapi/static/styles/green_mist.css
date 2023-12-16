@@ -808,3 +808,9 @@ td[class="col-slider_photo_path"]{
 td[class="col-description"]{
   text-align: left;
 }
+
+/* REVIEWS */
+td[class="col-created_at"] {
+  text-align: left;
+  min-width: 110px;
+}
