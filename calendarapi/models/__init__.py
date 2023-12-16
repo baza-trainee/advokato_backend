@@ -20,6 +20,7 @@ from calendarapi.models.clients import Client
 from calendarapi.models.pro_bono import ProBono
 from calendarapi.models.user_permissions import Permission
 from calendarapi.models.user_to_permissions import UsersToPermissions
+from calendarapi.models.hero_block import HeroBlock
 
 __all__ = [
     "User",
@@ -43,4 +44,5 @@ __all__ = [
     "AboutCompany",
     "Client",
     "ProBono",
+    "HeroBlock",
 ]

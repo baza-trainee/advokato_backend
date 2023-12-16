@@ -12,6 +12,7 @@ from calendarapi.api.schemas.about_company import AboutCompanySchema
 from calendarapi.api.schemas.possibilities import PossibilitiesSchema
 from calendarapi.api.schemas.client import ClientSchema
 from calendarapi.api.schemas.pro_bono import ProBonoSchema
+from calendarapi.api.schemas.hero_block import HeroBlockSchema
 
 
 __all__ = [
@@ -29,4 +30,5 @@ __all__ = [
     "PossibilitiesSchema",
     "ClientSchema",
     "ProBonoSchema",
+    "HeroBlockSchema",
 ]

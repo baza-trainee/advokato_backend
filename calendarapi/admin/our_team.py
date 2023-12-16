@@ -7,6 +7,7 @@ from wtforms import BooleanField, TextAreaField, FileField, ValidationError
 from flask_admin.form import rules
 from calendarapi.admin.common import (
     AdminModelView,
+    format_text_as_markup,
     get_media_path,
     custom_delete_file,
     custom_save_file,
@@ -68,13 +69,10 @@ class OurTeamModelView(AdminModelView):
         ),
     ]
 
-    def _format_description(view, context, model, name):
-        return Markup(model.description)
-
     column_formatters = {
         "photo_path": thumbnail_formatter(field_name="photo_path"),
         "slider_photo_path": thumbnail_formatter(field_name="slider_photo_path"),
-        "description": _format_description,
+        "description": format_text_as_markup,
     }
 
     form_extra_fields = {
@@ -122,3 +120,8 @@ class OurTeamModelView(AdminModelView):
             model.slider_photo_path = form.slider_photo_path.object_data
 
         return super().on_model_change(form, model, is_created)
+
+    # def on_form_prefill(self, form, id):
+    #     if not form.slider_photo_path.object_data:
+    #         del form._fields["delete_slider_photo"]
+    #     return super().on_form_prefill(form, id)

@@ -38,6 +38,7 @@ from calendarapi.admin import (
     PossibilitiesModelView,
     ClientsModelView,
     ProBonoModelView,
+    HeroModelView,
 )
 from calendarapi.models import (
     User,
@@ -55,6 +56,7 @@ from calendarapi.models import (
     Possibilities,
     Client,
     ProBono,
+    HeroBlock,
 )
 from calendarapi.api.schemas import (
     VisitorSchema,
@@ -83,6 +85,7 @@ from calendarapi.api.resources import (
     PossibilitiesResource,
     ClientResource,
     ProBonoResource,
+    HeroBlockResource,
 )
 
 
@@ -133,6 +136,7 @@ def create_app(testing=False):
         apispec.spec.path(view=PossibilitiesResource, app=app)
         apispec.spec.path(view=ClientResource, app=app)
         apispec.spec.path(view=ProBonoResource, app=app)
+        apispec.spec.path(view=HeroBlockResource, app=app)
 
         # apispec.spec.path(view=login, app=app)
         # apispec.spec.path(view=refresh, app=app)
@@ -153,6 +157,14 @@ def register_adminsite(app):
         template_mode="bootstrap4",
     )
     admin.add_view(
+        HeroModelView(HeroBlock, db.session, name='"HERO" блок', category="Керування")
+    )
+    admin.add_view(
+        AboutCompanyModelView(
+            AboutCompany, db.session, name="Про компанію", category="Керування"
+        )
+    )
+    admin.add_view(
         PossibilitiesModelView(
             Possibilities, db.session, name="Сильні сторони", category="Керування"
         )
@@ -160,11 +172,6 @@ def register_adminsite(app):
     admin.add_view(
         SpecializationModelView(
             Specialization, db.session, name="Cпеціалізації", category="Керування"
-        )
-    )
-    admin.add_view(
-        AboutCompanyModelView(
-            AboutCompany, db.session, name="Про компанію", category="Керування"
         )
     )
     admin.add_view(

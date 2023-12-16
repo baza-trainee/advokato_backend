@@ -36,11 +36,9 @@ class OurTeamResource(Resource):
                   company:
                     type: object
                     properties:
-                      title:
+                      our_team_page_description:
                         type: string
-                      photo_path:
-                        type: string
-                      description:
+                      our_team_page_photo_path:
                         type: string
                   team:
                     type: array
@@ -66,9 +64,12 @@ class OurTeamResource(Resource):
     our_team_schema: OurTeamSchema = OurTeamSchema()
     company_schema: AboutCompanySchema = AboutCompanySchema()
 
-    def get(self):
+    def get(self):  # TODO сделать рефакторинг этого ендпоинта.
         is_slider = request.args.get("is_slider", "false").lower() == "true"
-        company: AboutCompany = db.session.query(AboutCompany).first()
+        company: AboutCompany = db.session.query(
+            AboutCompany.our_team_page_description,
+            AboutCompany.our_team_page_photo_path,
+        ).first()
         team: List[OurTeam] = db.session.query(OurTeam).all()
         if is_slider:
             team = [
