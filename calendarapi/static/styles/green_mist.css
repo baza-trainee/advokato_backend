@@ -51,7 +51,7 @@ form[action=""][class="admin-form"][method="POST"][enctype="multipart/form-data"
   margin: 0 auto;
   color: white;
   font-size: 16px;
-  font-family: "desc_font", sans-serif;
+  font-family: "droid_sans", sans-serif;
 }
 
 input[name="_add_another"] {
@@ -94,7 +94,7 @@ input[name="login"] {
   border-radius: 30px;
   border: none;
   font-size: 16px;
-  font-family: "desc_font", sans-serif;
+  font-family: "droid_sans", sans-serif;
   text-align: center;
   padding: 10px;
   margin-top: 30px;
@@ -114,7 +114,7 @@ input[type="password"][placeholder='password'] {
   border-radius: 30px;
   border: none;
   font-size: 16px;
-  font-family: "desc_font", sans-serif;
+  font-family: "droid_sans", sans-serif;
   text-align: center;
   margin-top: 1px !important;
   padding: 10px;
@@ -138,7 +138,7 @@ input[type="password"][placeholder='confirm password'] {
   border-radius: 30px;
   border: none;
   font-size: 16px;
-  font-family: "desc_font", sans-serif;
+  font-family: "droid_sans", sans-serif;
   text-align: center;
   margin-top: 1px !important;
   padding: 10px;
@@ -158,7 +158,7 @@ input[type="email"][placeholder='email'] {
   border-radius: 30px;
   border: none;
   font-size: 16px;
-  font-family: "desc_font", sans-serif;
+  font-family: "droid_sans", sans-serif;
   text-align: center;
   margin-top: 1px !important;
   padding: 10px;
@@ -399,7 +399,7 @@ th:not(.first-column):not(.second-column) {
 }
 
 .btn-primary {
-  font-family: "desc_font";
+  font-family: "droid_sans";
   text-transform: lowercase;
   background-color: var(--button-save);
   border-color: var(--table-border);
@@ -414,7 +414,7 @@ th:not(.first-column):not(.second-column) {
 }
 
 .btn-danger {
-  font-family: "desc_font";
+  font-family: "droid_sans";
   text-transform: lowercase;
   color: var(--text-color);
   background-color: var(--button-exit);
@@ -498,13 +498,13 @@ th:not(.first-column):not(.second-column) {
 }
 
 .modal-footer>:not(:first-child) {
-  font-family: "desc_font";
+  font-family: "droid_sans";
   text-transform: lowercase;
   background-color: var(--button-exit);
 }
 
 .modal-footer>:not(:last-child) {
-  font-family: "desc_font";
+  font-family: "droid_sans";
   text-transform: lowercase;
   background-color: var(--button-save);
 }
@@ -514,7 +514,7 @@ th:not(.first-column):not(.second-column) {
 }
 
 input[type="text"] {
-  font-family: "desc_font";
+  font-family: "droid_sans";
   font-size: 14px;
 }
 input[type="text"]::placeholder {

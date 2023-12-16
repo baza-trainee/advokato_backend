@@ -14,6 +14,7 @@ def send_email(
     visitor_phone_number: str = None,
     appointment_date=None,
     appointment_time=None,
+    lawyer_email: str = None,
     lawyer_name: str = None,
     specialization_name: str = None,
     reminder: bool = False,
@@ -22,14 +23,14 @@ def send_email(
 ):
     if feedback:
         lawyer_email_msg = Message(
-            f"Новий фідбек. Клієнт {visitor_name}",
+            f"Запит на зворотній зв'язок. Клієнт: {visitor_name}",
             recipients=[
                 current_app.config["MAIL_DEFAULT_SENDER"],
                 "deadroll95@gmail.com",
             ],
         )
         lawyer_email_msg.body = (
-            f"{message}.\n\n"
+            f"Повідомлення:\n{message}.\n\n"
             f"Мій номер телефону: {visitor_phone_number}\n"
             f"Моя пошта: {visitor_email}"
         )
@@ -37,8 +38,8 @@ def send_email(
         return "Повідомлення відправлено"
     if not reminder:
         lawyer_email_msg = Message(
-            f"Нова зустріч. Клієнт {visitor_name }",
-            recipients=[current_app.config["MAIL_DEFAULT_SENDER"]],
+            f"Нова зустріч. Клієнт: {visitor_name}",
+            recipients=[lawyer_email],
         )
         user_email_msg = Message(
             f"Нова зустріч. Юрист {lawyer_name}",
@@ -57,7 +58,8 @@ def send_email(
         )
         if visitor_email:
             mail.send(user_email_msg)
-        mail.send(lawyer_email_msg)
+        if lawyer_email:
+            mail.send(lawyer_email_msg)
         return "Повідомлення відправлено"
 
     else:

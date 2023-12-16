@@ -1,15 +1,18 @@
 import os
 import uuid
+
 from flask import current_app, redirect, url_for, request, flash
 import flask_login as login
 from flask_admin import AdminIndexView, helpers, expose
 from flask_admin.contrib.sqla import ModelView
-from wtforms import form, fields, validators
+from wtforms import ValidationError, form, fields, validators
 from flask_mail import Message
 from cloudinary import uploader
+from calendarapi.config import IMAGE_FORMATS, IMAGE_SIZE
 
 from calendarapi.extensions import db, mail
 from calendarapi.models import User, UserSecurity
+from calendarapi.models.user_permissions import Permission
 
 
 def get_media_path(view_file_name: str):
@@ -114,6 +117,14 @@ class CustomAdminIndexView(AdminIndexView):
         if not login.current_user.is_authenticated:
             return redirect(url_for(".login_view"))
 
+        if db.session.query(Permission).count() < 1 and self.admin._views:
+            permissions = [Permission(view_name="Усі розділи")]
+            permissions += [
+                Permission(view_name=admin_view.name)
+                for admin_view in self.admin._views[1:]
+            ]
+            db.session.add_all(permissions)
+            db.session.commit()
         return super(CustomAdminIndexView, self).index()
 
     @expose("/login/", methods=("GET", "POST"))

@@ -66,7 +66,7 @@ def init():
             news_list = [News(**data) for data in news]
             clients_list = [Client(**data) for data in clients]
             reviews_list = [Reviews(**data) for data in reviews]
-            
+
             db.session.add_all(
                 [
                     *city_list,
@@ -110,7 +110,6 @@ def init():
             click.echo("Added fake news")
             click.echo("Added fake clients")
             click.echo("Added fake reviews")
-
 
         else:
             click.echo("Users is already exist")

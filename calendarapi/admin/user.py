@@ -1,3 +1,4 @@
+from re import search
 from flask import flash
 from flask_login import current_user
 from wtforms import EmailField, PasswordField
@@ -9,6 +10,27 @@ from calendarapi.api.schemas import LawyerSchema
 from calendarapi.extensions import db
 from calendarapi.models.user import User
 
+# async def validate_password(
+#     self, password: str, user: Union[UserCreate, User]
+# ) -> None:
+#     if len(password) < 8:
+#         raise InvalidPasswordException(reason=PASSWORD_LEN_ERROR)
+#     if user.email in password:
+#         raise InvalidPasswordException(reason=PASSWORD_UNIQUE_ERROR)
+
+#     if not check_password_strength(password):
+#         raise InvalidPasswordException(reason=PASSWORD_STRENGTH_ERROR)
+
+# def check_password_strength(password: str):
+#     """
+#     Checks if password is a combination of
+#     lowercase, uppercase, number and special symbol.
+#     """
+#     regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!?]*$"
+#     if not search(regex, password):
+#         return False
+#     return True
+
 
 class EmailValidator:
     def __call__(self, form, field):
@@ -18,9 +40,9 @@ class EmailValidator:
             raise ValidationError(errors["lawyer_mail"][0])
 
 
-class UserAdminModelView(AdminModelView):
-    def is_accessible(self):
-        return current_user.is_authenticated and current_user.is_superuser
+class UserModelView(AdminModelView):
+    # def is_accessible(self):
+    #     return current_user.is_authenticated and current_user.is_superuser
 
     form_columns = [
         "username",
@@ -28,15 +50,17 @@ class UserAdminModelView(AdminModelView):
         "confirm_password",
         "email",
         "is_active",
-        "is_superuser",
+        # "is_superuser",
+        "permissions",
         "description",
     ]
     column_list = [
         "username",
         "email",
-        "description",
         "is_active",
-        "is_superuser",
+        # "is_superuser",
+        "permissions",
+        "description",
     ]
     column_exclude_list = "password"
     column_labels = {
@@ -44,7 +68,8 @@ class UserAdminModelView(AdminModelView):
         "username": "Логін",
         "description": "Опис",
         "is_active": "Активний",
-        "is_superuser": "superuser",
+        "permissions": "Доступ до розділів #TODO",
+        # "is_superuser": "superuser",
     }
 
     form_extra_fields = {
@@ -78,20 +103,28 @@ class UserAdminModelView(AdminModelView):
             return super().delete_model(model)
 
     def on_model_change(self, form, model, is_created):
-        if form.is_superuser.object_data and not form.is_superuser.data:
-            if db.session.query(User).filter_by(is_superuser=True).count() <= 1:
+        if form.is_active.object_data and not form.is_active.data:
+            if db.session.query(User).filter_by(is_active=True).count() <= 1:
                 flash(
-                    "Має залишитися хоча б один користувач із привілегією superuser",
+                    "Має залишитися хоча б один активний користувач.",
                     "error",
                 )
-                model.is_superuser = True
+                model.is_active = True
         return super().on_model_change(form, model, is_created)
 
     def delete_model(self, model):
-        if db.session.query(User).filter_by(is_superuser=True).count() == 1:
+        if db.session.query(User).filter_by(is_active=True).count() == 1:
             flash(
-                "Має залишитися хоча б один користувач із привілегією superuser",
+                "Має залишитися хоча б один активний користувач.",
                 "error",
             )
         else:
             return super().delete_model(model)
+
+    form_ajax_refs = {
+        "permissions": {
+            "fields": ("view_name",),
+            "placeholder": "Доступ до розділів",
+            "minimum_input_length": 0,
+        },
+    }

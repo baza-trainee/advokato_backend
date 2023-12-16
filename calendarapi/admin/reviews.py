@@ -16,7 +16,7 @@ from calendarapi.admin.common import (
 ABS_MEDIA_PATH = get_media_path(__name__.split(".")[-1])
 
 
-class ReviewsAdminModelView(AdminModelView):
+class ReviewsModelView(AdminModelView):
     can_set_page_size = True
 
     column_labels = {
@@ -64,7 +64,7 @@ class ReviewsAdminModelView(AdminModelView):
         return thumbnail_formatter
 
     column_formatters = {
-        "photo_path": _list_thumbnail(width = 80),
+        "photo_path": _list_thumbnail(width=80),
         "description": _format_description,
     }
 

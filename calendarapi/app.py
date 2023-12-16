@@ -22,22 +22,22 @@ from calendarapi.extensions import (
 #     revoke_refresh_token,
 # )
 from calendarapi.admin import (
-    UserAdminModelView,
+    UserModelView,
     CustomAdminIndexView,
-    CityAdminModelView,
+    CityModelView,
     configure_login,
-    LawyerAdminModelView,
+    LawyerModelView,
     ScheduleModelView,
-    SpecializationAdminModelView,
+    SpecializationModelView,
     AppointmentModelView,
     VisitorModelView,
-    NewsAdminModelView,
+    NewsModelView,
     ContactModelView,
-    ReviewsAdminModelView,
+    ReviewsModelView,
     AboutCompanyModelView,
     PossibilitiesModelView,
-    ClientsAdminModelView,
-    ProBonoAdminModelView,
+    ClientsModelView,
+    ProBonoModelView,
 )
 from calendarapi.models import (
     User,
@@ -153,40 +153,13 @@ def register_adminsite(app):
         template_mode="bootstrap4",
     )
     admin.add_view(
-        SpecializationAdminModelView(
+        PossibilitiesModelView(
+            Possibilities, db.session, name="Сильні сторони", category="Керування"
+        )
+    )
+    admin.add_view(
+        SpecializationModelView(
             Specialization, db.session, name="Cпеціалізації", category="Керування"
-        )
-    )
-    admin.add_view(LawyerAdminModelView(Lawyer, db.session, name="Спеціалісти"))
-    admin.add_view(ScheduleModelView(Schedule, db.session, name="Розклад"))
-    admin.add_view(AppointmentModelView(Appointment, db.session, name="Записи"))
-    admin.add_view(VisitorModelView(Visitor, db.session, name="Клієнти"))
-    admin.add_view(
-        OurTeamModelView(OurTeam, db.session, name="Команда", category="Керування")
-    )
-    admin.add_view(
-        NewsAdminModelView(News, db.session, name="Новини", category="Керування")
-    )
-    admin.add_view(
-        ReviewsAdminModelView(Reviews, db.session, name="Відгуки", category="Керування")
-    )
-    admin.add_view(
-        CityAdminModelView(City, db.session, name="Адреси", category="Керування")
-    )
-    admin.add_view(
-        ContactModelView(Contact, db.session, name="Контакти", category="Керування")
-    )
-    admin.add_view(
-        ClientsAdminModelView(
-            Client, db.session, name="Партнери", category="Керування"
-        )
-    )
-    admin.add_view(
-        ProBonoAdminModelView(ProBono, db.session, name="ProBono", category="Керування")
-    )
-    admin.add_view(
-        UserAdminModelView(
-            User, db.session, name="облікові записи", category="Керування"
         )
     )
     admin.add_view(
@@ -195,10 +168,31 @@ def register_adminsite(app):
         )
     )
     admin.add_view(
-        PossibilitiesModelView(
-            Possibilities, db.session, name="Сильні сторони", category="Керування"
-        )
+        OurTeamModelView(OurTeam, db.session, name="Команда", category="Керування")
     )
+    admin.add_view(NewsModelView(News, db.session, name="Новини", category="Керування"))
+    admin.add_view(
+        ReviewsModelView(Reviews, db.session, name="Відгуки", category="Керування")
+    )
+    admin.add_view(
+        ProBonoModelView(ProBono, db.session, name="ProBono", category="Керування")
+    )
+    admin.add_view(
+        ClientsModelView(Client, db.session, name="Партнери", category="Керування")
+    )
+    admin.add_view(
+        CityModelView(City, db.session, name="Філіали", category="Керування")
+    )
+    admin.add_view(
+        ContactModelView(Contact, db.session, name="Контакти", category="Керування")
+    )
+    admin.add_view(
+        UserModelView(User, db.session, name="Облікові записи", category="Керування")
+    )
+    admin.add_view(LawyerModelView(Lawyer, db.session, name="Спеціалісти"))
+    admin.add_view(ScheduleModelView(Schedule, db.session, name="Розклад"))
+    admin.add_view(AppointmentModelView(Appointment, db.session, name="Записи"))
+    admin.add_view(VisitorModelView(Visitor, db.session, name="Клієнти"))
 
 
 def configure_extensions(app):

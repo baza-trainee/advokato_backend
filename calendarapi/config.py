@@ -15,12 +15,12 @@ MAIN_PAGE_URL = os.getenv("MAIN_PAGE_URL")
 BABEL_DEFAULT_LOCALE = "uk_UA"
 
 STORAGE = "CLOUDINARY"  # "STATIC" or "CLOUDINARY"
+
+IMAGE_SIZE = 30 * 1024
 IMAGE_FORMATS = [
     "jpg",
     "jpeg",
     "png",
-    "svg",
-    "gif",
     "webp",
 ]
 

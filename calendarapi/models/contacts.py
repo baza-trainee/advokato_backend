@@ -6,7 +6,7 @@ class Contact(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     contact_type = db.Column(db.String(100), unique=True, nullable=False)
-    value = db.Column(db.String(2000))
+    value = db.Column(db.String(500))
 
     def __repr__(self):
         return f"{self.contact_type}: {self.value}"

@@ -3,40 +3,40 @@ from calendarapi.admin.common import (
     CustomAdminIndexView,
     configure_login,
 )
-from calendarapi.admin.specialization import SpecializationAdminModelView
-from calendarapi.admin.user import UserAdminModelView
-from calendarapi.admin.city import CityAdminModelView
-from calendarapi.admin.lawyer import LawyerAdminModelView
+from calendarapi.admin.specialization import SpecializationModelView
+from calendarapi.admin.user import UserModelView
+from calendarapi.admin.city import CityModelView
+from calendarapi.admin.lawyer import LawyerModelView
 from calendarapi.admin.schedule import ScheduleModelView
 from calendarapi.admin.appointment import AppointmentModelView
 from calendarapi.admin.visitor import VisitorModelView
 from calendarapi.admin.our_team import OurTeamModelView
-from calendarapi.admin.news import NewsAdminModelView
+from calendarapi.admin.news import NewsModelView
 from calendarapi.admin.contacts import ContactModelView
-from calendarapi.admin.reviews import ReviewsAdminModelView
+from calendarapi.admin.reviews import ReviewsModelView
 from calendarapi.admin.about_company import AboutCompanyModelView
 from calendarapi.admin.possibilities import PossibilitiesModelView
-from calendarapi.admin.client import ClientsAdminModelView
-from calendarapi.admin.pro_bono import ProBonoAdminModelView
+from calendarapi.admin.client import ClientsModelView
+from calendarapi.admin.pro_bono import ProBonoModelView
 
 
 __all__ = [
     "AdminModelView",
     "CustomAdminIndexView",
     "configure_login",
-    "UserAdminModelView",
-    "CityAdminModelView",
-    "SpecializationAdminModelView",
-    "LawyerAdminModelView",
+    "UserModelView",
+    "CityModelView",
+    "SpecializationModelView",
+    "LawyerModelView",
     "ScheduleModelView",
     "AppointmentModelView",
     "VisitorModelView",
     "OurTeamModelView",
-    "NewsAdminModelView",
+    "NewsModelView",
     "ContactModelView",
-    "ReviewsAdminModelView",
+    "ReviewsModelView",
     "AboutCompanyModelView",
     "PossibilitiesModelView",
-    "ClientsAdminModelView",
-    "ProBonoAdminModelView",
+    "ClientsModelView",
+    "ProBonoModelView",
 ]

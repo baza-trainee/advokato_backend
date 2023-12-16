@@ -110,12 +110,18 @@ class AppointmentResource(Resource):
         return False
 
     def find_or_create_visitor(self, **kwargs) -> Visitor:
-        visitor = Visitor.query.filter(
-            (Visitor.email == kwargs["email"])
-            | (Visitor.phone_number == kwargs["phone_number"])
-        ).first()
+        phone_number = kwargs.get("phone_number")
+        email = kwargs.get("email")
+
+        if email is not None:
+            visitor = Visitor.query.filter(
+                (Visitor.phone_number == phone_number) | (Visitor.email == email)
+            ).first()
+        else:
+            visitor = Visitor.query.filter_by(phone_number=phone_number).first()
+
         if visitor:
-            [setattr(visitor, key, value) for key, value in kwargs.items()]
+            [setattr(visitor, key, value) for key, value in kwargs.items() if value]
             db.session.commit()
             return visitor
         new_visitor = Visitor(**kwargs)
@@ -129,23 +135,27 @@ class AppointmentResource(Resource):
         appointment_data = json_data["appointment"]
 
         try:
+            lawyer = (
+                db.session.query(Lawyer)
+                .filter(Lawyer.id == appointment_data.get("lawyer_id"))
+                .one_or_none()
+            )
+            specialization_id = appointment_data.get("specialization_id")
+            if specialization_id is not None and not isinstance(specialization_id, int):
+                raise ma.ValidationError(
+                    "specialization_id must be an integer or null."
+                )
+
             validated_visitor_data: Visitor = self.visitor_schema.load(visitor_data)
             validated_appointment_data: Appointment = self.appointment_schema.load(
                 {
                     "specialization": str(
                         db.session.query(Specialization)
-                        .filter(
-                            Specialization.id
-                            == appointment_data.get("specialization_id")
-                        )
+                        .filter(Specialization.id == specialization_id)
                         .one_or_none()
                         or "Не вказано"
                     ),
-                    "lawyer": str(
-                        db.session.query(Lawyer)
-                        .filter(Lawyer.id == appointment_data.get("lawyer_id"))
-                        .one_or_none()
-                    ),
+                    "lawyer": str(lawyer),
                     "appointment_date": appointment_data.get("appointment_date"),
                     "appointment_time": appointment_data.get("appointment_time"),
                 }
@@ -185,6 +195,7 @@ class AppointmentResource(Resource):
                 visitor_phone_number=existing_visitor.phone_number,
                 appointment_date=appointment.appointment_date,
                 appointment_time=str(appointment.appointment_time)[:-3],
+                # lawyer_email=lawyer.lawyer_mail,
                 lawyer_name=appointment.lawyer,
                 specialization_name=appointment.specialization,
             )
