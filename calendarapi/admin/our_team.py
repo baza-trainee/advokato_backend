@@ -10,8 +10,9 @@ from calendarapi.admin.common import (
     get_media_path,
     custom_delete_file,
     custom_save_file,
+    thumbnail_formatter,
+    validate_image,
 )
-from calendarapi.config import IMAGE_FORMATS, IMAGE_SIZE
 
 ABS_MEDIA_PATH = get_media_path(__name__.split(".")[-1])
 
@@ -68,61 +69,23 @@ class OurTeamModelView(AdminModelView):
     ]
 
     def _format_description(view, context, model, name):
-        return Markup(f'<div style="text-align: left">{model.description}</div>')
-
-    def _list_thumbnail(width: int = 240):
-        def thumbnail_formatter(view, context, model, name):
-            if not model.photo_path:
-                return ""
-            if current_app.config["STORAGE"] == "STATIC":
-                url = os.path.join(request.host_url, model.photo_path)
-            else:
-                url = model.photo_path
-
-            if model.photo_path.split(".")[-1] in current_app.config["IMAGE_FORMATS"]:
-                return Markup(f"<img src={url} width={width}>")
-
-        return thumbnail_formatter
-
-    def _list_thumbnail(width: int = 240, field_name: str = "photo_path"):
-        def thumbnail_formatter(view, context, model, name):
-            field_value = getattr(model, field_name)
-            if not field_value:
-                return ""
-
-            if current_app.config["STORAGE"] == "STATIC":
-                url = os.path.join(request.host_url, field_value)
-            else:
-                url = field_value
-
-            if field_value.split(".")[-1] in current_app.config["IMAGE_FORMATS"]:
-                return Markup(f"<img src={url} width={width}>")
-
-        return thumbnail_formatter
+        return Markup(model.description)
 
     column_formatters = {
-        "photo_path": _list_thumbnail(field_name="photo_path"),
-        "slider_photo_path": _list_thumbnail(field_name="slider_photo_path"),
+        "photo_path": thumbnail_formatter(field_name="photo_path"),
+        "slider_photo_path": thumbnail_formatter(field_name="slider_photo_path"),
         "description": _format_description,
     }
-
-    def _custom_validate_media(form, field):
-        if not form.photo_path.object_data and not form.photo_path.data:
-            raise ValidationError("Це поле обов'язкове.")
-        file_format = field.data.filename.split(".")[-1]
-        if file_format not in IMAGE_FORMATS:
-            raise ValidationError(
-                f"Формат файлу {file_format} не підтримується. Завантажте фото у наступних форматах: {', '.join(IMAGE_FORMATS)}."
-            )
-        if len(form.photo_path.data.read()) < 10:
-            raise ValidationError(f"Розмір перевищує {IMAGE_SIZE}.")
 
     form_extra_fields = {
         "photo_path": FileField(
             "Виберіть фото партнера",
-            validators=[_custom_validate_media],
+            validators=[validate_image()],
         ),
-        "slider_photo_path": FileField("Виберіть фото партнера для слайдеру."),
+        "slider_photo_path": FileField(
+            "Виберіть фото партнера для слайдеру.",
+            validators=[validate_image(required=False)],
+        ),
         "description": TextAreaField(
             "Опис",
             validators=[DataRequired(message="Це поле обов'язкове.")],
@@ -147,15 +110,15 @@ class OurTeamModelView(AdminModelView):
             model.photo_path = form.photo_path.object_data
 
         if model.slider_photo_path:
-            if form.slider_photo_path.object_data:
+            if form.slider_photo_path.object_data or form.delete_slider_photo.data:
                 custom_delete_file(ABS_MEDIA_PATH, form.slider_photo_path.object_data)
-            model.slider_photo_path = custom_save_file(
-                ABS_MEDIA_PATH, model.slider_photo_path
-            )
+            if form.delete_slider_photo.data:
+                model.slider_photo_path = None
+            else:
+                model.slider_photo_path = custom_save_file(
+                    ABS_MEDIA_PATH, model.slider_photo_path
+                )
         else:
             model.slider_photo_path = form.slider_photo_path.object_data
 
-        if form.delete_slider_photo.data and model.slider_photo_path:
-            custom_delete_file(ABS_MEDIA_PATH, model.slider_photo_path)
-            model.slider_photo_path = None
         return super().on_model_change(form, model, is_created)
