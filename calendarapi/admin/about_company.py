@@ -3,13 +3,16 @@ import os
 from flask import request, current_app
 from markupsafe import Markup
 from wtforms.validators import DataRequired
-from wtforms import TextAreaField, FileField, ValidationError
+from wtforms import TextAreaField, FileField
 
 from calendarapi.admin.common import (
     AdminModelView,
+    format_text_as_markup,
     get_media_path,
     custom_delete_file,
     custom_save_file,
+    thumbnail_formatter,
+    validate_image,
 )
 
 ABS_MEDIA_PATH = get_media_path(__name__.split(".")[-1])
@@ -18,74 +21,86 @@ ABS_MEDIA_PATH = get_media_path(__name__.split(".")[-1])
 class AboutCompanyModelView(AdminModelView):
     can_set_page_size = True
     column_labels = {
-        "photo_path": "Фото",
-        "title": "Заголовок",
-        "description": "Опис",
+        "main_page_photo_path": "Фото(головна)",
+        "our_team_page_photo_path": "Фото(про компанію)",
+        "main_page_description": "Опис(головна)",
+        "our_team_page_description": "Опис(про компанію)",
     }
     column_list = [
-        "photo_path",
-        "title",
-        "description",
+        "main_page_photo_path",
+        "our_team_page_photo_path",
+        "main_page_description",
+        "our_team_page_description",
     ]
     form_columns = [
-        "title",
-        "description",
-        "photo_path",
+        "main_page_description",
+        "our_team_page_description",
+        "main_page_photo_path",
+        "our_team_page_photo_path",
     ]
     column_descriptions = {
-        "description": """Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д., для покращення зручності читання."""
+        "main_page_photo_path": """Відображається на головній сторінці. Розмір до 30 мб, формати: PNG, JPG, JPEG, WebP""",
+        "our_team_page_photo_path": """Відображається на сторінці "Про компанію". Розмір до 30 мб, формати: PNG, JPG, JPEG, WebP""",
+        "main_page_description": """Відображається на головній сторінці під блоком Hero, максимальна кількість символів - 500.""",
+        "our_team_page_description": """Відображається на сторінці "Про компанію". Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д., для покращення зручності читання. Максимальна кількість символів - 3000""",
     }
 
     can_create = False
     can_delete = False
 
-    def _format_description(view, context, model, name):
-        return Markup(model.description)
-
-    def _list_thumbnail(width: int = 240):
-        def thumbnail_formatter(view, context, model, name):
-            if not model.photo_path:
-                return ""
-            if current_app.config["STORAGE"] == "STATIC":
-                url = os.path.join(request.host_url, model.photo_path)
-            else:
-                url = model.photo_path
-
-            if model.photo_path.split(".")[-1] in current_app.config["IMAGE_FORMATS"]:
-                return Markup(f"<img src={url} width={width}>")
-
-        return thumbnail_formatter
-
     column_formatters = {
-        "photo_path": _list_thumbnail(),
-        "description": _format_description,
+        "main_page_photo_path": thumbnail_formatter(field_name="main_page_photo_path"),
+        "our_team_page_photo_path": thumbnail_formatter(field_name="our_team_page_photo_path"),
+        "our_team_page_description": format_text_as_markup,
+        "main_page_description": format_text_as_markup,
     }
 
-    def _custom_validate_media(form, field):
-        if not form.photo_path.object_data and not form.photo_path.data:
-            raise ValidationError("Це поле обов'язкове.")
-
     form_extra_fields = {
-        "photo_path": FileField(
-            "Виберіть фото.",
-            validators=[_custom_validate_media],
+        "our_team_page_photo_path": FileField(
+            """Виберіть фото для сторінки "Наша компанія".""",
+            validators=[validate_image()],
+            description="Розмір до 30 мб, формати: PNG, JPG, JPEG, WebP."
         ),
-        "description": TextAreaField(
-            "Опис",
+        "our_team_page_description": TextAreaField(
+            """Опис для сторінки "Наша компанія". """,
             render_kw={"class": "form-control", "rows": 5},
             validators=[DataRequired(message="Це поле обов'язкове.")],
+            description="До 3000 символів."
+        ),
+        "main_page_photo_path": FileField(
+            "Виберіть фото для головної сторінки.",
+            validators=[validate_image()],
+            description="Розмір до 30 мб, формати: PNG, JPG, JPEG, WebP."
+        ),
+        "main_page_description": TextAreaField(
+            "Короткий опис для головної сторінки. ",
+            render_kw={"class": "form-control", "rows": 5},
+            validators=[DataRequired(message="Це поле обов'язкове.")],
+            description="До 500 символів."
         ),
     }
 
     def on_model_delete(self, model):
-        custom_delete_file(ABS_MEDIA_PATH, model.photo_path)
+        if model.main_page_photo_path:
+            custom_delete_file(ABS_MEDIA_PATH, model.main_page_photo_path)
+        if model.our_team_page_photo_path:
+            custom_delete_file(ABS_MEDIA_PATH, model.our_team_page_photo_path)
         return super().on_model_delete(model)
 
     def on_model_change(self, form, model, is_created):
-        if model.photo_path:
-            if form.photo_path.object_data:
-                custom_delete_file(ABS_MEDIA_PATH, form.photo_path.object_data)
-            model.photo_path = custom_save_file(ABS_MEDIA_PATH, model.photo_path)
+        if model.main_page_photo_path:
+            if form.main_page_photo_path.object_data:
+                custom_delete_file(ABS_MEDIA_PATH, form.main_page_photo_path.object_data)
+            model.main_page_photo_path = custom_save_file(ABS_MEDIA_PATH, model.main_page_photo_path)
         else:
-            model.photo_path = form.photo_path.object_data
+            model.main_page_photo_path = form.main_page_photo_path.object_data
+
+        if model.our_team_page_photo_path:
+            if form.our_team_page_photo_path.object_data:
+                custom_delete_file(ABS_MEDIA_PATH, form.our_team_page_photo_path.object_data)
+            model.our_team_page_photo_path = custom_save_file(
+                ABS_MEDIA_PATH, model.our_team_page_photo_path
+            )
+        else:
+            model.our_team_page_photo_path = form.our_team_page_photo_path.object_data
         return super().on_model_change(form, model, is_created)

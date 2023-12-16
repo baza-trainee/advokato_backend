@@ -18,7 +18,7 @@ class LawyerModelView(AdminModelView):
     column_labels = {
         "name": "Ім'я",
         "specializations": "Спеціалізації",
-        "specializations.specialization_name": "Спец...",
+        "specializations.specialization_name": "Спеціалізація",
         "lawyer_mail": "Пошта",
     }
     column_sortable_list = [
@@ -52,7 +52,7 @@ class LawyerModelView(AdminModelView):
     form_args = {
         "specializations": {
             "label": "Спеціалізації",
-            "validators": [DataRequired(message="Це поле обов'язкове.")],
+            "validators": [DataRequired("Це поле обов'язкове.")],
         },
     }
 

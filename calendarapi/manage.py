@@ -19,6 +19,7 @@ from calendarapi.models import (
     News,
     Client,
     Reviews,
+    HeroBlock
 )
 from calendarapi.services.fake_data import (
     our_team_data,
@@ -31,6 +32,7 @@ from calendarapi.services.fake_data import (
     news,
     clients,
     reviews,
+    hero,
 )
 from calendarapi.extensions import db
 
@@ -78,6 +80,7 @@ def init():
                     *clients_list,
                     *reviews_list,
                     AboutCompany(**about_company),
+                    HeroBlock(**hero)
                 ]
             )
             db.session.flush()
@@ -104,12 +107,13 @@ def init():
             db.session.commit()
 
             click.echo("created user admin")
-            click.echo("Added fake cities")
+            click.echo("Added cities")
             click.echo("Added fake Lawyers")
-            click.echo("Added fake ProBono_data")
-            click.echo("Added fake news")
+            click.echo("Added ProBono_data")
+            click.echo("Added news")
             click.echo("Added fake clients")
             click.echo("Added fake reviews")
+            click.echo("Added hero")
 
         else:
             click.echo("Users is already exist")

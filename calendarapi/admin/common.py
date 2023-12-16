@@ -293,3 +293,7 @@ def thumbnail_formatter(width: int = 240, field_name: str = "photo_path"):
             return Markup(f"<img src={url} width={width}>")
 
     return _thumbnail_formatter
+
+
+def format_text_as_markup(view, context, model, name):
+    return Markup(getattr(model, name))

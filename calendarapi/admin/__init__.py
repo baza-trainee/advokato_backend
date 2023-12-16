@@ -18,6 +18,7 @@ from calendarapi.admin.about_company import AboutCompanyModelView
 from calendarapi.admin.possibilities import PossibilitiesModelView
 from calendarapi.admin.client import ClientsModelView
 from calendarapi.admin.pro_bono import ProBonoModelView
+from calendarapi.admin.hero_block import HeroModelView
 
 
 __all__ = [
@@ -39,4 +40,5 @@ __all__ = [
     "PossibilitiesModelView",
     "ClientsModelView",
     "ProBonoModelView",
+    "HeroModelView",
 ]
