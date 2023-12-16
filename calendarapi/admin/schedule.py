@@ -123,7 +123,7 @@ def _validate_time_format(time_list: list, skip_raise=False) -> list[time]:
     except ValueError:
         if not skip_raise:
             raise ValidationError(
-                "Невірний формат. Приймається час у вигляді 'HH:MM:SS' або 'HH:MM' або 'HH' або start_HH-end_HH."
+                "Невірний формат. Приймається час у вигляді'HH:MM' або 'HH' або start_HH-end_HH. HH(0-23) MM(0-59)."
             )
 
 
@@ -322,7 +322,6 @@ class ScheduleModelView(AdminModelView):
                 DataRequired(),
                 validate_date,
             ],
-            description="Дати, які минули видалятимуться автоматично.",
             default=datetime.now().date(),
         ),
         "end_date": DateField(
@@ -347,6 +346,7 @@ class ScheduleModelView(AdminModelView):
                 DataRequired(message="Це поле обов'язкове."),
                 validate_lawyers,
             ],
+            "description": "При створенні нового запису можна обрати декілька спеціалістів та розклад складеться для кожного з них. При редагуванні можна обирати лише 1.",
         },
         "time": {
             "validators": [
@@ -356,13 +356,13 @@ class ScheduleModelView(AdminModelView):
             "description": Markup(
                 "Можна додавати кілька значень розділяючи їх пробілом у наступному вигляді:<br>"
                 + "<ul><li><b>HH:MM</b> приклад: 14:45</li><li><b>HH</b> приклад: 18</li>"
-                + "<li><b>start_HH-end_HH</b> приклад: 12-20 (кожну годину включаючи 12:00 та 20:00)</li><br>"
+                + "<li><b>start_HH-end_HH</b> приклад: 12-20 (кожну годину включаючи 12:00 та 20:00)</li>"
             ),
         },
     }
-    column_filters = [
-        "date",
-    ]
+    # column_filters = [
+    #     "date",
+    # ]
 
     def on_model_change(self, form, model, is_created):
         model.lawyer_id = model.lawyers[0].id

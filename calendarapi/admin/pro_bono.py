@@ -15,7 +15,7 @@ from calendarapi.admin.common import (
 ABS_MEDIA_PATH = get_media_path(__name__.split(".")[-1])
 
 
-class ProBonoAdminModelView(AdminModelView):
+class ProBonoModelView(AdminModelView):
     can_set_page_size = True
     column_labels = {
         "photo_path": "Фото",

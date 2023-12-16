@@ -1,5 +1,6 @@
 from calendarapi.models.user import User
-from calendarapi.models.blocklist import TokenBlocklist
+
+# from calendarapi.models.blocklist import TokenBlocklist
 from calendarapi.models.city import City
 from calendarapi.models.specialization import Specialization
 from calendarapi.models.lawyer import Lawyer
@@ -17,10 +18,13 @@ from calendarapi.models.possibilities import Possibilities
 from calendarapi.models.about_company import AboutCompany
 from calendarapi.models.clients import Client
 from calendarapi.models.pro_bono import ProBono
-
+from calendarapi.models.user_permissions import Permission
+from calendarapi.models.user_to_permissions import UsersToPermissions
 
 __all__ = [
     "User",
+    "Permission",
+    "UsersToPermissions",
     "TokenBlocklist",
     "City",
     "Specialization",

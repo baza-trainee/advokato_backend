@@ -15,7 +15,7 @@ from calendarapi.admin.common import (
 ABS_MEDIA_PATH = get_media_path(__name__.split(".")[-1])
 
 
-class SpecializationAdminModelView(AdminModelView):
+class SpecializationModelView(AdminModelView):
     form_excluded_columns = ["lawyers"]
     column_list = [
         "specialization_photo",

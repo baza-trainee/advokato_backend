@@ -3,7 +3,7 @@ from markupsafe import Markup
 from calendarapi.admin.common import AdminModelView
 
 
-class CityAdminModelView(AdminModelView):
+class CityModelView(AdminModelView):
     form_excluded_columns = ["lawyers"]
 
     column_labels = {"city_name": "Місто", "address": "Адреса філіалу"}
