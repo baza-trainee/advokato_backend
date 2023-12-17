@@ -2,6 +2,7 @@ from flask_restful import Resource
 
 from calendarapi.api.schemas import SpecializationSchema
 from calendarapi.models import Specialization, Lawyer
+
 # from calendarapi.config import DAY
 from calendarapi.extensions import (
     db,

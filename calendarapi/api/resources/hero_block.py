@@ -3,6 +3,7 @@ from sqlalchemy import exc
 
 from calendarapi.api.schemas import AboutCompanySchema, HeroBlockSchema
 from calendarapi.models import HeroBlock, AboutCompany
+
 # from calendarapi.config import DAY
 from calendarapi.extensions import (
     db,
