@@ -124,6 +124,10 @@ input[type="password"]::placeholder {
   color: black;
   font-size: 14px;
 }
+input[name="login"]::placeholder {
+  color: black;
+  font-size: 14px;
+}
 
 input[type="password"][placeholder='password']:focus-visible {
   transition: 0.1s;
@@ -352,6 +356,7 @@ td {
 tr:hover td:not(.list-buttons-column) {
   color: white;
   text-decoration-line: underline;
+  text-decoration-color: rgb(228, 228, 228);
   text-decoration-thickness: 1.5px;
 }
 
@@ -364,17 +369,21 @@ tr:hover td:not(.list-buttons-column) {
 }
 .fa-eye:hover:before {
   color: white;
+  padding-left: 5px;
 }
 .fa-pencil:before {
-  color: rgba(255, 255, 255, 0.6);
-  font: normal normal normal 20px/1 FontAwesome;
+  color: rgba(255, 255, 255, 0.7);
+  font: normal normal normal 18px/1 FontAwesome;
+  padding-left: 5px;
 }
 .fa-pencil:hover:before {
   color: white;
 }
 .fa-trash:before {
-  color: rgba(255, 255, 255, 0.6);
-  font: normal normal normal 20px/1 FontAwesome;
+  color: rgba(255, 255, 255, 0.7);
+  font: normal normal normal 18px/1 FontAwesome;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 .fa-trash:hover:before {
   color: white;
@@ -522,10 +531,9 @@ th:not(.first-column):not(.second-column) {
 .fa_filter_container {
   display: none;
 }
-
 input[type="text"] {
   font-family: "droid_sans";
-  font-size: 14px;
+  font-size: 16px;
 }
 input[type="text"]::placeholder {
   color: black;
@@ -632,7 +640,7 @@ a:hover {
   height: calc(1.5em + .75rem + 6px);
   background-color: rgba(255, 255, 255, 0.6);
   border: 1px solid var(--table-border);
-  size: 20%;
+  font-size: 16px;
   color: black !important;
 }
 
