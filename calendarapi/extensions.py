@@ -9,6 +9,7 @@ from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 import marshmallow
 from flask_mail import Mail
+
 # from celery import Celery
 # from flask_caching import Cache
 

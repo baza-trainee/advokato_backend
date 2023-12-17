@@ -3,6 +3,7 @@ from typing import List
 from flask_restful import Resource
 
 from calendarapi.api.schemas import ProBonoSchema
+
 # from calendarapi.config import DAY
 from calendarapi.extensions import (
     db,

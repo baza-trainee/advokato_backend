@@ -3,6 +3,7 @@ from typing import List
 from flask_restful import Resource
 
 from calendarapi.api.schemas import PossibilitiesSchema
+
 # from calendarapi.config import DAY
 from calendarapi.models import Possibilities
 from calendarapi.extensions import (

@@ -10,7 +10,9 @@ def validate_float(form, field):
         float(field.data)
     except Exception as exc:
         print(exc)
-        raise ValidationError("Невірний формат для координат. Приймаються лише дробові та цілі числа.")
+        raise ValidationError(
+            "Невірний формат для координат. Приймаються лише дробові та цілі числа."
+        )
 
 
 def format_coords(view, context, model, name):

@@ -4,6 +4,7 @@ from flask_restful import Resource
 
 from calendarapi.api.schemas import ClientSchema
 from calendarapi.models import Client
+
 # from calendarapi.config import DAY
 from calendarapi.extensions import (
     db,
