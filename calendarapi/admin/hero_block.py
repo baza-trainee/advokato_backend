@@ -1,7 +1,8 @@
 from wtforms import TextAreaField
 from wtforms.validators import DataRequired
 
-from calendarapi.admin.common import AdminModelView
+from calendarapi.admin.base_admin import AdminModelView
+from calendarapi.commons.exeptions import DATA_REQUIRED
 
 
 class HeroModelView(AdminModelView):
@@ -23,9 +24,9 @@ class HeroModelView(AdminModelView):
         "right_text",
     ]
     column_descriptions = {
-        "slogan": """Перше, що бачуть користувачі сайту.""",
-        "left_text": """Короткий текст зліва під гаслом, до 200 символів.""",
-        "right_text": """Короткий текст справа під гаслом, до 200 символів.""",
+        "slogan": "Перше, що бачать користувачі сайту.",
+        "left_text": "Короткий текст зліва під гаслом, до 200 символів.",
+        "right_text": "Короткий текст справа під гаслом, до 200 символів.",
     }
 
     can_create = False
@@ -33,21 +34,21 @@ class HeroModelView(AdminModelView):
 
     form_extra_fields = {
         "slogan": TextAreaField(
-            "Гасло.",
+            label="Гасло.",
             render_kw={"class": "form-control", "rows": 1},
-            validators=[DataRequired("Це поле обов'язкове.")],
+            validators=[DataRequired(message=DATA_REQUIRED)],
             description="Те, що характеризує компанію. До 30 символів.",
         ),
         "left_text": TextAreaField(
-            "Опис зліва.",
+            label="Опис зліва.",
             render_kw={"class": "form-control", "rows": 3},
-            validators=[DataRequired("Це поле обов'язкове.")],
+            validators=[DataRequired(message=DATA_REQUIRED)],
             description="До 200 символів.",
         ),
         "right_text": TextAreaField(
-            "Опис справа.",
+            label="Опис справа.",
             render_kw={"class": "form-control", "rows": 3},
-            validators=[DataRequired("Це поле обов'язкове.")],
+            validators=[DataRequired(message=DATA_REQUIRED)],
             description="До 200 символів.",
         ),
     }

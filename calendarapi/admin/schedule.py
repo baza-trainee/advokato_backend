@@ -8,7 +8,7 @@ from wtforms import DateField, ValidationError
 from wtforms.validators import DataRequired, Optional
 from sqlalchemy.orm import joinedload
 
-from calendarapi.admin.common import AdminModelView
+from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.models.schedule import Schedule
 from calendarapi.extensions import db
 

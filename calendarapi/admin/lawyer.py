@@ -1,16 +1,8 @@
 from wtforms import EmailField
-from wtforms.validators import DataRequired, ValidationError
+from wtforms.validators import DataRequired, Email
 
-from calendarapi.admin.common import AdminModelView
-from calendarapi.api.schemas import LawyerSchema
-
-
-class EmailValidator:
-    def __call__(self, form, field):
-        schema = LawyerSchema()
-        errors = schema.validate({"lawyer_mail": field.data})
-        if errors.get("lawyer_mail"):
-            raise ValidationError(errors["lawyer_mail"][0])
+from calendarapi.admin.base_admin import AdminModelView
+from calendarapi.commons.exeptions import DATA_REQUIRED, INVALID_EMAIL
 
 
 class LawyerModelView(AdminModelView):
@@ -52,13 +44,16 @@ class LawyerModelView(AdminModelView):
     form_args = {
         "specializations": {
             "label": "Спеціалізації",
-            "validators": [DataRequired("Це поле обов'язкове.")],
+            "validators": [DataRequired(message=DATA_REQUIRED)],
         },
     }
 
     form_extra_fields = {
         "lawyer_mail": EmailField(
             label="Пошта",
-            validators=[EmailValidator(), DataRequired("Це поле обов'язкове.")],
+            validators=[
+                Email(message=INVALID_EMAIL),
+                DataRequired(message=DATA_REQUIRED),
+            ],
         ),
     }

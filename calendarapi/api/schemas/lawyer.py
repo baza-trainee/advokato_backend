@@ -1,5 +1,6 @@
 from calendarapi.models import Lawyer
 from calendarapi.extensions import fm, db, ma
+from calendarapi.commons.exeptions import INVALID_EMAIL
 
 
 class LawyerSchema(fm.SQLAlchemyAutoSchema):
@@ -7,7 +8,7 @@ class LawyerSchema(fm.SQLAlchemyAutoSchema):
     lawyer_mail = ma.fields.String(
         required=True,
         validate=[
-            ma.fields.validate.Email(error="Невірний формат пошти."),
+            ma.fields.validate.Email(error=INVALID_EMAIL),
         ],
     )
     name = ma.fields.String(

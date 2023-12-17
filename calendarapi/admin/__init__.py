@@ -1,4 +1,4 @@
-from calendarapi.admin.common import (
+from calendarapi.admin.base_admin import (
     AdminModelView,
     CustomAdminIndexView,
     configure_login,

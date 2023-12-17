@@ -1,19 +1,11 @@
-import os
-
 from wtforms.validators import DataRequired
-from flask import current_app, request
-from markupsafe import Markup
-from wtforms import TextAreaField, ValidationError
-from wtforms import FileField
+from wtforms import TextAreaField, FileField
 
-from calendarapi.admin.common import (
-    AdminModelView,
-    get_media_path,
-    custom_delete_file,
-    custom_save_file,
-)
-
-ABS_MEDIA_PATH = get_media_path(__name__.split(".")[-1])
+from calendarapi.admin.base_admin import AdminModelView
+from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
+from calendarapi.admin.commons.validators import ImageValidator
+from calendarapi.commons.exeptions import DATA_REQUIRED
+from calendarapi.commons.utils import custom_delete_file, custom_update_file
 
 
 class ReviewsModelView(AdminModelView):
@@ -46,57 +38,33 @@ class ReviewsModelView(AdminModelView):
         "created_at",
     ]
 
-    def _format_description(view, context, model, name):
-        return Markup(model.description)
-
-    def _list_thumbnail(width: int = 240):
-        def thumbnail_formatter(view, context, model, name):
-            if not model.photo_path:
-                return ""
-            if current_app.config["STORAGE"] == "STATIC":
-                url = os.path.join(request.host_url, model.photo_path)
-            else:
-                url = model.photo_path
-
-            if model.photo_path.split(".")[-1] in current_app.config["IMAGE_FORMATS"]:
-                return Markup(f"<img src={url} width={width}>")
-
-        return thumbnail_formatter
-
     column_formatters = {
-        "photo_path": _list_thumbnail(width=80),
-        "description": _format_description,
+        "photo_path": ThumbnailFormatter(width=80),
+        "description": format_as_markup,
     }
-
-    def _custom_validate_media(form, field):
-        if not form.photo_path.object_data and not form.photo_path.data:
-            raise ValidationError("Це поле обов'язкове.")
 
     form_extra_fields = {
         "photo_path": FileField(
-            "Виберіть фото для відгуку",
-            validators=[_custom_validate_media],
+            label="Виберіть фото для відгуку",
+            validators=[ImageValidator()],
         ),
         "description": TextAreaField(
-            "Опис",
+            label="Опис",
             render_kw={"class": "form-control", "rows": 5},
-            validators=[DataRequired(message="Це поле обов'язкове.")],
+            validators=[DataRequired(message=DATA_REQUIRED)],
         ),
     }
 
     form_args = {
-        "created_at": {"validators": [DataRequired(message="Це поле обов'язкове.")]},
+        "created_at": {
+            "validators": [DataRequired(message=DATA_REQUIRED)],
+        },
     }
 
     def on_model_delete(self, model):
-        custom_delete_file(ABS_MEDIA_PATH, model.photo_path)
+        custom_delete_file(model, field_name="photo_path")
         return super().on_model_delete(model)
 
     def on_model_change(self, form, model, is_created):
-        if model.photo_path:
-            if form.photo_path.object_data:
-                custom_delete_file(ABS_MEDIA_PATH, form.photo_path.object_data)
-            model.photo_path = custom_save_file(ABS_MEDIA_PATH, model.photo_path)
-        else:
-            model.photo_path = form.photo_path.object_data
+        custom_update_file(model, form, field_name="photo_path")
         return super().on_model_change(form, model, is_created)

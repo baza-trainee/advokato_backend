@@ -1,5 +1,6 @@
 from calendarapi.models import User
 from calendarapi.extensions import fm, db, ma
+from calendarapi.commons.exeptions import INVALID_EMAIL
 
 
 class UserSchema(fm.SQLAlchemyAutoSchema):
@@ -8,7 +9,7 @@ class UserSchema(fm.SQLAlchemyAutoSchema):
     email = ma.fields.String(
         required=True,
         validate=[
-            ma.fields.validate.Email(error="Невірний формат пошти."),
+            ma.fields.validate.Email(error=INVALID_EMAIL),
         ],
     )
 
@@ -16,7 +17,4 @@ class UserSchema(fm.SQLAlchemyAutoSchema):
         model = User
         sqla_session = db.session
         load_instance = True
-        exclude = (
-            "_password",
-            "is_superuser",
-        )
+        exclude = ("_password",)

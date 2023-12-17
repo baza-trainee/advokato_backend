@@ -1,4 +1,4 @@
-from calendarapi.admin.common import AdminModelView
+from calendarapi.admin.base_admin import AdminModelView
 
 
 class VisitorModelView(AdminModelView):
