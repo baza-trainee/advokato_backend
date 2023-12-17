@@ -11,61 +11,6 @@ from calendarapi.extensions import db
 
 
 class FeedbackResource(Resource):
-    """
-    Feedback Resource
-
-    ---
-    post:
-      tags:
-        - Website content
-      summary: Submit feedback.
-      description: Submit feedback from users.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: Visitor's name.
-                email:
-                  type: string
-                  format: email
-                  description: Visitor's email address.
-                phone_number:
-                  type: string
-                  description: Visitor's phone number.
-                  example: "+380123456789"
-                message:
-                  type: string
-                  description: Feedback message.
-              required:
-                - phone_number
-      responses:
-        200:
-          description: Feedback submitted successfully.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    description: Indicates if the feedback was successfully submitted.
-        400:
-          description: Bad Request. Invalid JSON or missing required fields.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: Error message.
-    """
-
     visitor_schema = VisitorSchema()
 
     def find_or_create_visitor(self, **kwargs) -> Visitor:

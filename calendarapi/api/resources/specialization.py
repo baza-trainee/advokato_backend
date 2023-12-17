@@ -1,40 +1,15 @@
 from flask_restful import Resource
 
 from calendarapi.api.schemas import SpecializationSchema
+from calendarapi.models import Specialization, Lawyer
+# from calendarapi.config import DAY
 from calendarapi.extensions import (
     db,
     # cache,
 )
-from calendarapi.models import Specialization, Lawyer
-# from calendarapi.config import DAY
 
 
 class SpecializationListResource(Resource):
-    """
-    Specialization Resource
-
-    ---
-    get:
-      tags:
-        - Calendar
-      summary: Get a list of specializations.
-      description: Get a list of specializations.
-      responses:
-        200:
-          description: List of specializations.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    specialization_name:
-                      type: string
-    """
-
     specialization_schema: SpecializationSchema = SpecializationSchema()
 
     def get(self):
@@ -49,39 +24,6 @@ class SpecializationListResource(Resource):
 
 
 class AllSpecializationsResource(Resource):
-    """
-    All Specializations Resource
-
-    ---
-    get:
-      tags:
-        - Website content
-      summary: Get a list of all specializations with photos and descriptions.
-      description: Get a list of all specializations including their photos and descriptions.
-      responses:
-        200:
-          description: List of all specializations with photos and descriptions.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    specialization_name:
-                      type: string
-                    specialization_description:
-                      type: string
-                    specialization_photo:
-                      type: string
-                      format: uri
-
-        400:
-          description: "Bad Request"
-    """
-
     specialization_schema: SpecializationSchema = SpecializationSchema()
 
     # @cache.cached(key_prefix="specialization_list", timeout=DAY)

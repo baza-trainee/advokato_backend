@@ -1,8 +1,6 @@
 from datetime import datetime
 
-from flask import request
-from flask_restful import Resource
-
+from flask_restful import Resource, request
 from sqlalchemy import exc
 
 from calendarapi.api.schemas import AppointmentSchema, VisitorSchema
@@ -18,80 +16,6 @@ from calendarapi.models import (
 
 
 class AppointmentResource(Resource):
-    """
-    Appointment Resource
-    ---
-    post:
-      tags:
-        - Calendar
-      summary: Create a new appointment.
-      description: Create a new appointment by providing visitor and appointment data in the request body.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                visitor:
-                  type: object
-                  required:
-                    - phone_number
-                  properties:
-                    name:
-                      type: string
-                    email:
-                      type: string
-                    phone_number:
-                      type: string
-                appointment:
-                  type: object
-                  required:
-                    - specialization_id
-                    - lawyer_id
-                    - appointment_date
-                    - appointment_time
-                  properties:
-                    specialization_id:
-                      type: integer
-                    lawyer_id:
-                      type: integer
-                    appointment_date:
-                      type: string
-                      format: date
-                    appointment_time:
-                      type: string
-                      format: time
-      responses:
-        201:
-          description: Appointment created successfully.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-        400:
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-        500:
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-    """
-
     visitor_schema = VisitorSchema()
     appointment_schema = AppointmentSchema()
 

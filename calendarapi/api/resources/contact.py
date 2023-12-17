@@ -1,54 +1,14 @@
 from flask_restful import Resource
 
+from calendarapi.models import Contact, City
 from calendarapi.extensions import (
     db,
     # cache,
 )
-from calendarapi.models import Contact, City
 # from calendarapi.config import DAY
 
 
 class ContactResource(Resource):
-    """
-    Contact Resource
-
-    ---
-    get:
-      tags:
-        - Website content
-      summary: Get a list of contacts and cities.
-      description: Get a list of contacts and cities.
-      responses:
-        200:
-          description: List of contacts and cities.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  contacts:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        contact_type:
-                          type: string
-                  cities:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        city_name:
-                          type: string
-                        address:
-                          type: string
-
-        400:
-          description: "Bad Request"
-    """
-
     # @cache.cached(key_prefix="contact_list", timeout=DAY)
     def get(self):
         try:

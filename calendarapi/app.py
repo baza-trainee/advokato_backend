@@ -4,11 +4,11 @@ from flask_admin import Admin
 from flask_babel import Babel
 from flask_mail import Mail
 from markupsafe import Markup
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from calendarapi import api, manage
 from calendarapi.admin.our_team import OurTeamModelView
 from calendarapi.extensions import (
-    apispec,
     db,
     migrate,
     # celery,
@@ -51,35 +51,6 @@ from calendarapi.models import (
     ProBono,
     HeroBlock,
 )
-from calendarapi.api.schemas import (
-    VisitorSchema,
-    CitySchema,
-    LawyerSchema,
-    SpecializationSchema,
-    AppointmentSchema,
-    ScheduleSchema,
-    OurTeamSchema,
-    NewsSchema,
-    ReviewsSchema,
-    ClientSchema,
-    ProBonoSchema,
-)
-from calendarapi.api.resources import (
-    SpecializationListResource,
-    AllSpecializationsResource,
-    LawyersListResource,
-    ScheduleResource,
-    AppointmentResource,
-    OurTeamResource,
-    FeedbackResource,
-    NewsResource,
-    ContactResource,
-    ReviewsResource,
-    PossibilitiesResource,
-    ClientResource,
-    ProBonoResource,
-    HeroBlockResource,
-)
 
 
 def create_app(testing=False):
@@ -94,42 +65,11 @@ def create_app(testing=False):
     register_adminsite(app)
     configure_extensions(app)
     configure_cli(app)
-    configure_apispec(app)
     configure_mails(app)
     register_blueprints(app)
     # init_celery(app)
     # if app.config["DEBUG"]:
     #     app.after_request(sql_debug)
-
-    with app.app_context():
-        apispec.spec.components.schema("VisitorSchema", schema=VisitorSchema)
-        apispec.spec.components.schema("CitySchema", schema=CitySchema)
-        apispec.spec.components.schema("LawyerSchema", schema=LawyerSchema)
-        apispec.spec.components.schema("ScheduleSchema", schema=ScheduleSchema)
-        apispec.spec.components.schema(
-            "SpecializationSchema", schema=SpecializationSchema
-        )
-        apispec.spec.components.schema("AppointmentSchema", schema=AppointmentSchema)
-        apispec.spec.components.schema("OurTeamSchema", schema=OurTeamSchema)
-        apispec.spec.components.schema("NewsSchema", schema=NewsSchema)
-        apispec.spec.components.schema("ReviewsSchema", schema=ReviewsSchema)
-        apispec.spec.components.schema("ClientSchema", schema=ClientSchema)
-        apispec.spec.components.schema("ProBonoSchema", schema=ProBonoSchema)
-
-        apispec.spec.path(view=ScheduleResource, app=app)
-        apispec.spec.path(view=AppointmentResource, app=app)
-        apispec.spec.path(view=LawyersListResource, app=app)
-        apispec.spec.path(view=SpecializationListResource, app=app)
-        apispec.spec.path(view=AllSpecializationsResource, app=app)
-        apispec.spec.path(view=OurTeamResource, app=app)
-        apispec.spec.path(view=FeedbackResource, app=app)
-        apispec.spec.path(view=NewsResource, app=app)
-        apispec.spec.path(view=ContactResource, app=app)
-        apispec.spec.path(view=ReviewsResource, app=app)
-        apispec.spec.path(view=PossibilitiesResource, app=app)
-        apispec.spec.path(view=ClientResource, app=app)
-        apispec.spec.path(view=ProBonoResource, app=app)
-        apispec.spec.path(view=HeroBlockResource, app=app)
     return app
 
 
@@ -202,28 +142,22 @@ def configure_cli(app):
     app.cli.add_command(manage.init)
 
 
-def configure_apispec(app):
-    """Configure APISpec for swagger support"""
-    apispec.init_app(app, security=[{"jwt": []}])
-    apispec.spec.components.security_scheme(
-        "jwt", {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
+def configure_swagger(app):
+    swagger_ui_blueprint = get_swaggerui_blueprint(
+        base_url=app.config["SWAGGER_URL"],
+        api_url=app.config["SWAGGER_PATH"],
+        config=app.config["SWAGGER_CONFIG"],
     )
-    apispec.spec.components.schema(
-        "PaginatedResult",
-        {
-            "properties": {
-                "total": {"type": "integer"},
-                "pages": {"type": "integer"},
-                "next": {"type": "string"},
-                "prev": {"type": "string"},
-            }
-        },
-    )
+    return swagger_ui_blueprint
 
 
 def register_blueprints(app):
     """Register all blueprints for application"""
     app.register_blueprint(api.views.blueprint)
+    app.register_blueprint(
+        configure_swagger(app),
+        url_prefix=app.config["SWAGGER_URL"],
+    )
 
 
 # def init_celery(app=None):
