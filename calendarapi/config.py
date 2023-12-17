@@ -30,6 +30,16 @@ IMAGE_FORMATS = [
 # CACHE_REDIS_HOST = "redis"
 # DAY = 86400
 
+SWAGGER_URL = "/swagger-ui"
+SWAGGER_PATH = "/static/swagger.json"
+SWAGGER_CONFIG = {
+    "app_name": "Lawyer API",
+    "syntaxHighlight.theme": "obsidian",
+    "tryItOutEnabled": True,
+    "requestSnippets": True,
+    "displayRequestDuration": True,
+}
+
 MAIL_DEFAULT_SENDER = MAIL_USERNAME = os.getenv("MAIL_USERNAME")
 MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
 MAIL_PORT = os.getenv("MAIL_PORT")

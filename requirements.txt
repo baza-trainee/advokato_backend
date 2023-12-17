@@ -18,3 +18,4 @@ apispec[yaml]==6.3.0
 apispec-webframeworks==0.5.2
 psycopg2-binary==2.9.9
 cloudinary==1.36.0
+flask_swagger_ui==4.11.1

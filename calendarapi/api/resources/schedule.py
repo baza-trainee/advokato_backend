@@ -1,6 +1,6 @@
 from datetime import datetime
-from flask import request
-from flask_restful import Resource
+
+from flask_restful import Resource, request
 from sqlalchemy import and_
 
 from calendarapi.api.schemas import ScheduleSchema
@@ -9,38 +9,6 @@ from calendarapi.models import Schedule
 
 
 class ScheduleResource(Resource):
-    """
-    Lawyer Schedule Resource
-
-    ---
-    get:
-      tags:
-        - Calendar
-      summary: Get a lawyer's schedule.
-      description: Get the schedule for a specific lawyer based on their ID.
-      parameters:
-        - in: query
-          name: lawyer_id
-          required: true
-          schema:
-            type: integer
-          description: ID of the lawyer to retrieve the schedule for.
-      responses:
-        200:
-          description: Lawyer's schedule retrieved successfully.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ScheduleSchema'
-        400:
-          description: Bad request. Lawyer ID is required.
-        404:
-          description: Schedule not found for the specified lawyer ID.
-    """
-
-    # method_decorators = [jwt_required()]
     schedule_schema: ScheduleSchema = ScheduleSchema()
 
     def get(self):
