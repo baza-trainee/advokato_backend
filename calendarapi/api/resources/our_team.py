@@ -1,10 +1,14 @@
 from typing import List
-
-from flask_restful import Resource, request
+from flask import request
+from flask_restful import Resource
 
 from calendarapi.api.schemas import OurTeamSchema, AboutCompanySchema
-from calendarapi.extensions import db
+from calendarapi.extensions import (
+    db,
+    # cache,
+)
 from calendarapi.models import OurTeam, AboutCompany
+# from calendarapi.config import DAY
 
 
 class OurTeamResource(Resource):
@@ -64,7 +68,11 @@ class OurTeamResource(Resource):
     our_team_schema: OurTeamSchema = OurTeamSchema()
     company_schema: AboutCompanySchema = AboutCompanySchema()
 
-    def get(self):  # TODO сделать рефакторинг этого ендпоинта.
+    # @cache.cached(
+    #     key_prefix=lambda: f"team_list_{request.args.get('is_slider', 'false').lower()}",
+    #     timeout=DAY,
+    # )
+    def get(self):
         is_slider = request.args.get("is_slider", "false").lower() == "true"
         company: AboutCompany = db.session.query(
             AboutCompany.our_team_page_description,

@@ -2,7 +2,11 @@ from flask_restful import Resource
 from sqlalchemy import exc
 
 from calendarapi.api.schemas import AboutCompanySchema, HeroBlockSchema
-from calendarapi.extensions import db
+# from calendarapi.config import DAY
+from calendarapi.extensions import (
+    db,
+    # cache,
+)
 from calendarapi.models import HeroBlock, AboutCompany
 
 
@@ -47,6 +51,7 @@ class HeroBlockResource(Resource):
     company_schema: AboutCompanySchema = AboutCompanySchema()
     hero_schema: HeroBlockSchema = HeroBlockSchema()
 
+    # @cache.cached(key_prefix="hero_block", timeout=DAY)
     def get(self):
         try:
             hero_data = db.session.query(HeroBlock).first()
