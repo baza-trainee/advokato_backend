@@ -349,26 +349,36 @@ td {
   border-bottom-color: var(--text-color);
 }
 
-tr:hover td {
-  background-color: var(--table-background);
-  color: var(--table-text-hower);
+tr:hover td:not(.list-buttons-column) {
+  color: white;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1.5px;
 }
 
 .fa-eye:before {
-  color: var(--second-column-elements);
-  font: normal normal normal 18px/1 FontAwesome;
+  color: rgba(255, 255, 255, 0.6);
+  font: normal normal normal 20px/1 FontAwesome;
 }
-
+.fa-eye:hover {
+  color: #FFF;
+}
+.fa-eye:hover:before {
+  color: white;
+}
 .fa-pencil:before {
-  color: var(--second-column-elements);
-  font: normal normal normal 18px/1 FontAwesome;
+  color: rgba(255, 255, 255, 0.6);
+  font: normal normal normal 20px/1 FontAwesome;
 }
-
+.fa-pencil:hover:before {
+  color: white;
+}
 .fa-trash:before {
-  color: var(--second-column-elements);
-  font: normal normal normal 18px/1 FontAwesome;
+  color: rgba(255, 255, 255, 0.6);
+  font: normal normal normal 20px/1 FontAwesome;
 }
-
+.fa-trash:hover:before {
+  color: white;
+}
 td:not(.first-column):not(.second-column),
 th:not(.first-column):not(.second-column) {
   padding: 8px;
@@ -783,7 +793,6 @@ body {
   border-width: 1.5px;
   border-color: var(--table-border);
 }
-
 /* format columns in sections */
 td[class="list-buttons-column"] {
   width: 12px;

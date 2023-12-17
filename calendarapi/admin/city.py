@@ -1,28 +1,30 @@
-from markupsafe import Markup
-
-from calendarapi.admin.common import AdminModelView
+from calendarapi.admin.base_admin import AdminModelView
+from calendarapi.admin.commons.formatters import format_as_markup
 
 
 class CityModelView(AdminModelView):
     form_excluded_columns = ["lawyers"]
 
-    column_labels = {"city_name": "Місто", "address": "Адреса філіалу"}
-
-    column_list = ["city_name", "address"]
-
     column_default_sort = [
         ("id", False),
     ]
 
-    def _format_description(view, context, model, name):
-        return Markup(model.address)
+    column_labels = {
+        "city_name": "Місто",
+        "address": "Адреса філіалу",
+    }
+
+    column_list = [
+        "city_name",
+        "address",
+    ]
 
     column_formatters = {
-        "address": _format_description,
+        "address": format_as_markup,
     }
 
     column_sortable_list = []
 
     column_descriptions = {
-        "address": "Адреси відображатимуться на сайті, в розділі 'контакти'."
+        "address": "Адреси відображатимуться на сайті, в розділі 'контакти'.",
     }

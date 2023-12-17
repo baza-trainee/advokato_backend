@@ -158,12 +158,12 @@ def register_adminsite(app):
         )
     )
     admin.add_view(
+        OurTeamModelView(OurTeam, db.session, name="Команда", category="Керування")
+    )
+    admin.add_view(
         SpecializationModelView(
             Specialization, db.session, name="Cпеціалізації", category="Керування"
         )
-    )
-    admin.add_view(
-        OurTeamModelView(OurTeam, db.session, name="Команда", category="Керування")
     )
     admin.add_view(NewsModelView(News, db.session, name="Новини", category="Керування"))
     admin.add_view(

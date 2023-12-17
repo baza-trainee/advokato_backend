@@ -1,18 +1,20 @@
-from markupsafe import Markup
-
-from calendarapi.admin.common import AdminModelView
+from calendarapi.admin.base_admin import AdminModelView
+from calendarapi.admin.commons.formatters import format_as_markup
 
 
 class ContactModelView(AdminModelView):
     can_set_page_size = True
+    can_create = False
+    can_delete = False
+    can_edit = True
+    column_sortable_list = []
+    column_default_sort = [
+        ("id", False),
+    ]
     column_labels = {
         "contact_type": "Контакт",
         "value": "Значення",
     }
-
-    column_default_sort = [
-        ("id", False),
-    ]
     column_list = [
         "contact_type",
         "value",
@@ -20,14 +22,6 @@ class ContactModelView(AdminModelView):
     form_columns = [
         "value",
     ]
-
-    def _format_description(view, context, model, name):
-        return Markup(model.value)
-
     column_formatters = {
-        "value": _format_description,
+        "value": format_as_markup,
     }
-    can_create = False
-    can_delete = False
-    can_edit = True
-    column_sortable_list = []

@@ -1,21 +1,14 @@
 import os
 
-from flask import request, current_app
-from markupsafe import Markup
 from wtforms.validators import DataRequired
-from wtforms import BooleanField, TextAreaField, FileField, ValidationError
+from wtforms import BooleanField, TextAreaField, FileField
+from wtforms.widgets import CheckboxInput
 from flask_admin.form import rules
-from calendarapi.admin.common import (
-    AdminModelView,
-    format_text_as_markup,
-    get_media_path,
-    custom_delete_file,
-    custom_save_file,
-    thumbnail_formatter,
-    validate_image,
-)
 
-ABS_MEDIA_PATH = get_media_path(__name__.split(".")[-1])
+from calendarapi.admin.base_admin import AdminModelView
+from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
+from calendarapi.admin.commons.validators import ImageValidator
+from calendarapi.commons.utils import custom_delete_file, custom_update_file
 
 
 class OurTeamModelView(AdminModelView):
@@ -53,8 +46,10 @@ class OurTeamModelView(AdminModelView):
     ]
     column_descriptions = {
         "photo_path": """Фото для сторінки "Наша команда".""",
-        "slider_photo_path": """Фото для слайдеру на головній сторінці. Якщо залишити це поле пустим, відповідний спеціаліст не відображатиметься у слайдері.""",
-        "description": """Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д., для покращення зручності читання.""",
+        "slider_photo_path": """Фото для слайдеру на головній сторінці. Якщо залишити це поле пустим,
+відповідний спеціаліст не відображатиметься у слайдері.""",
+        "description": """Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д.,
+для покращення зручності читання.""",
     }
     form_rules = [
         "name",
@@ -70,22 +65,22 @@ class OurTeamModelView(AdminModelView):
     ]
 
     column_formatters = {
-        "photo_path": thumbnail_formatter(field_name="photo_path"),
-        "slider_photo_path": thumbnail_formatter(field_name="slider_photo_path"),
-        "description": format_text_as_markup,
+        "photo_path": ThumbnailFormatter(),
+        "slider_photo_path": ThumbnailFormatter(),
+        "description": format_as_markup,
     }
 
     form_extra_fields = {
         "photo_path": FileField(
-            "Виберіть фото партнера",
-            validators=[validate_image()],
+            label="Виберіть фото партнера",
+            validators=[ImageValidator()],
         ),
         "slider_photo_path": FileField(
-            "Виберіть фото партнера для слайдеру.",
-            validators=[validate_image(required=False)],
+            label="Виберіть фото партнера для слайдеру.",
+            validators=[ImageValidator(required=False)],
         ),
         "description": TextAreaField(
-            "Опис",
+            label="Опис",
             validators=[DataRequired(message="Це поле обов'язкове.")],
             render_kw={"class": "form-control", "rows": 5, "maxlength": 3000},
         ),
@@ -93,35 +88,22 @@ class OurTeamModelView(AdminModelView):
     }
 
     def on_model_delete(self, model):
-        if model.photo_path:
-            custom_delete_file(ABS_MEDIA_PATH, model.photo_path)
-        if model.slider_photo_path:
-            custom_delete_file(ABS_MEDIA_PATH, model.slider_photo_path)
+        custom_delete_file(model, field_name="photo_path")
+        custom_delete_file(model, field_name="slider_photo_path")
         return super().on_model_delete(model)
 
     def on_model_change(self, form, model, is_created):
-        if model.photo_path:
-            if form.photo_path.object_data:
-                custom_delete_file(ABS_MEDIA_PATH, form.photo_path.object_data)
-            model.photo_path = custom_save_file(ABS_MEDIA_PATH, model.photo_path)
-        else:
-            model.photo_path = form.photo_path.object_data
+        custom_update_file(model, form, field_name="photo_path")
+        custom_update_file(model, form, field_name="slider_photo_path")
 
-        if model.slider_photo_path:
-            if form.slider_photo_path.object_data or form.delete_slider_photo.data:
-                custom_delete_file(ABS_MEDIA_PATH, form.slider_photo_path.object_data)
-            if form.delete_slider_photo.data:
-                model.slider_photo_path = None
-            else:
-                model.slider_photo_path = custom_save_file(
-                    ABS_MEDIA_PATH, model.slider_photo_path
-                )
-        else:
-            model.slider_photo_path = form.slider_photo_path.object_data
+        if form.delete_slider_photo.data:
+            custom_delete_file(model, field_name="slider_photo_path")
+            model.slider_photo_path = None
 
         return super().on_model_change(form, model, is_created)
 
     # def on_form_prefill(self, form, id):
-    #     if not form.slider_photo_path.object_data:
+    #     if not id:
     #         del form._fields["delete_slider_photo"]
+    #     self.form_rules
     #     return super().on_form_prefill(form, id)
