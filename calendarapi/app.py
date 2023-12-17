@@ -5,6 +5,7 @@ from flask_babel import Babel
 from flask_mail import Mail
 from markupsafe import Markup
 from flask_swagger_ui import get_swaggerui_blueprint
+from flask_cors import CORS
 
 from calendarapi import api, manage
 from calendarapi.admin.our_team import OurTeamModelView
@@ -57,6 +58,7 @@ def create_app(testing=False):
     """Application factory, used to create application"""
     app = Flask("calendarapi")
     app.config.from_object("calendarapi.config")
+    CORS(app, resources={r"/*": {"origins": "*"}})
     Babel(app)
     if testing is True:
         app.config["TESTING"] = True
