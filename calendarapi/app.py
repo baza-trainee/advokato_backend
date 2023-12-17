@@ -5,22 +5,15 @@ from flask_babel import Babel
 from flask_mail import Mail
 from markupsafe import Markup
 
-from calendarapi import api, auth, manage
+from calendarapi import api, manage
 from calendarapi.admin.our_team import OurTeamModelView
 from calendarapi.extensions import (
     apispec,
     db,
-    # jwt,
     migrate,
     # celery,
+    # cache,
 )
-
-# from calendarapi.auth.views import (
-#     login,
-#     refresh,
-#     revoke_access_token,
-#     revoke_refresh_token,
-# )
 from calendarapi.admin import (
     UserModelView,
     CustomAdminIndexView,
@@ -137,11 +130,6 @@ def create_app(testing=False):
         apispec.spec.path(view=ClientResource, app=app)
         apispec.spec.path(view=ProBonoResource, app=app)
         apispec.spec.path(view=HeroBlockResource, app=app)
-
-        # apispec.spec.path(view=login, app=app)
-        # apispec.spec.path(view=refresh, app=app)
-        # apispec.spec.path(view=revoke_access_token, app=app)
-        # apispec.spec.path(view=revoke_refresh_token, app=app)
     return app
 
 
@@ -205,7 +193,6 @@ def register_adminsite(app):
 def configure_extensions(app):
     """Configure flask extensions"""
     db.init_app(app)
-    # jwt.init_app(app)
     migrate.init_app(app, db)
     # cache.init_app(app)
 
@@ -236,7 +223,6 @@ def configure_apispec(app):
 
 def register_blueprints(app):
     """Register all blueprints for application"""
-    # app.register_blueprint(auth.views.blueprint)
     app.register_blueprint(api.views.blueprint)
 
 

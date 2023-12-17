@@ -50,7 +50,9 @@ class AboutCompanyModelView(AdminModelView):
 
     column_formatters = {
         "main_page_photo_path": thumbnail_formatter(field_name="main_page_photo_path"),
-        "our_team_page_photo_path": thumbnail_formatter(field_name="our_team_page_photo_path"),
+        "our_team_page_photo_path": thumbnail_formatter(
+            field_name="our_team_page_photo_path"
+        ),
         "our_team_page_description": format_text_as_markup,
         "main_page_description": format_text_as_markup,
     }
@@ -59,24 +61,24 @@ class AboutCompanyModelView(AdminModelView):
         "our_team_page_photo_path": FileField(
             """Виберіть фото для сторінки "Наша компанія".""",
             validators=[validate_image()],
-            description="Розмір до 30 мб, формати: PNG, JPG, JPEG, WebP."
+            description="Розмір до 30 мб, формати: PNG, JPG, JPEG, WebP.",
         ),
         "our_team_page_description": TextAreaField(
             """Опис для сторінки "Наша компанія". """,
             render_kw={"class": "form-control", "rows": 5},
             validators=[DataRequired(message="Це поле обов'язкове.")],
-            description="До 3000 символів."
+            description="До 3000 символів.",
         ),
         "main_page_photo_path": FileField(
             "Виберіть фото для головної сторінки.",
             validators=[validate_image()],
-            description="Розмір до 30 мб, формати: PNG, JPG, JPEG, WebP."
+            description="Розмір до 30 мб, формати: PNG, JPG, JPEG, WebP.",
         ),
         "main_page_description": TextAreaField(
             "Короткий опис для головної сторінки. ",
             render_kw={"class": "form-control", "rows": 5},
             validators=[DataRequired(message="Це поле обов'язкове.")],
-            description="До 500 символів."
+            description="До 500 символів.",
         ),
     }
 
@@ -90,14 +92,20 @@ class AboutCompanyModelView(AdminModelView):
     def on_model_change(self, form, model, is_created):
         if model.main_page_photo_path:
             if form.main_page_photo_path.object_data:
-                custom_delete_file(ABS_MEDIA_PATH, form.main_page_photo_path.object_data)
-            model.main_page_photo_path = custom_save_file(ABS_MEDIA_PATH, model.main_page_photo_path)
+                custom_delete_file(
+                    ABS_MEDIA_PATH, form.main_page_photo_path.object_data
+                )
+            model.main_page_photo_path = custom_save_file(
+                ABS_MEDIA_PATH, model.main_page_photo_path
+            )
         else:
             model.main_page_photo_path = form.main_page_photo_path.object_data
 
         if model.our_team_page_photo_path:
             if form.our_team_page_photo_path.object_data:
-                custom_delete_file(ABS_MEDIA_PATH, form.our_team_page_photo_path.object_data)
+                custom_delete_file(
+                    ABS_MEDIA_PATH, form.our_team_page_photo_path.object_data
+                )
             model.our_team_page_photo_path = custom_save_file(
                 ABS_MEDIA_PATH, model.our_team_page_photo_path
             )

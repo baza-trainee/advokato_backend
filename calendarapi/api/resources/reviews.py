@@ -3,11 +3,13 @@ from typing import List
 from flask_restful import Resource
 from sqlalchemy import desc
 
-# from flask_jwt_extended import jwt_required
-
 from calendarapi.api.schemas import ReviewsSchema
-from calendarapi.extensions import db
+from calendarapi.extensions import (
+    db,
+    # cache,
+)
 from calendarapi.models import Reviews
+# from calendarapi.config import DAY
 
 
 class ReviewsResource(Resource):
@@ -42,9 +44,9 @@ class ReviewsResource(Resource):
           description: No reviews found.
     """
 
-    # method_decorators = [jwt_required()]
     reviews_schema: ReviewsSchema = ReviewsSchema()
 
+    # @cache.cached(key_prefix="reviews_list", timeout=DAY)
     def get(self):
         reviews: List[Reviews] = (
             db.session.query(Reviews).order_by(desc(Reviews.id)).all()

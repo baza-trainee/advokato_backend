@@ -1,4 +1,5 @@
 from calendarapi.extensions import db
+# from calendarapi.services.cache_invalidator import invalidate_cache
 
 
 class Possibilities(db.Model):
@@ -9,3 +10,6 @@ class Possibilities(db.Model):
     short_text = db.Column(db.String(300), nullable=False)
     photo_path = db.Column(db.String(300), nullable=False)
     description = db.Column(db.String(500), nullable=False)
+
+
+# invalidate_cache(Possibilities, "possibilities")

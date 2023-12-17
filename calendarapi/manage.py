@@ -19,7 +19,7 @@ from calendarapi.models import (
     News,
     Client,
     Reviews,
-    HeroBlock
+    HeroBlock,
 )
 from calendarapi.services.fake_data import (
     our_team_data,
@@ -80,7 +80,7 @@ def init():
                     *clients_list,
                     *reviews_list,
                     AboutCompany(**about_company),
-                    HeroBlock(**hero)
+                    HeroBlock(**hero),
                 ]
             )
             db.session.flush()

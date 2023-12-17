@@ -2,10 +2,12 @@ from typing import List
 
 from flask_restful import Resource
 
-# from flask_jwt_extended import jwt_required
-
 from calendarapi.api.schemas import ProBonoSchema
-from calendarapi.extensions import db
+# from calendarapi.config import DAY
+from calendarapi.extensions import (
+    db,
+    # cache,
+)
 from calendarapi.models import ProBono
 
 
@@ -39,9 +41,9 @@ class ProBonoResource(Resource):
           description: No data found.
     """
 
-    # method_decorators = [jwt_required()]
     city_schema: ProBonoSchema = ProBonoSchema()
 
+    # @cache.cached(key_prefix="pro_bono", timeout=DAY)
     def get(self):
         data_list: List[ProBono] = db.session.query(ProBono).all()
         return self.city_schema.dump(data_list, many=True), 200

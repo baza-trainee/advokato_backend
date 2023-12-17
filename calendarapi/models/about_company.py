@@ -1,4 +1,6 @@
 from calendarapi.extensions import db
+# from calendarapi.services.cache_invalidator import invalidate_cache
+# from .our_team import OurTeam
 
 
 class AboutCompany(db.Model):
@@ -9,3 +11,7 @@ class AboutCompany(db.Model):
     our_team_page_photo_path = db.Column(db.String(300), nullable=False)
     main_page_description = db.Column(db.String(500), nullable=False)
     our_team_page_description = db.Column(db.String(3000), nullable=False)
+
+
+# invalidate_cache(AboutCompany, "hero_block")
+# invalidate_cache(AboutCompany, "team_list_false")
