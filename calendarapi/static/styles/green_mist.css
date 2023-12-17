@@ -369,12 +369,12 @@ tr:hover td:not(.list-buttons-column) {
 }
 .fa-eye:hover:before {
   color: white;
+  padding-left: 5px;
 }
 .fa-pencil:before {
   color: rgba(255, 255, 255, 0.7);
   font: normal normal normal 18px/1 FontAwesome;
   padding-left: 5px;
-  padding-right: 5px;
 }
 .fa-pencil:hover:before {
   color: white;
@@ -382,6 +382,8 @@ tr:hover td:not(.list-buttons-column) {
 .fa-trash:before {
   color: rgba(255, 255, 255, 0.7);
   font: normal normal normal 18px/1 FontAwesome;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 .fa-trash:hover:before {
   color: white;
