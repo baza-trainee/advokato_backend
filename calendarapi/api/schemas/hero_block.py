@@ -3,11 +3,15 @@ from calendarapi.extensions import fm, db, ma
 
 
 class HeroBlockSchema(fm.SQLAlchemyAutoSchema):
-
-    slogan = ma.fields.String(required=True, validate=ma.fields.validate.Length(min=2, max=30))
-    left_text = ma.fields.String(required=True, validate=ma.fields.validate.Length(min=2, max=200))
-    right_text = ma.fields.String(required=True, validate=ma.fields.validate.Length(min=2, max=200))
-
+    slogan = ma.fields.String(
+        required=True, validate=ma.fields.validate.Length(min=2, max=30)
+    )
+    left_text = ma.fields.String(
+        required=True, validate=ma.fields.validate.Length(min=2, max=200)
+    )
+    right_text = ma.fields.String(
+        required=True, validate=ma.fields.validate.Length(min=2, max=200)
+    )
 
     class Meta:
         model = HeroBlock

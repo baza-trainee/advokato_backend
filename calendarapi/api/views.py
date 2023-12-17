@@ -16,7 +16,7 @@ from calendarapi.api.resources import (
     PossibilitiesResource,
     ClientResource,
     ProBonoResource,
-    HeroBlockResource
+    HeroBlockResource,
 )
 
 

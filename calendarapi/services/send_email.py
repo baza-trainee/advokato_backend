@@ -72,5 +72,6 @@ def send_email(
             f"Нагадуємо Вам, що Ви залишали заявку на отримання консультації за темою: {specialization_name}.\n"
             f"Зустріч заплановано на {appointment_date} о {appointment_time} годині."
         )
-        mail.send(reminder_message)
-        return f"Повідомлення відправлено для {visitor_email}"
+        if visitor_email:
+            mail.send(reminder_message)
+            return f"Повідомлення відправлено для {visitor_email}"
