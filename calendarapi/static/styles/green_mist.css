@@ -349,17 +349,20 @@ td {
   border-bottom-color: #ff060600;
 }
 
-.table tbody td a:hover {
+.table tbody td a:hover { 
   border-bottom-color: var(--text-color);
 }
 
-tr:hover td:not(.list-buttons-column) {
-  color: white;
-  text-decoration-line: underline;
-  text-decoration-color: rgb(228, 228, 228);
-  text-decoration-thickness: 1.5px;
+tr:hover td:not(.list-buttons-column):not(:first-child) {
+  background-color: rgba(255, 255, 255, 0.4);
+  color: black;
 }
-
+.table:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+.text-center {
+  color: white
+}
 .fa-eye:before {
   color: rgba(255, 255, 255, 0.6);
   font: normal normal normal 20px/1 FontAwesome;
