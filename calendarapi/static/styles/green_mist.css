@@ -804,6 +804,19 @@ body {
   border-width: 1.5px;
   border-color: var(--table-border);
 }
+
+/* .city_coordinates {
+  display: flex;
+  justify-content: space-evenly;
+} */
+
+.city_coord_name {
+  padding: 5px;
+}
+
+.city_coord_value {
+  padding: 5px;
+}
 /* format columns in sections */
 td[class="list-buttons-column"] {
   width: 12px;
@@ -834,3 +847,4 @@ td[class="col-created_at"] {
   text-align: left;
   min-width: 110px;
 }
+
