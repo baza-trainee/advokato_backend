@@ -9,7 +9,6 @@ def validate_float(form, field):
         field.data = field.data.strip().replace(",", ".")
         float(field.data)
     except Exception as exc:
-        print(exc)
         raise ValidationError(
             "Невірний формат для координат. Приймаються лише дробові та цілі числа."
         )
