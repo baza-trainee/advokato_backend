@@ -1,0 +1,20 @@
+# Flask_Admin from local distribution ¯\_(ツ)_/¯
+./custom_dist/Flask_Admin-1.6.1-py3-none-any.whl
+flask==2.3.1
+flask-restful==0.3.10
+flask-migrate==4.0.5
+flask-sqlalchemy==3.1.1
+flask-marshmallow==0.15.0
+flask_login==0.6.2
+Flask-Babel==4.0.0
+Flask-Mail==0.9.1
+# flask-ckeditor==0.5.1
+Werkzeug==2.3.7
+marshmallow==3.20.1
+marshmallow-sqlalchemy==0.29.0
+python-dotenv==1.0.0
+passlib==1.7.4
+apispec[yaml]==6.3.0
+apispec-webframeworks==0.5.2
+psycopg2-binary==2.9.9
+cloudinary==1.36.0
