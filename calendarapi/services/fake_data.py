@@ -1,6 +1,7 @@
 our_team_data = [
     {
         "name": "Адвокат Сергій Бурдинский",
+        "slider_photo_path": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1702888337/lge6lvjcl9kubtl8td1r.jpg",
         "position": "Керівний партнер, адвокат з 2017 р.",
         "photo_path": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701383543/p65zdmyprytolguienyg.jpg",
         "description": """
