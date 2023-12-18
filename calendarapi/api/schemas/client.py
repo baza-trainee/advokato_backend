@@ -9,6 +9,5 @@ class ClientSchema(fm.SQLAlchemyAutoSchema):
 
     class Meta:
         model = Client
-        exclude = ["id"]
         load_instance = True
         sqla_session = db.session
