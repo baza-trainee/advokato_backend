@@ -38,6 +38,7 @@ SWAGGER_CONFIG = {
     "tryItOutEnabled": True,
     "requestSnippets": True,
     "displayRequestDuration": True,
+    "defaultModelsExpandDepth": -1,
 }
 
 MAIL_DEFAULT_SENDER = MAIL_USERNAME = os.getenv("MAIL_USERNAME")

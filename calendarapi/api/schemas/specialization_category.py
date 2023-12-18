@@ -1,10 +1,20 @@
 from calendarapi.models import Specialization
-from calendarapi.extensions import fm, db
-from marshmallow_sqlalchemy.fields import Nested
+from calendarapi.extensions import fm, db, ma
 
 
 class SpecializationSchema(fm.SQLAlchemyAutoSchema):
-    lawyers = Nested("LawyerSchema", many=True, exclude=("id",))
+    specialization_name = ma.fields.String(
+        required=True, validate=ma.fields.validate.Length(min=2, max=100)
+    )
+    specialization_photo = ma.fields.String(
+        required=True, validate=ma.fields.validate.Length(min=2, max=300)
+    )
+    specialization_description = ma.fields.String(
+        required=True, validate=ma.fields.validate.Length(min=10, max=1000)
+    )
+    specialization_description_full = ma.fields.String(
+        validate=ma.fields.validate.Length(max=3000)
+    )
 
     class Meta:
         model = Specialization

@@ -14,8 +14,6 @@ marshmallow-sqlalchemy==0.29.0
 email_validator==2.1.0
 python-dotenv==1.0.0
 passlib==1.7.4
-apispec[yaml]==6.3.0
-apispec-webframeworks==0.5.2
 psycopg2-binary==2.9.9
 cloudinary==1.36.0
 flask_swagger_ui==4.11.1
