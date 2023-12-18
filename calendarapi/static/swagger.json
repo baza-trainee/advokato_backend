@@ -443,9 +443,7 @@
                                             "phone_number": {
                                                 "type": "string",
                                                 "description": "Visitor's phone number",
-                                                "pattern": "^(?:\\+?380|\b380|0)[0-9]{9,13}$",
-                                                "errorMessage": "Invalid phone number format",
-                                                "required": true
+                                                "pattern": "^(?:\\+?380|\b380|0)[0-9]{9,13}$"
                                             }
                                         },
                                         "required": [
@@ -530,17 +528,18 @@
                                                 "type": "string",
                                                 "description": "Client's link",
                                                 "maxLength": 300,
-                                                "unique": true,
                                                 "nullable": true
                                             },
                                             "photo_path": {
                                                 "type": "string",
                                                 "description": "Client's photo path",
                                                 "minLength": 2,
-                                                "maxLength": 300,
-                                                "required": true
+                                                "maxLength": 300
                                             }
                                         },
+                                        "required": [
+                                            "photo_path"
+                                        ],
                                         "type": "object"
                                     },
                                     "type": "array"
@@ -627,27 +626,22 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "description": "Visitor's email address",
-                                        "required": false
+                                        "description": "Visitor's email address"
                                     },
                                     "message": {
                                         "description": "Feedback message.",
                                         "type": "string",
-                                        "maxLength": 2000,
-                                        "required": false
+                                        "maxLength": 2000
                                     },
                                     "name": {
                                         "description": "Visitor's name.",
-                                        "type": "string",
-                                        "required": false
+                                        "type": "string"
                                     },
                                     "phone_number": {
                                         "type": "string",
                                         "example": "+380123456789",
                                         "description": "Visitor's phone number",
-                                        "pattern": "^(?:\\+?380|\b380|0)[0-9]{9,13}$",
-                                        "errorMessage": "Invalid phone number format",
-                                        "required": true
+                                        "pattern": "^(?:\\+?380|\b380|0)[0-9]{9,13}$"
                                     }
                                 },
                                 "required": [
@@ -714,17 +708,19 @@
                                                     "type": "string",
                                                     "description": "Description for the main page",
                                                     "minLength": 2,
-                                                    "maxLength": 500,
-                                                    "required": true
+                                                    "maxLength": 500
                                                 },
                                                 "main_page_photo_path": {
                                                     "type": "string",
                                                     "description": "Path to the main page photo",
                                                     "minLength": 2,
-                                                    "maxLength": 300,
-                                                    "required": true
+                                                    "maxLength": 300
                                                 }
                                             },
+                                            "required": [
+                                                "main_page_description",
+                                                "main_page_photo_path"
+                                            ],
                                             "type": "object"
                                         },
                                         "hero": {
@@ -733,24 +729,26 @@
                                                     "type": "string",
                                                     "description": "Text on the left side of the hero block",
                                                     "minLength": 2,
-                                                    "maxLength": 200,
-                                                    "required": true
+                                                    "maxLength": 200
                                                 },
                                                 "right_text": {
                                                     "type": "string",
                                                     "description": "Text on the right side of the hero block",
                                                     "minLength": 2,
-                                                    "maxLength": 200,
-                                                    "required": true
+                                                    "maxLength": 200
                                                 },
                                                 "slogan": {
                                                     "type": "string",
                                                     "description": "Hero block slogan",
                                                     "minLength": 2,
-                                                    "maxLength": 30,
-                                                    "required": true
+                                                    "maxLength": 30
                                                 }
                                             },
+                                            "required": [
+                                                "left_text",
+                                                "right_text",
+                                                "slogan"
+                                            ],
                                             "type": "object"
                                         }
                                     },
@@ -912,17 +910,19 @@
                                                     "type": "string",
                                                     "description": "Description for the our team page",
                                                     "minLength": 2,
-                                                    "maxLength": 3000,
-                                                    "required": true
+                                                    "maxLength": 3000
                                                 },
                                                 "our_team_page_photo_path": {
                                                     "type": "string",
                                                     "description": "Path to the our team page photo",
                                                     "minLength": 2,
-                                                    "maxLength": 300,
-                                                    "required": true
+                                                    "maxLength": 300
                                                 }
                                             },
+                                            "required": [
+                                                "our_team_page_description",
+                                                "our_team_page_photo_path"
+                                            ],
                                             "type": "object"
                                         },
                                         "team": {
