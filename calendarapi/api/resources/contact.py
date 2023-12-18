@@ -15,21 +15,26 @@ class ContactResource(Resource):
         try:
             contacts = db.session.query(Contact).all()
             cities = db.session.query(City).all()
-            contacts_data = [
-                {
-                    contact.contact_type: contact.value,
-                }
-                for contact in contacts
-            ]
 
+            data = {contact.contact_type: contact.value for contact in contacts}
+            output_data = [
+                {
+                    "contacts": [
+                        {"phone": data.pop("phone")},
+                        {"mail": data.pop("mail")},
+                    ],
+                    "social": [{"title": k, "url": v} for k, v in data.items()],
+                }
+            ]
             cities_data = [
                 {
                     "id": city.id,
                     "city_name": city.city_name,
                     "address": city.address,
+                    "coords": {"lat": city.latitude, "lng": city.longitude},
                 }
                 for city in cities
             ]
-            return {"contacts": contacts_data, "cities": cities_data}, 200
+            return {"contacts": output_data, "cities": cities_data}, 200
         except Exception as e:
-            return {"message": "Internal Server Error"}, 500
+            return {"message": f"Internal Server Error. {str(e)}"}, 500

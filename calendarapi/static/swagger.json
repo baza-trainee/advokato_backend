@@ -28,21 +28,41 @@
             },
             "CitySchema": {
                 "properties": {
-                    "address": {
-                        "maxLength": 200,
-                        "type": "string"
+                    "id": {
+                        "type": "integer"
                     },
                     "city_name": {
                         "maxLength": 100,
-                        "type": "string"
+                        "type": "string",
+                        "example": "Миколаїв"
                     },
-                    "id": {
-                        "type": "integer"
+                    "address": {
+                        "maxLength": 200,
+                        "type": "string",
+                        "example": "вул. Третя Костильна, 12"
+                    },
+                    "coords": {
+                        "type": "object",
+                        "properties": {
+                            "lat": {
+                                "type": "number",
+                                "example": "45.408166"
+                            },
+                            "lng": {
+                                "type": "number",
+                                "example": "-123.008118"
+                            }
+                        },
+                        "required": [
+                            "lat",
+                            "lng"
+                        ]
                     }
                 },
                 "required": [
                     "address",
-                    "city_name"
+                    "city_name",
+                    "coords"
                 ],
                 "type": "object"
             },
@@ -271,7 +291,11 @@
                             "format": "time"
                         },
                         "description": "Array of time slots",
-                        "example":["10:30", "13:50", "16:00"]
+                        "example": [
+                            "10:30",
+                            "13:50",
+                            "16:00"
+                        ]
                     }
                 },
                 "required": [
@@ -351,36 +375,41 @@
             "PossibilitiesSchema": {
                 "type": "object",
                 "properties": {
-                  "title": {
-                    "type": "string",
-                    "description": "Title of the possibilities",
-                    "minLength": 4,
-                    "maxLength": 100
-                  },
-                  "photo_path": {
-                    "type": "string",
-                    "description": "Path to the possibilities photo",
-                    "minLength": 2,
-                    "maxLength": 300
-                  },
-                  "short_text": {
-                    "type": "string",
-                    "description": "Short text description of the possibilities",
-                    "minLength": 2,
-                    "maxLength": 300
-                  },
-                  "description": {
-                    "type": "string",
-                    "description": "Full description of the possibilities",
-                    "minLength": 2,
-                    "maxLength": 500
-                  },
-                  "id": {
-                      "type": "integer"
-                  }
+                    "title": {
+                        "type": "string",
+                        "description": "Title of the possibilities",
+                        "minLength": 4,
+                        "maxLength": 100
+                    },
+                    "photo_path": {
+                        "type": "string",
+                        "description": "Path to the possibilities photo",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+                    "short_text": {
+                        "type": "string",
+                        "description": "Short text description of the possibilities",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Full description of the possibilities",
+                        "minLength": 2,
+                        "maxLength": 500
+                    },
+                    "id": {
+                        "type": "integer"
+                    }
                 },
-                "required": ["title", "photo_path", "short_text", "description"]
-              }
+                "required": [
+                    "title",
+                    "photo_path",
+                    "short_text",
+                    "description"
+                ]
+            }
         }
     },
     "info": {
@@ -567,34 +596,71 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "contacts": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "contacts": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "anyOf": [
+                                                                {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "phone": {
+                                                                            "type": "string",
+                                                                            "example": "+380123456789"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "phone"
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "mail": {
+                                                                            "type": "string",
+                                                                            "example": "example@example.com"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "mail"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    },
+                                                    "social": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "title": {
+                                                                    "type": "string"
+                                                                },
+                                                                "url": {
+                                                                    "type": "string",
+                                                                    "maxLength": 500
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "title",
+                                                                "url"
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "required": [
+                                                    "contacts",
+                                                    "social"
+                                                ]
+                                            }
+                                        },
                                         "cities": {
                                             "items": {
-                                                "properties": {
-                                                    "address": {
-                                                        "type": "string",
-                                                        "maxLength": 200
-                                                    },
-                                                    "city_name": {
-                                                        "type": "string",
-                                                        "maxLength": 100
-                                                    },
-                                                    "id": {
-                                                        "type": "integer"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            },
-                                            "type": "array"
-                                        },
-                                        "contacts": {
-                                            "items": {
-                                                "properties": {
-                                                    "contact_type": {
-                                                        "type": "string",
-                                                        "maxLength": 500
-                                                    }
-                                                },
-                                                "type": "object"
+                                                "$ref": "#/components/schemas/CitySchema"
                                             },
                                             "type": "array"
                                         }
