@@ -15,7 +15,6 @@ class NewsSchema(fm.SQLAlchemyAutoSchema):
 
     class Meta:
         model = News
-        exclude = ["id"]
         include_fk = True
         load_instance = True
         sqla_session = db.session

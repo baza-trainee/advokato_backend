@@ -12,6 +12,5 @@ class ProBonoSchema(fm.SQLAlchemyAutoSchema):
 
     class Meta:
         model = ProBono
-        exclude = ["id"]
         load_instance = True
         sqla_session = db.session

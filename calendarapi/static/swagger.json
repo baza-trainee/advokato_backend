@@ -127,7 +127,6 @@
                 "properties": {
                     "created_at": {
                         "format": "date-time",
-                        "nullable": true,
                         "type": "string"
                     },
                     "description": {
@@ -144,6 +143,9 @@
                         "maxLength": 300,
                         "minLength": 2,
                         "type": "string"
+                    },
+                    "id": {
+                        "type": "integer"
                     }
                 },
                 "required": [
@@ -193,24 +195,11 @@
                 ],
                 "type": "object"
             },
-            "PaginatedResult": {
-                "properties": {
-                    "next": {
-                        "type": "string"
-                    },
-                    "pages": {
-                        "type": "integer"
-                    },
-                    "prev": {
-                        "type": "string"
-                    },
-                    "total": {
-                        "type": "integer"
-                    }
-                }
-            },
             "ProBonoSchema": {
                 "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
                     "description": {
                         "maxLength": 3000,
                         "minLength": 2,
@@ -230,19 +219,17 @@
             },
             "ReviewsSchema": {
                 "properties": {
-                    "created_at": {
-                        "format": "date",
-                        "nullable": true,
-                        "type": "string"
-                    },
-                    "description": {
-                        "maxLength": 1000,
-                        "minLength": 2,
-                        "type": "string"
+                    "id": {
+                        "type": "integer"
                     },
                     "name": {
                         "maxLength": 100,
                         "minLength": 4,
+                        "type": "string"
+                    },
+                    "position": {
+                        "maxLength": 100,
+                        "minLength": 2,
                         "type": "string"
                     },
                     "photo_path": {
@@ -250,9 +237,13 @@
                         "minLength": 2,
                         "type": "string"
                     },
-                    "position": {
-                        "maxLength": 100,
+                    "description": {
+                        "maxLength": 1000,
                         "minLength": 2,
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "format": "date",
                         "type": "string"
                     }
                 },
@@ -271,18 +262,22 @@
                         "type": "string"
                     },
                     "lawyer_id": {
-                        "nullable": true,
                         "type": "integer"
                     },
-                    "lawyers": {
-                        "$ref": "#/components/schemas/LawyerSchema"
-                    },
                     "time": {
-                        "nullable": true
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "time"
+                        },
+                        "description": "Array of time slots",
+                        "example":["10:30", "13:50", "16:00"]
                     }
                 },
                 "required": [
-                    "date"
+                    "date",
+                    "time",
+                    "lawyer_id"
                 ],
                 "type": "object"
             },
@@ -303,15 +298,8 @@
                     "id": {
                         "type": "integer"
                     },
-                    "lawyers": {
-                        "items": {
-                            "$ref": "#/components/schemas/Lawyer"
-                        },
-                        "type": "array"
-                    },
                     "specialization_description": {
                         "maxLength": 1000,
-                        "nullable": true,
                         "type": "string"
                     },
                     "specialization_description_full": {
@@ -320,17 +308,18 @@
                         "type": "string"
                     },
                     "specialization_name": {
-                        "maxLength": 255,
+                        "maxLength": 100,
                         "type": "string"
                     },
                     "specialization_photo": {
                         "maxLength": 300,
-                        "nullable": true,
                         "type": "string"
                     }
                 },
                 "required": [
-                    "specialization_name"
+                    "specialization_name",
+                    "specialization_description",
+                    "specialization_photo"
                 ],
                 "type": "object"
             },
@@ -358,7 +347,40 @@
                     "phone_number"
                 ],
                 "type": "object"
-            }
+            },
+            "PossibilitiesSchema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Title of the possibilities",
+                    "minLength": 4,
+                    "maxLength": 100
+                  },
+                  "photo_path": {
+                    "type": "string",
+                    "description": "Path to the possibilities photo",
+                    "minLength": 2,
+                    "maxLength": 300
+                  },
+                  "short_text": {
+                    "type": "string",
+                    "description": "Short text description of the possibilities",
+                    "minLength": 2,
+                    "maxLength": 300
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Full description of the possibilities",
+                    "minLength": 2,
+                    "maxLength": 500
+                  },
+                  "id": {
+                      "type": "integer"
+                  }
+                },
+                "required": ["title", "photo_path", "short_text", "description"]
+              }
         }
     },
     "info": {
@@ -379,11 +401,14 @@
                                         "properties": {
                                             "appointment_date": {
                                                 "format": "date",
-                                                "type": "string"
+                                                "type": "string",
+                                                "description": "Date in the format YYYY-MM-DD"
                                             },
                                             "appointment_time": {
                                                 "format": "time",
-                                                "type": "string"
+                                                "type": "string",
+                                                "pattern": "^(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$",
+                                                "description": "Time in 24-hour format (e.g., '14:30')"
                                             },
                                             "lawyer_id": {
                                                 "type": "integer"
@@ -403,13 +428,24 @@
                                     "visitor": {
                                         "properties": {
                                             "email": {
-                                                "type": "string"
+                                                "type": "string",
+                                                "format": "email",
+                                                "description": "Visitor's email address",
+                                                "nullable": true
                                             },
                                             "name": {
-                                                "type": "string"
+                                                "type": "string",
+                                                "description": "Visitor's name",
+                                                "minLength": 2,
+                                                "maxLength": 100,
+                                                "nullable": true
                                             },
                                             "phone_number": {
-                                                "type": "string"
+                                                "type": "string",
+                                                "description": "Visitor's phone number",
+                                                "pattern": "^(?:\\+?380|\b380|0)[0-9]{9,13}$",
+                                                "errorMessage": "Invalid phone number format",
+                                                "required": true
                                             }
                                         },
                                         "required": [
@@ -491,10 +527,18 @@
                                                 "type": "integer"
                                             },
                                             "link": {
-                                                "type": "string"
+                                                "type": "string",
+                                                "description": "Client's link",
+                                                "maxLength": 300,
+                                                "unique": true,
+                                                "nullable": true
                                             },
                                             "photo_path": {
-                                                "type": "string"
+                                                "type": "string",
+                                                "description": "Client's photo path",
+                                                "minLength": 2,
+                                                "maxLength": 300,
+                                                "required": true
                                             }
                                         },
                                         "type": "object"
@@ -528,10 +572,12 @@
                                             "items": {
                                                 "properties": {
                                                     "address": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "maxLength": 200
                                                     },
                                                     "city_name": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "maxLength": 100
                                                     },
                                                     "id": {
                                                         "type": "integer"
@@ -545,7 +591,8 @@
                                             "items": {
                                                 "properties": {
                                                     "contact_type": {
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "maxLength": 500
                                                     }
                                                 },
                                                 "type": "object"
@@ -578,22 +625,29 @@
                             "schema": {
                                 "properties": {
                                     "email": {
-                                        "description": "Visitor's email address.",
+                                        "type": "string",
                                         "format": "email",
-                                        "type": "string"
+                                        "description": "Visitor's email address",
+                                        "required": false
                                     },
                                     "message": {
                                         "description": "Feedback message.",
-                                        "type": "string"
+                                        "type": "string",
+                                        "maxLength": 2000,
+                                        "required": false
                                     },
                                     "name": {
                                         "description": "Visitor's name.",
-                                        "type": "string"
+                                        "type": "string",
+                                        "required": false
                                     },
                                     "phone_number": {
-                                        "description": "Visitor's phone number.",
+                                        "type": "string",
                                         "example": "+380123456789",
-                                        "type": "string"
+                                        "description": "Visitor's phone number",
+                                        "pattern": "^(?:\\+?380|\b380|0)[0-9]{9,13}$",
+                                        "errorMessage": "Invalid phone number format",
+                                        "required": true
                                     }
                                 },
                                 "required": [
@@ -657,10 +711,18 @@
                                         "company": {
                                             "properties": {
                                                 "main_page_description": {
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "description": "Description for the main page",
+                                                    "minLength": 2,
+                                                    "maxLength": 500,
+                                                    "required": true
                                                 },
                                                 "main_page_photo_path": {
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "description": "Path to the main page photo",
+                                                    "minLength": 2,
+                                                    "maxLength": 300,
+                                                    "required": true
                                                 }
                                             },
                                             "type": "object"
@@ -668,13 +730,25 @@
                                         "hero": {
                                             "properties": {
                                                 "left_text": {
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "description": "Text on the left side of the hero block",
+                                                    "minLength": 2,
+                                                    "maxLength": 200,
+                                                    "required": true
                                                 },
                                                 "right_text": {
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "description": "Text on the right side of the hero block",
+                                                    "minLength": 2,
+                                                    "maxLength": 200,
+                                                    "required": true
                                                 },
                                                 "slogan": {
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "description": "Hero block slogan",
+                                                    "minLength": 2,
+                                                    "maxLength": 30,
+                                                    "required": true
                                                 }
                                             },
                                             "type": "object"
@@ -795,24 +869,7 @@
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "properties": {
-                                            "created_at": {
-                                                "type": "string"
-                                            },
-                                            "description": {
-                                                "type": "string"
-                                            },
-                                            "id": {
-                                                "type": "integer"
-                                            },
-                                            "name": {
-                                                "type": "string"
-                                            },
-                                            "photo_path": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
+                                        "$ref": "#/components/schemas/NewsSchema"
                                     },
                                     "type": "array"
                                 }
@@ -852,36 +909,25 @@
                                         "company": {
                                             "properties": {
                                                 "our_team_page_description": {
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "description": "Description for the our team page",
+                                                    "minLength": 2,
+                                                    "maxLength": 3000,
+                                                    "required": true
                                                 },
                                                 "our_team_page_photo_path": {
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "description": "Path to the our team page photo",
+                                                    "minLength": 2,
+                                                    "maxLength": 300,
+                                                    "required": true
                                                 }
                                             },
                                             "type": "object"
                                         },
                                         "team": {
                                             "items": {
-                                                "properties": {
-                                                    "description": {
-                                                        "type": "string"
-                                                    },
-                                                    "id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "photo_path": {
-                                                        "type": "string"
-                                                    },
-                                                    "position": {
-                                                        "type": "string"
-                                                    },
-                                                    "slider_photo_path": {
-                                                        "type": "string"
-                                                    }
-                                                },
+                                                "$ref": "#/components/schemas/OurTeamSchema",
                                                 "type": "object"
                                             },
                                             "type": "array"
@@ -912,24 +958,7 @@
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "properties": {
-                                            "description": {
-                                                "type": "string"
-                                            },
-                                            "id": {
-                                                "type": "integer"
-                                            },
-                                            "photo_path": {
-                                                "type": "string"
-                                            },
-                                            "short_text": {
-                                                "type": "string"
-                                            },
-                                            "title": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
+                                        "$ref": "#/components/schemas/PossibilitiesSchema"
                                     },
                                     "type": "array"
                                 }
@@ -956,18 +985,7 @@
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "properties": {
-                                            "description": {
-                                                "type": "string"
-                                            },
-                                            "id": {
-                                                "type": "integer"
-                                            },
-                                            "photo_path": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
+                                        "$ref": "#/components/schemas/ProBonoSchema"
                                     },
                                     "type": "array"
                                 }
@@ -994,21 +1012,7 @@
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "properties": {
-                                            "description": {
-                                                "type": "string"
-                                            },
-                                            "id": {
-                                                "type": "integer"
-                                            },
-                                            "name": {
-                                                "type": "string"
-                                            },
-                                            "photo_path": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
+                                        "$ref": "#/components/schemas/ReviewsSchema"
                                     },
                                     "type": "array"
                                 }
@@ -1076,22 +1080,7 @@
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer"
-                                            },
-                                            "specialization_description": {
-                                                "type": "string"
-                                            },
-                                            "specialization_name": {
-                                                "type": "string"
-                                            },
-                                            "specialization_photo": {
-                                                "format": "uri",
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
+                                        "$ref": "#/components/schemas/SpecializationSchema"
                                     },
                                     "type": "array"
                                 }

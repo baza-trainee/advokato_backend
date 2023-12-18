@@ -18,7 +18,6 @@ class ReviewsSchema(fm.SQLAlchemyAutoSchema):
 
     class Meta:
         model = Reviews
-        exclude = ["id"]
         include_fk = True
         load_instance = True
         sqla_session = db.session
