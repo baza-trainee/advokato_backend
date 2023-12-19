@@ -10,7 +10,6 @@ COPY tests tests/
 
 RUN pip install -U pip
 RUN pip install -r dependencies/requirements_prod.txt
-RUN pip install -e .
 
 COPY calendarapi calendarapi/
 COPY tests tests/
