@@ -5,6 +5,7 @@ from wtforms import ValidationError
 from werkzeug.datastructures.file_storage import FileStorage
 
 from calendarapi.commons.exeptions import (
+    BAD_EQUAL_PASSWORD,
     DATA_REQUIRED,
     INVALID_PASSWORD,
     PASSWORD_LEN_ERROR,
@@ -44,8 +45,18 @@ class ImageValidator:
 
 
 def validate_password(form, field):
-    if len(field.data) < 8 or len(field.data) > 64:
-        raise ValidationError(reason=PASSWORD_LEN_ERROR)
-    regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!?]*$"
-    if not search(regex, field.data):
-        raise ValidationError(reason=INVALID_PASSWORD)
+    if field.data:
+        if form.password.data != form.confirm_password.data:
+            raise ValidationError(message=BAD_EQUAL_PASSWORD)
+        if len(field.data) < 8 or len(field.data) > 64:
+            raise ValidationError(message=PASSWORD_LEN_ERROR)
+        regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!?]*$"
+        if not search(regex, field.data):
+            raise ValidationError(message=INVALID_PASSWORD)
+    else:
+        if not form._obj:
+            raise ValidationError(message=DATA_REQUIRED)
+        elif field.name == 'password':
+            form.password.data = form._obj.password
+
+
