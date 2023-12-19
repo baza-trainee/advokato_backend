@@ -49,20 +49,6 @@ lint:
 clean:
 	sudo find . | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs sudo rm -rf
 
-dev:
-	# sed -i 's/:\/\/admin:admin@postgres:/:\/\/admin:admin@localhost:/g' .flaskenv
-	# @if [ -d "migrations" ]; then \
-	# 	rm -r migrations; \
-	# fi
-	# docker compose down
-	# docker compose build postgres
-	# docker compose up -d postgres
-	# flask db init
-	# flask db migrate
-	# flask db upgrade
-	# flask init
-	flask --debug run
-
 prod: down build run
 	docker compose exec web flask db init
 	docker compose exec web flask db migrate
