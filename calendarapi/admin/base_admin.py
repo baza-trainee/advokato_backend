@@ -1,6 +1,6 @@
 import uuid
 
-from flask import redirect, url_for, request, flash
+from flask import current_app, redirect, url_for, request, flash
 import flask_login as login
 from flask_admin import AdminIndexView, helpers, expose
 from flask_admin.contrib.sqla import ModelView
@@ -28,7 +28,15 @@ class AdminModelView(ModelView):
     edit_modal = True
 
     def is_accessible(self):
-        return login.current_user.is_authenticated
+        permissions = []
+        PERMISSION_ALL = current_app.config["PERMISSION_ALL"]
+        if not login.current_user.is_anonymous:
+            permissions += [
+                permision.view_name for permision in login.current_user.permissions
+            ]
+        return login.current_user.is_authenticated and (
+            PERMISSION_ALL in permissions or self.name in permissions
+        )
 
     def inaccessible_callback(self, name, **kwargs):
         return redirect("/admin/login")
@@ -96,9 +104,8 @@ class CustomAdminIndexView(AdminIndexView):
         if not login.current_user.is_authenticated:
             return redirect(url_for(".login_view"))
 
-        if not db.session.query(Permission).count() and self.admin._views:
-            permissions = [Permission(view_name="Усі розділи")]
-            permissions += [
+        if db.session.query(Permission).count() < 2 and self.admin._views:
+            permissions = [
                 Permission(view_name=admin_view.name)
                 for admin_view in self.admin._views[1:]
             ]

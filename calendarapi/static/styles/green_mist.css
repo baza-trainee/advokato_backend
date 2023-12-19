@@ -848,3 +848,9 @@ td[class="col-created_at"] {
   min-width: 110px;
 }
 
+td[class="col-main_page_photo_path_alt"] {
+  min-width: 110px;
+}
+td[class="col-our_team_page_photo_path_alt"] {
+  min-width: 110px;
+}

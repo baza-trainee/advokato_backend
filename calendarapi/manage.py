@@ -21,6 +21,7 @@ from calendarapi.models import (
     Reviews,
     HeroBlock,
 )
+from calendarapi.models.user_permissions import Permission
 from calendarapi.services.fake_data import (
     our_team_data,
     specializations,
@@ -51,6 +52,10 @@ def init():
     if not VERCEL:
         if db.session.query(User).count() == 0:
             """Create a new admin user, fake lawyers, initial city and specializations lists."""
+            click.echo("create permission")
+            permission_all = Permission(view_name=current_app.config["PERMISSION_ALL"])
+            db.session.add(permission_all)
+            db.session.flush()
             click.echo("create user")
             user = User(
                 username=current_app.config["ADMIN_DEFAULT_LOGIN"],
@@ -59,6 +64,9 @@ def init():
                 is_active=True,
                 is_superuser=True,
             )
+            db.session.add(user)
+            db.session.flush()
+            user.permissions = [permission_all]
 
             contact_list = [Contact(**data) for data in contacts]
             city_list = [City(**data) for data in cities]
@@ -103,7 +111,7 @@ def init():
                 schedule.lawyer_id = lawyer.id
                 schedule.time = ["10:00", "11:00", "12:00", "14:00"]
 
-            db.session.add_all([*fake_schedule, user])
+            db.session.add_all(fake_schedule)
             db.session.commit()
 
             click.echo("created user admin")
