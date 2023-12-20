@@ -1,11 +1,21 @@
+from celery import current_app
+from markupsafe import Markup
 from wtforms.validators import DataRequired
 from wtforms import TextAreaField, FileField
 
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
 from calendarapi.admin.commons.validators import ImageValidator
-from calendarapi.commons.exeptions import DATA_REQUIRED
-from calendarapi.commons.utils import custom_delete_file, custom_update_file
+from calendarapi.commons.exeptions import (
+    DATA_REQUIRED,
+    REQ_HTML_M,
+    REQ_IMAGE,
+    REQ_MAX_LEN,
+)
+from calendarapi.commons.utils import custom_update_file
+
+MAIN_PAGE_INFO = "Відображається на головній сторінці під блоком Hero."
+OUR_TEAM_PAGE_INFO = 'Відображається на сторінці "Про компанію".'
 
 
 class AboutCompanyModelView(AdminModelView):
@@ -32,41 +42,42 @@ class AboutCompanyModelView(AdminModelView):
         "our_team_page_photo_path",
     ]
     column_descriptions = {
-        "main_page_photo_path": """Відображається на головній сторінці. Розмір до 30 мб, формати: PNG, JPG, JPEG, WebP""",
-        "our_team_page_photo_path": """Відображається на сторінці "Про компанію". Розмір до 30 мб, формати: PNG, JPG, JPEG, WebP""",
-        "main_page_description": """Відображається на головній сторінці під блоком Hero, максимальна кількість символів - 500.""",
-        "our_team_page_description": """Відображається на сторінці "Про компанію". Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д., для покращення зручності читання. Максимальна кількість символів - 3000""",
+        "main_page_photo_path": MAIN_PAGE_INFO,
+        "our_team_page_photo_path": OUR_TEAM_PAGE_INFO,
+        "main_page_description": MAIN_PAGE_INFO,
+        "our_team_page_description": OUR_TEAM_PAGE_INFO,
     }
 
     column_formatters = {
         "main_page_photo_path": ThumbnailFormatter(),
         "our_team_page_photo_path": ThumbnailFormatter(),
         "our_team_page_description": format_as_markup,
-        "main_page_description": format_as_markup,
     }
 
     form_extra_fields = {
-        "our_team_page_photo_path": FileField(
-            """Виберіть фото для сторінки "Наша компанія".""",
-            validators=[ImageValidator()],
-            description="Розмір до 30 мб, формати: PNG, JPG, JPEG, WebP.",
-        ),
-        "our_team_page_description": TextAreaField(
-            """Опис для сторінки "Наша компанія". """,
-            render_kw={"class": "form-control", "rows": 5},
-            validators=[DataRequired(message=DATA_REQUIRED)],
-            description="До 3000 символів.",
-        ),
         "main_page_photo_path": FileField(
             label="Виберіть фото для головної сторінки.",
             validators=[ImageValidator()],
-            description="Розмір до 30 мб, формати: PNG, JPG, JPEG, WebP.",
+            description=f"{MAIN_PAGE_INFO} {REQ_IMAGE}",
+        ),
+        "our_team_page_photo_path": FileField(
+            'Виберіть фото для сторінки "Наша компанія".',
+            validators=[ImageValidator()],
+            description=f"{OUR_TEAM_PAGE_INFO} {REQ_IMAGE}",
         ),
         "main_page_description": TextAreaField(
             label="Короткий опис для головної сторінки. ",
-            render_kw={"class": "form-control", "rows": 5},
+            render_kw={"class": "form-control", "rows": 5, "maxlength": 500},
             validators=[DataRequired(message=DATA_REQUIRED)],
-            description="До 500 символів.",
+            description=f"{MAIN_PAGE_INFO} {REQ_MAX_LEN % 500}",
+        ),
+        "our_team_page_description": TextAreaField(
+            'Опис для сторінки "Наша компанія".',
+            render_kw={"class": "form-control", "rows": 5, "maxlength": 3000},
+            validators=[DataRequired(message=DATA_REQUIRED)],
+            description=Markup(
+                f"{OUR_TEAM_PAGE_INFO} {REQ_MAX_LEN % 3000} {REQ_HTML_M}"
+            ),
         ),
     }
 

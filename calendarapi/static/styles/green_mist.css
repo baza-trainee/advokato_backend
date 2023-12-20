@@ -30,10 +30,12 @@
   font-family: 'desc_font';
   src: url('/static/fonts/Comfortaa-VariableFont_wght.ttf') format('truetype');
 }
+
 @font-face {
   font-family: 'droid_sans';
   src: url('/static/fonts/DroidSans.ttf') format('truetype');
 }
+
 @font-face {
   font-family: 'table_font';
   src: url('/static/fonts/Oswald-VariableFont_wght.ttf') format('truetype');
@@ -120,10 +122,12 @@ input[type="password"][placeholder='password'] {
   padding: 10px;
   margin-bottom: 10px;
 }
+
 input[type="password"]::placeholder {
   color: black;
   font-size: 14px;
 }
+
 input[name="login"]::placeholder {
   color: black;
   font-size: 14px;
@@ -135,6 +139,7 @@ input[type="password"][placeholder='password']:focus-visible {
   border: solid 2px rgba(33, 37, 41, 0.9);
   outline: none;
 }
+
 input[type="password"][placeholder='confirm password'] {
   height: 40px;
   width: 250px;
@@ -155,6 +160,7 @@ input[type="password"][placeholder='confirm password']:focus-visible {
   border: solid 2px rgba(33, 37, 41, 0.9);
   outline: none;
 }
+
 input[type="email"][placeholder='email'] {
   height: 40px;
   width: 250px;
@@ -168,6 +174,7 @@ input[type="email"][placeholder='email'] {
   padding: 10px;
   margin-bottom: 10px;
 }
+
 input[type="email"]::placeholder {
   color: rgba(0, 0, 0, 0.6);
   font-size: 18px;
@@ -179,6 +186,7 @@ input[type="email"][placeholder='email']:focus-visible {
   border: solid 2px rgba(33, 37, 41, 0.9);
   outline: none;
 }
+
 .label_forgot {
   font-family: "header_font", sans-serif;
   text-transform: uppercase;
@@ -187,6 +195,7 @@ input[type="email"][placeholder='email']:focus-visible {
   border: none;
   padding: 5px;
 }
+
 .forgot_password {
   font-family: "header_font", sans-serif;
   text-transform: uppercase;
@@ -195,6 +204,7 @@ input[type="email"][placeholder='email']:focus-visible {
   border: none;
   padding: 5px;
 }
+
 button[class="btn btn-dark"] {
   font-family: "header_font", sans-serif;
   text-transform: uppercase;
@@ -217,6 +227,7 @@ body {
   width: 100%;
   margin: 0;
 }
+
 ::-webkit-scrollbar {
   width: 12px;
   background-color: var(--table-background);
@@ -267,33 +278,72 @@ body::before {
 }
 
 /* Table styles */
-.daterangepicker select.hourselect, .daterangepicker select.minuteselect, .daterangepicker select.secondselect, .daterangepicker select.ampmselect {
+div[class="daterangepicker dropdown-menu single opensright show-calendar"] {
+  top: 80px !important;
+}
+div[class="calendar-date"] table[class="table-condensed"] tr th{
+  font-size: 14px;
+}
+div[class="calendar-date"] table[class="table-condensed"] tr:hover td:first-child{
+  background-color: rgba(255, 255, 255, 0.4);
+  color: black;
+}
+
+div[class="range_inputs"] .btn-secondary {
+  border: 1px solid darkred !important;
+  border-radius: 0.2rem !important;
+}
+div[class="range_inputs"] .btn-secondary:hover {
+  background-color: darkred;
+}
+div[class="range_inputs"] .btn {
+  padding: 8px 16px !important;
+}
+.daterangepicker select.hourselect,
+.daterangepicker select.minuteselect,
+.daterangepicker select.secondselect,
+.daterangepicker select.ampmselect {
   background: var(--table-background);
   color: white;
 }
-.daterangepicker .calendar th, .daterangepicker .calendar td {
+
+.daterangepicker .calendar th,
+.daterangepicker .calendar td {
   color: #FFF;
 }
-.daterangepicker td.available:hover, .daterangepicker td.available.today, .daterangepicker th.available:hover {
+
+.daterangepicker td.available:hover,
+.daterangepicker td.available.today,
+.daterangepicker th.available:hover {
   color: black;
 }
-.daterangepicker select.monthselect, .daterangepicker select.yearselect {
+
+.daterangepicker select.monthselect,
+.daterangepicker select.yearselect {
   background: var(--table-background);
   color: #FFF;
 }
+
 .daterangepicker.dropdown-menu {
   background: black;
 }
-.daterangepicker .calendar th, .daterangepicker .calendar td {
+
+.daterangepicker .calendar th,
+.daterangepicker .calendar td {
   border: 3px solid black;
 }
-.daterangepicker td.today.active, .daterangepicker td.active, .daterangepicker td.active:hover {
+
+.daterangepicker td.today.active,
+.daterangepicker td.active,
+.daterangepicker td.active:hover {
   border: 0px;
 }
+
 .daterangepicker .calendar.single .calendar-date {
   padding: 1px;
   border-radius: 0;
 }
+
 /* 
 .daterangepicker .calendar.single .calendar-date {
   background: black;
@@ -337,9 +387,11 @@ td {
   text-align: center;
   padding: 8px;
 }
+
 .model-list a.icon:first-child {
   margin-left: 0;
 }
+
 .table-bordered td,
 .table-bordered th {
   border: 2px solid var(--table-border);
@@ -349,7 +401,7 @@ td {
   border-bottom-color: #ff060600;
 }
 
-.table tbody td a:hover { 
+.table tbody td a:hover {
   border-bottom-color: var(--text-color);
 }
 
@@ -357,40 +409,50 @@ tr:hover td:not(.list-buttons-column):not(:first-child) {
   background-color: rgba(255, 255, 255, 0.4);
   color: black;
 }
+
 .table:hover {
   background-color: rgba(255, 255, 255, 0.4);
 }
+
 .text-center {
   color: white
 }
+
 .fa-eye:before {
   color: rgba(255, 255, 255, 0.6);
   font: normal normal normal 20px/1 FontAwesome;
 }
+
 .fa-eye:hover {
   color: #FFF;
 }
+
 .fa-eye:hover:before {
   color: white;
   padding-left: 5px;
 }
+
 .fa-pencil:before {
   color: rgba(255, 255, 255, 0.7);
   font: normal normal normal 18px/1 FontAwesome;
   padding-left: 5px;
 }
+
 .fa-pencil:hover:before {
   color: white;
 }
+
 .fa-trash:before {
   color: rgba(255, 255, 255, 0.7);
   font: normal normal normal 18px/1 FontAwesome;
   padding-left: 5px;
   padding-right: 5px;
 }
+
 .fa-trash:hover:before {
   color: white;
 }
+
 td:not(.first-column):not(.second-column),
 th:not(.first-column):not(.second-column) {
   padding: 8px;
@@ -534,13 +596,16 @@ th:not(.first-column):not(.second-column) {
 .fa_filter_container {
   display: none;
 }
+
 input[type="text"] {
   font-family: "droid_sans";
   font-size: 16px;
 }
+
 input[type="text"]::placeholder {
   color: black;
 }
+
 /* dropdown menu */
 .dropdown-item.active,
 .dropdown-item:active {
@@ -805,52 +870,66 @@ body {
   border-color: var(--table-border);
 }
 
-/* .city_coordinates {
-  display: flex;
-  justify-content: space-evenly;
-} */
-
-.city_coord_name {
-  padding: 5px;
+hr {
+  background-color: #6c757d;
 }
 
+ul {
+  margin: 0 0 5px;
+  padding: 0 0 0 30px;
+}
+
+ol {
+  margin: 0 0 px;
+  padding: 0 0 0 30px;
+}
+
+p {
+  text-indent: 30px;
+  margin: 0 0 5px;
+}
+
+.city_coord_name,
 .city_coord_value {
-  padding: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
+
 /* format columns in sections */
 td[class="list-buttons-column"] {
   width: 12px;
   padding: 6px;
 }
+
 /* SPECIALIZATIONS */
 td[class="col-specialization_name"] {
   width: 10%;
 }
-td[class="col-specialization_description"] {
+
+td[class="col-specialization_description"],
+td[class="col-specialization_description_full"] {
   text-align: left;
 }
-td[class="col-specialization_description_full"]{
-  text-align: left;
-}
+
 /* OUR TEAM */
-td[class="col-slider_photo_path"]{
+td[class="col-slider_photo_path"] {
   min-width: 110px;
 }
 
 /* OUR COMPANY */
-td[class="col-description"]{
+td[class="col-our_team_page_description"],
+td[class="col-main_page_description"] {
   text-align: left;
 }
 
 /* REVIEWS */
 td[class="col-created_at"] {
   text-align: left;
-  min-width: 110px;
+  min-width: 150px;
 }
 
-td[class="col-main_page_photo_path_alt"] {
-  min-width: 110px;
-}
-td[class="col-our_team_page_photo_path_alt"] {
-  min-width: 110px;
+/* POSSIBILITIES */
+td[class="col-short_text"],
+td[class="col-description"] {
+  text-align: left;
 }

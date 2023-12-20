@@ -5,10 +5,10 @@ from wtforms import ValidationError
 from werkzeug.datastructures.file_storage import FileStorage
 
 from calendarapi.commons.exeptions import (
-    BAD_EQUAL_PASSWORD,
     DATA_REQUIRED,
-    INVALID_PASSWORD,
-    PASSWORD_LEN_ERROR,
+    REQ_PASSWORD,
+    INVALID_EQUAL_PASSWORD,
+    INVALID_PASSWORD_LEN,
 )
 from calendarapi.config import IMAGE_FORMATS, IMAGE_SIZE
 
@@ -21,7 +21,7 @@ class ImageValidator:
         "validate image formats and image with IMAGE_FORMATS and IMAGE_SIZE from config"
 
         if self.required and not field.object_data and not field.data:
-            raise ValidationError(DATA_REQUIRED)
+            raise ValidationError(message=DATA_REQUIRED)
         if field.data:
             file_format = field.data.filename.split(".")[-1]
             if file_format not in IMAGE_FORMATS:
@@ -47,16 +47,19 @@ class ImageValidator:
 def validate_password(form, field):
     if field.data:
         if form.password.data != form.confirm_password.data:
-            raise ValidationError(message=BAD_EQUAL_PASSWORD)
-        if len(field.data) < 8 or len(field.data) > 64:
-            raise ValidationError(message=PASSWORD_LEN_ERROR)
-        regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!?]*$"
+            raise ValidationError(message=INVALID_EQUAL_PASSWORD)
+        password_len = len(field.data)
+        if not 8 <= password_len <= 64:
+            raise ValidationError(
+                message=f"{INVALID_PASSWORD_LEN % password_len}. {REQ_PASSWORD}"
+            )
+        regex = (
+            r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!?]*$"
+        )
         if not search(regex, field.data):
-            raise ValidationError(message=INVALID_PASSWORD)
+            raise ValidationError(message=REQ_PASSWORD)
     else:
         if not form._obj:
             raise ValidationError(message=DATA_REQUIRED)
-        elif field.name == 'password':
+        elif field.name == "password":
             form.password.data = form._obj.password
-
-

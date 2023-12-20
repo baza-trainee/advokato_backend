@@ -4,8 +4,12 @@ from wtforms import TextAreaField, FileField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
 from calendarapi.admin.commons.validators import ImageValidator
-from calendarapi.commons.exeptions import DATA_REQUIRED
+from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_MAX_LEN
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
+
+DESCRIPTION_INFO = "Відображається зліва або справа від фото."
+TITLE_INFO = "Заголовок під фото."
+SHORT_TEXT_INFO = "Текст який буде під заголовком, накладений на фото."
 
 
 class PossibilitiesModelView(AdminModelView):
@@ -32,9 +36,9 @@ class PossibilitiesModelView(AdminModelView):
         "photo_path",
     ]
     column_descriptions = {
-        "title": "Заголовок під фото.",
-        "short_text": "Текст який буде під заголовком, накладений на фото.",
-        "description": "Відображається зліва або справа від фото.",
+        "title": TITLE_INFO,
+        "short_text": SHORT_TEXT_INFO,
+        "description": DESCRIPTION_INFO,
     }
 
     column_formatters = {
@@ -49,9 +53,18 @@ class PossibilitiesModelView(AdminModelView):
         ),
         "description": TextAreaField(
             label="Опис",
-            render_kw={"class": "form-control", "rows": 5},
+            render_kw={"class": "form-control", "rows": 5, "maxlength": 500},
             validators=[DataRequired(message=DATA_REQUIRED)],
+            description=f"{DESCRIPTION_INFO} {REQ_MAX_LEN % 500}",
         ),
+    }
+    form_args = {
+        "title": {
+            "description": f"{TITLE_INFO} {REQ_MAX_LEN % 100}",
+        },
+        "short_text": {
+            "description": f"{SHORT_TEXT_INFO} {REQ_MAX_LEN % 300}",
+        },
     }
 
     def on_model_delete(self, model):

@@ -1,18 +1,19 @@
 from flask import flash
 from flask_login import current_user
-from wtforms import EmailField, PasswordField, ValidationError
-from wtforms.validators import DataRequired, Email
+from wtforms import EmailField, PasswordField
+from wtforms.validators import DataRequired, Email, StopValidation
 
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.validators import validate_password
-from calendarapi.config import PERMISSION_ALL
-from calendarapi.extensions import db
+from calendarapi.admin.commons.descriptions import EMPTY_EDIT_FIELD
 from calendarapi.models.user import User
+from calendarapi.config import PERMISSION_ALL
 from calendarapi.commons.exeptions import (
     DATA_REQUIRED,
     INVALID_EMAIL,
     LOSS_USER_CONTROL,
-    USER_IS_CURRENT,
+    DELETE_CURRENT_USER,
+    REQ_PASSWORD,
     ZERO_ACTIVE_USER,
 )
 
@@ -38,21 +39,26 @@ class UserModelView(AdminModelView):
     column_labels = {
         "email": "Пошта",
         "username": "Логін",
-        "description": "Опис",
+        "description": "Замітки",
         "is_active": "Активний",
-        "permissions": "Доступ до розділів #TODO",
-        # "is_superuser": "superuser",
+        "permissions": "Доступ до розділів",
     }
 
     form_extra_fields = {
         "password": PasswordField(
             "Пароль",
-            validators=[validate_password],
-            default="test",
+            validators=[
+                DataRequired(message=DATA_REQUIRED),
+                validate_password,
+            ],
+            description=REQ_PASSWORD,
         ),
         "confirm_password": PasswordField(
             "Підтвердіть пароль",
-            validators=[validate_password],
+            validators=[
+                DataRequired(message=DATA_REQUIRED),
+                validate_password,
+            ],
         ),
         "email": EmailField(
             label="Пошта",
@@ -60,13 +66,24 @@ class UserModelView(AdminModelView):
                 Email(message=INVALID_EMAIL),
                 DataRequired(message=DATA_REQUIRED),
             ],
+            description="Необхідна для відновлення паролю.",
         ),
     }
+
+    def edit_form(self, obj=None):
+        form = super(UserModelView, self).edit_form(obj)
+        form.view_name = self.name
+        form.password.description = form.confirm_password.description = EMPTY_EDIT_FIELD
+        form.password.validators = form.confirm_password.validators = [
+            validate_password
+        ]
+        form.password.flags.required = form.confirm_password.flags.required = False
+        return form
 
     def delete_model(self, model):
         if model.id == current_user.id:
             flash(
-                USER_IS_CURRENT,
+                DELETE_CURRENT_USER,
                 "error",
             )
         else:
@@ -74,12 +91,17 @@ class UserModelView(AdminModelView):
 
     def _validate_permissions(form, field):
         permissions = [permission.view_name for permission in field.data]
-        if not ("Облікові записи" in permissions or PERMISSION_ALL in permissions):
-            raise ValidationError(message=LOSS_USER_CONTROL)
+        if (
+            form._obj
+            and form._obj.id == current_user.id
+            and not (form.view_name in permissions or PERMISSION_ALL in permissions)
+        ):
+            field.data = field.object_data
+            raise StopValidation(message=LOSS_USER_CONTROL)
 
     def on_model_change(self, form, model, is_created):
         if form.is_active.object_data and not form.is_active.data:
-            if db.session.query(User).filter_by(is_active=True).count() <= 1:
+            if self.session.query(User).filter_by(is_active=True).count() <= 1:
                 flash(
                     ZERO_ACTIVE_USER,
                     "error",
@@ -97,5 +119,9 @@ class UserModelView(AdminModelView):
     form_args = {
         "permissions": {
             "validators": [_validate_permissions],
-        }
+            "description": 'У користувача буде доступ лише для обраних розділів. Оберіть "Усі розділи" якщо бажаєте дозволити повний доступ.',
+        },
+        "is_active": {
+            "description": "Якщо вимкнути - користувач не зможе увійти в панель адміністратора.",
+        },
     }
