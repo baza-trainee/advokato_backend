@@ -27,35 +27,75 @@ To run the project, you will need [Docker](https://www.docker.com/) installed. F
     ```
 
 
-6. Create a `.flaskenv` file if it does not already exist and set the necessary environment variables:
+6. Create a `.env` file and set the necessary environment variables:
+
+    <details class="custom-details">
+    <summary><b>API settings</b></summary>
+    <p class="custom-details-description"><i>Variable for configuring API.</i></p>
+
+    <b class="variable-name">FLASK_ENV</b>=<span class="variable-value">development</span><br>
+    <b class="variable-name">FLASK_APP</b>=<span class="variable-value">calendarapi.app:create_app</span><br>
+    <b class="variable-name">SECRET_KEY</b>=<span class="variable-value">the_most_secret_key_in_the_world</span><br>
+    <b class="variable-name">ADMIN_DEFAULT_LOGIN</b>=<span class="variable-value">admin</span><br>
+    <b class="variable-name">ADMIN_DEFAULT_PASSWORD</b>=<span class="variable-value">admin</span><br>
+    <b class="variable-name">MAIN_PAGE_URL</b>=<span class="variable-value">http://yourfrontend.com/main</span><br>
+
+    </details>
+
+    <details class="custom-details">
+    <summary><b>DB settings</b></summary>
+    <p class="custom-details-description"><i>Variables for database and the project configuration.</i></p>
+
+    <b>DATABASE_URI</b>=<span class="variable-value">postgresql://admin:admin@postgres:5432/calendarapi</span><br>
+    </details>
+
+    <details class="custom-details">
+    <summary><b>Docker settings</b></summary>
+    <p class="custom-details-description"><i>Variable for configuring Docker containers.</i></p>
+
+    <b class="variable-name">POSTGRES_DB</b>=<span class="variable-value">calendarapi</span><br>
+    <b class="variable-name">POSTGRES_USER</b>=<span class="variable-value">admin</span><br>
+    <b class="variable-name">POSTGRES_PASSWORD</b>=<span class="variable-value">admin</span>
+    </details>
+
+    <details class="custom-details">
+    <summary><b>Redis and Celery settings</b></summary>
+    <p class="custom-details-description"><i>Variable for configuring Redis and Celery containers.</i></p>
+
+    <b class="variable-name">REDIS_PASS</b>=<span class="variable-value">strong_password123</span><br>
+    <b class="variable-name">REDIS_PORT</b>=<span class="variable-value">1111</span><br>
+    <b class="variable-name">CELERY_BROKER_URL</b>=<span class="variable-value">redis://:$(echo $REDIS_AUTH)@redis:$(echo $REDIS_PORT)</span><br>
+
+    <b class="variable-name">CELERY_RESULT_BACKEND_URL</b>=<span class="variable-value">redis://:$(echo $REDIS_AUTH)@redis:$(echo $REDIS_PORT)</span>
+    </details>
+
+
+    <details class="custom-details">
+    <summary><b>Mail settings</b></summary>
+    <p class="custom-details-description"><i>Variable for configuring Mail service.</i></p>
+
+    <b class="variable-name">MAIL_SERVER</b>=<span class="variable-value">smtp.gmail.com</span><br>
+    <b class="variable-name">MAIL_PORT</b>=<span class="variable-value">587</span><br>
+    <b class="variable-name">MAIL_USERNAME</b>=<span class="variable-value">your_mail@gmail.com</span><br>
+    <b class="variable-name">MAIL_PASSWORD</b>=<span class="variable-value">your_mail_api_key</span>
+    </details>
+
+    <details class="custom-details">
+    <summary><b>Cloudinary settings</b></summary>
+    <p class="custom-details-description"><i>Variable for configuring Cloudinary service.</i></p>
+
+    <b class="variable-name">CLOUD_NAME</b>=<span class="variable-value">yourcloudname</span><br>
+    <b class="variable-name">API_KEY</b>=<span class="variable-value">yourapikey</span><br>
+    <b class="variable-name">API_SECRET</b>=<span class="variable-value">yourapisecret</span><br>
+    </details>
+
+7. Initialize and start the containers:
 
     ```
-    FLASK_ENV=development
-    FLASK_APP=calendarapi.app:create_app
-    SECRET_KEY=changeme
-    DATABASE_URI=postgresql://admin:admin@postgres:5432/calendarapi
-
-    CELERY_BROKER_URL=amqp://guest:guest@rabbitmq
-    CELERY_RESULT_BACKEND_URL=redis://redis
-
-    ```
-7. Create a `.testenv` file if it does not already exist and set the necessary environment variables::
-
-    ```
-    # using in container
-    SECRET_KEY=testing
-    DATABASE_URI=sqlite:///:memory:
-    CELERY_BROKER_URL=amqp://guest:guest@localhost/
-    CELERY_RESULT_BACKEND_URL=amqp://guest:guest@localhost/
-
-    ```
-8. Initialize and start the containers:
-
-    ```
-    make init
+    make prod
     ```
 
-After successfully executing this command, you should have `7 Docker containers` up and running.
+After successfully executing this command, you should have `5 Docker containers` up and running.
 
 Since development is carried out within the container, the migrations folder is also created inside it. Therefore, in case of changes to the database model, it is necessary to run the commands `make db-migrate` and `make db-upgrade`. This will allow performing migrations inside the containers.
 
@@ -72,15 +112,13 @@ To debug the code, you can view the container logs using the command `docker log
 
 - `web` - The Flask application container.
 - `postgres` - The PostgreSQL database container.
-- `pgadmin` - The pgAdmin database management tool container.
-- `rabbitmq` - The RabbitMQ message broker container. 
 - `redis` - The Redis container used for caching and storing the results of asynchronous tasks.
 - `celery` - The Celery task worker container.
 - `flower` - The Flower Celery task monitoring tool container.
 
 
 ## Run locally
-If you need to run the application locally, stop the `web` container, change the database address in the `.flaskenv` file. 
+If you need to run the application locally, stop the `web` container, change the database address in the `.env` file. 
 ```
 DATABASE_URI=postgresql://admin:admin@localhost:5432/calendarapi
 ```
@@ -129,13 +167,13 @@ http://localhost:5555
 
 ## Makefile Commands
 
-- `init`: Project initialization, building, creating the admin user and container startup.
+- `init`: Postgres container initialization, building, creating the admin user and startup.
 - `build:` Builds Docker images.
 - `run`: Starts Docker containers.
-- `dev`: Reload container with applied changes.
 - `db-migrate`: Create migration file inside the container.
 - `db-upgrade`: Apply migrations inside the container.
 - `test`: Run project tests.
 - `lint`: Run the linter to check the code.
 - `tox`: Code linting with subsequent testing.
+- `prod`: Run the project with all containers.
 - `clean`: Clean Python-related files.

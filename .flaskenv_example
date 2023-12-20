@@ -5,13 +5,16 @@ MAIN_PAGE_URL=https://statusac.com.ua
 ADMIN_DEFAULT_LOGIN = admin
 ADMIN_DEFAULT_PASSWORD = admin
 DATABASE_URI=postgresql://admin:admin@localhost:5432/calendarapi
+
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=admin
 POSTGRES_DB=calendarapi
 
+REDIS_PASS=reD1SaRt5
+REDIS_PORT=1234
 
-CELERY_BROKER_URL=amqp://guest:guest@rabbitmq
-CELERY_RESULT_BACKEND_URL=redis://redis
+CELERY_BROKER_URL=redis://:$($REDIS_PASS)@redis:1234
+CELERY_RESULT_BACKEND_URL=redis://:$($REDIS_PASS)@redis:1234
 
 MAIL_SERVER = smtp.gmail.com
 MAIL_PORT = 587

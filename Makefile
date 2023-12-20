@@ -29,7 +29,7 @@ db-upgrade:
 	docker compose exec web flask db upgrade
 
 open-redis:
-	docker exec -it $$(docker compose ps -q redis) redis-cli
+	docker exec -it $$(docker compose ps -q redis) redis-cli -p $$REDIS_PORT
 
 test:
 	docker compose stop celery # stop celery to avoid conflicts with celery tests
