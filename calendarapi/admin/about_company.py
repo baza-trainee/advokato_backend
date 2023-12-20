@@ -1,4 +1,3 @@
-from celery import current_app
 from markupsafe import Markup
 from wtforms.validators import DataRequired
 from wtforms import TextAreaField, FileField
