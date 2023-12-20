@@ -1,4 +1,4 @@
-version: '3'
+version: "3.7"
 
 services:
 
@@ -9,6 +9,8 @@ services:
       - "5432:5432"
     env_file:
       - ./.env
+    volumes:
+      - postgres-data:/data
     environment:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
@@ -27,7 +29,7 @@ services:
   web:
     image: calendarapi
     build: .
-    command: gunicorn -b 0.0.0.0:5000 --reload calendarapi.wsgi:app
+    command: gunicorn --workers 5 --bind=0.0.0.0:5000 --reload --log-level=debug calendarapi.wsgi:app
     env_file:
       - ./.env
     environment:
@@ -35,14 +37,27 @@ services:
       - CELERY_BROKER_URL=$CELERY_BROKER_URL
       - CELERY_RESULT_BACKEND_URL=$CELERY_RESULT_BACKEND_URL
     volumes:
-      - ./calendarapi:/code/calendarapi
+      - main-app-data:/data
     ports:
       - "5000:5000"
     depends_on:
       - postgres
 
   redis:
-    image: redis
+    image: redis:7.2.3
+    container_name: redis
+    restart: on-failure
+    ports:
+      - $REDIS_PORT:$REDIS_PORT
+    expose:
+      - $REDIS_PORT
+    volumes:
+      - redis-data:/data
+    command:
+      - redis-server
+      - --port $REDIS_PORT
+      - --requirepass $REDIS_PASS
+      - --maxmemory 150mb
 
   celery:
     image: calendarapi
@@ -50,7 +65,7 @@ services:
     env_file:
       - ./.env
     volumes:
-      - .:/code
+      - celery-data:/data
     depends_on:
       - redis
     environment:
@@ -62,7 +77,16 @@ services:
     env_file:
       - ./.env
     command: "celery --broker=$CELERY_BROKER_URL flower  --persistent=True --basic_auth=$ADMIN_DEFAULT_LOGIN:$ADMIN_DEFAULT_PASSWORD"
+    volumes:
+      - flower-data:/data
     ports:
       - "5555:5555"
     depends_on:
       - redis
+
+volumes:
+  postgres-data:
+  main-app-data:
+  celery-data:
+  flower-data:
+  redis-data:
