@@ -4,8 +4,11 @@ from wtforms import TextAreaField, FileField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
 from calendarapi.admin.commons.validators import ImageValidator
-from calendarapi.commons.exeptions import DATA_REQUIRED
+from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_HTML_M, REQ_MAX_LEN
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
+
+SPECIALIZATION_DESCRIPTION_FULL_INFO = """Доповнення до опису. Відображається при натисканні на кнопку "Детальніше" 
+при перегляді практик."""
 
 
 class SpecializationModelView(AdminModelView):
@@ -41,7 +44,7 @@ class SpecializationModelView(AdminModelView):
         "specialization_photo",
     ]
     column_descriptions = {
-        "specialization_description_full": """Доповнення до опису. Відображається при натисканні на кнопку "Детальніше" при перегляді практик."""
+        "specialization_description_full": SPECIALIZATION_DESCRIPTION_FULL_INFO
     }
 
     column_formatters = {
@@ -52,18 +55,25 @@ class SpecializationModelView(AdminModelView):
     form_extra_fields = {
         "specialization_photo": FileField(
             label="Виберіть фото для спеціалізації",
-            validators=[DataRequired(message=DATA_REQUIRED), ImageValidator()],
+            validators=[ImageValidator()],
         ),
         "specialization_description": TextAreaField(
             label="Опис",
-            render_kw={"class": "form-control", "rows": 5},
+            render_kw={"class": "form-control", "rows": 5, "maxlength": 1000},
             validators=[DataRequired(message=DATA_REQUIRED)],
+            description=f"{REQ_MAX_LEN % 1000} {REQ_HTML_M}",
         ),
         "specialization_description_full": TextAreaField(
             label="Детальніше",
-            render_kw={"class": "form-control", "rows": 5},
+            render_kw={"class": "form-control", "rows": 5, "maxlength": 3000},
             validators=[DataRequired(message=DATA_REQUIRED)],
+            description=f"{SPECIALIZATION_DESCRIPTION_FULL_INFO} {REQ_MAX_LEN % 3000} {REQ_HTML_M}",
         ),
+    }
+    form_args = {
+        "specialization_name": {
+            "description": f"{REQ_MAX_LEN % 255}",
+        },
     }
 
     def on_model_delete(self, model):

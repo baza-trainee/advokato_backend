@@ -1,17 +1,20 @@
 from markupsafe import Markup
 from wtforms import StringField, ValidationError
+
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import format_as_markup
+from calendarapi.commons.exeptions import IVNALID_COORDS, REQ_MAX_LEN
+
+ADDRESS_INFO = "Адреси відображатимуться на сайті, в розділі 'контакти'."
+COORDS_INFO = "Необхідні для відображення міток на карті"
 
 
 def validate_float(form, field):
     try:
         field.data = field.data.strip().replace(",", ".")
         float(field.data)
-    except Exception as exc:
-        raise ValidationError(
-            "Невірний формат для координат. Приймаються лише дробові та цілі числа."
-        )
+    except Exception:
+        raise ValidationError(message=IVNALID_COORDS)
 
 
 def format_coords(view, context, model, name):
@@ -26,7 +29,7 @@ def format_coords(view, context, model, name):
 
 class CityModelView(AdminModelView):
     form_excluded_columns = ["lawyers"]
-
+    column_sortable_list = []
     column_default_sort = [
         ("id", False),
     ]
@@ -47,13 +50,24 @@ class CityModelView(AdminModelView):
         "address": format_as_markup,
         "coordinates": format_coords,
     }
-    form_extra_fields = {
-        "latitude": StringField("Координати (Широта)", validators=[validate_float]),
-        "longitude": StringField("Координати (Довгота)", validators=[validate_float]),
+    column_descriptions = {
+        "address": ADDRESS_INFO,
+        "coordinates": COORDS_INFO,
     }
 
-    column_sortable_list = []
-
-    column_descriptions = {
-        "address": "Адреси відображатимуться на сайті, в розділі 'контакти'.",
+    form_extra_fields = {
+        "latitude": StringField(
+            "Координати (Широта)", validators=[validate_float], description=COORDS_INFO
+        ),
+        "longitude": StringField(
+            "Координати (Довгота)", validators=[validate_float], description=COORDS_INFO
+        ),
+    }
+    form_args = {
+        "city_name": {
+            "description": REQ_MAX_LEN % 100,
+        },
+        "address": {
+            "description": f"{ADDRESS_INFO} {REQ_MAX_LEN % 200}",
+        },
     }

@@ -11,9 +11,8 @@ from calendarapi.extensions import db, mail
 from calendarapi.models import User, UserSecurity
 from calendarapi.models.user_permissions import Permission
 from calendarapi.commons.exeptions import (
-    BAD_EQUAL_PASSWORD,
-    BAD_LOGIN,
-    BAD_PASSWORD,
+    INVALID_EQUAL_PASSWORD,
+    BAD_LOGIN_DATA,
     DATA_REQUIRED,
     EXPIRED_TOKEN,
     NOT_FOUND_TOKEN,
@@ -60,11 +59,8 @@ class LoginForm(form.Form):
     def validate_login(self, field):
         user = self.get_user()
 
-        if user is None:
-            raise validators.ValidationError(message=BAD_LOGIN)
-        # we're comparing hashes
-        if not user.password == user.hash_password(self.password.data):
-            raise validators.ValidationError(message=BAD_PASSWORD)
+        if user is None or not user.password == user.hash_password(self.password.data):
+            raise validators.ValidationError(message=BAD_LOGIN_DATA)
 
         if not user.is_active:
             raise validators.ValidationError(message=USER_IS_NOT_ADMIN)
@@ -206,7 +202,7 @@ class CustomAdminIndexView(AdminIndexView):
                 else:
                     flash(NOT_FOUND_TOKEN, "error")
             else:
-                flash(BAD_EQUAL_PASSWORD, "error")
+                flash(INVALID_EQUAL_PASSWORD, "error")
                 return redirect(request.url)
         else:
             token = request.args.get("token", default=None)
