@@ -1,6 +1,8 @@
 from datetime import datetime
 
 from calendarapi.admin.base_admin import AdminModelView
+from calendarapi.models import Visitor
+from calendarapi.extensions import db
 
 
 class AppointmentModelView(AdminModelView):
@@ -34,6 +36,9 @@ class AppointmentModelView(AdminModelView):
     ]
 
     column_formatters = {
+        "visitor": lambda view, context, model, name: db.session.query(Visitor)
+        .filter(Visitor.id == model.visitor_id)
+        .one_or_none(),
         "time": lambda view, context, model, name: [
             item.strftime("%H:%M") for item in model.time
         ]
@@ -47,6 +52,6 @@ class AppointmentModelView(AdminModelView):
     column_searchable_list = [
         "specialization",
         "lawyer",
-        "visitor",
+        "visitor_id",
         "appointment_date",
     ]

@@ -63,7 +63,7 @@ class FeedbackResource(Resource):
                 visitor_name=data.get("name", "Не вказано"),
                 visitor_email=data.get("email", "Не вказана"),
                 visitor_phone_number=data.get("phone_number"),
-                message=data.get("message", "Без повідомлення"),
+                message=data.get("message"),
             )
         except SMTPException as e:
             return {"error": f"Email sending error: {str(e)}"}, 500

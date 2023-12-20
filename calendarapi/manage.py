@@ -62,7 +62,6 @@ def init():
                 email="admin@gmail.com",
                 password=current_app.config["ADMIN_DEFAULT_PASSWORD"],
                 is_active=True,
-                is_superuser=True,
             )
             db.session.add(user)
             db.session.flush()

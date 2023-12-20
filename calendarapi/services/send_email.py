@@ -30,7 +30,7 @@ def send_email(
             ],
         )
         lawyer_email_msg.body = (
-            f"Повідомлення:\n{message}.\n\n"
+            f"Повідомлення:\n{message if message is not None else 'Передзвоніть мені, будь ласка.'}.\n\n"
             f"Мій номер телефону: {visitor_phone_number}\n"
             f"Моя пошта: {visitor_email}"
         )
@@ -68,9 +68,12 @@ def send_email(
             recipients=[visitor_email],
         )
         reminder_message.body = (
-            f"Вітаю {visitor_name}!.\n"
+            f"Вітаємо, {visitor_name}!\n\n"
             f"Нагадуємо Вам, що Ви залишали заявку на отримання консультації за темою: {specialization_name}.\n"
-            f"Зустріч заплановано на {appointment_date} о {appointment_time} годині."
+            f"Зустріч заплановано на сьогодні ({appointment_date}) о {appointment_time} годині.\n\n"
+            "Будь ласка, приходьте вчасно та з усіма необхідними документами.\n"
+            "Якщо у вас виникнуть питання або необхідна додаткова інформація, будь ласка, зв'яжіться з нами.\n\n"
+            "З повагою, адвокатська компанія «STATUS»."
         )
         if visitor_email:
             mail.send(reminder_message)

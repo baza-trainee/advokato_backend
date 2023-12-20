@@ -53,6 +53,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 CELERY = {
     "broker_url": os.getenv("CELERY_BROKER_URL"),
     "result_backend": os.getenv("CELERY_RESULT_BACKEND_URL"),
+    "result_expires": 3600*24*2,
     "broker_connection_retry_on_startup": True,
 }
 

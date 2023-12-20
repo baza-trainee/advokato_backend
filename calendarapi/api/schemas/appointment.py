@@ -20,7 +20,7 @@ class AppointmentSchema(fm.SQLAlchemyAutoSchema):
         model = Appointment
         exclude = [
             "id",
-            "visitor",
+            "visitor_id",
         ]
         include_fk = True
         load_instance = True
