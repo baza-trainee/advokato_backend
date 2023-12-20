@@ -14,7 +14,6 @@ class User(db.Model, UserMixin):
     _password = db.Column("password", db.String(1024), nullable=False)
     description = db.Column(db.String(2000), nullable=True)
     is_active = db.Column(db.Boolean, default=True)
-    is_superuser = db.Column(db.Boolean, default=False)
 
     permissions = db.relationship(
         "Permission",

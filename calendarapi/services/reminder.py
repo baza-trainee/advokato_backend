@@ -1,9 +1,9 @@
 # from datetime import datetime
 # from typing import List
 
-# from calendarapi.models import Appointment, Visitor, Lawyer, Specialization
+# from calendarapi.models import Appointment, Visitor
 # from calendarapi.services.send_email import send_email
-# from calendarapi.extensions import celery
+# from calendarapi.extensions import celery, db
 
 
 # @celery.task()
@@ -11,29 +11,33 @@
 #     today = datetime.utcnow().date()
 
 #     try:
-#         appointments: List[Appointment] = Appointment.query.filter(
-#             Appointment.appointment_date == today
-#         ).all()
+#         appointments = (
+#             db.session.query(
+#                 Appointment.specialization,
+#                 Appointment.appointment_date,
+#                 Appointment.appointment_time,
+#                 Appointment.lawyer,
+#                 Visitor.name,
+#                 Visitor.email,
+#             )
+#             .join(Visitor)
+#             .filter(Appointment.appointment_date == today, Visitor.email.isnot(None))
+#             .all()
+#         )
 #     except Exception as e:
 #         return f"Виникла помилка при отриманні даних з БД. {e}"
 
 #     if not appointments:
-#         return "Записів на сьогодні не заплановано."
+#         return "Записів на сьогодні не заплановано, або відсутні пошти для розсилки."
 
 #     for appointment in appointments:
-#         visitor: Visitor = Visitor.query.get(appointment.visitor_id)
-#         lawyer: Lawyer = Lawyer.query.get(appointment.lawyer_id)
-#         specialization: Specialization = Specialization.query.get(
-#             appointment.specialization_id
+#         send_email.delay(
+#             reminder=True,
+#             visitor_name=appointment.name,
+#             visitor_email=appointment.email,
+#             specialization_name=appointment.specialization,
+#             appointment_date=appointment.appointment_date,
+#             appointment_time=str(appointment.appointment_time)[:-3],
+#             lawyer_name=appointment.lawyer,
 #         )
-#         if all([visitor, lawyer, specialization]):
-#             send_email.delay(
-#                 reminder=True,
-#                 visitor_name=visitor.name,
-#                 visitor_email=visitor.email,
-#                 specialization_name=specialization.specialization_name,
-#                 appointment_date=appointment.appointment_date,
-#                 appointment_time=str(appointment.appointment_time)[:-3],
-#                 lawyer_name=lawyer.name,
-#             )
 #     return "Листи з нагадуваннями надіслано."
