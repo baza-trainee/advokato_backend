@@ -4,12 +4,17 @@ from wtforms import BooleanField, TextAreaField, FileField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
 from calendarapi.admin.commons.validators import ImageValidator
-from calendarapi.commons.exeptions import REQ_HTML_M, REQ_IMAGE, REQ_MAX_LEN
+from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_HTML_M, REQ_IMAGE, REQ_MAX_LEN
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
+from calendarapi.models import OurTeam
+
 
 PHOTO_PATH_INFO = 'Фото для сторінки "Наша команда".'
 SLIDER_PHOTO_PATH_INFO = """Фото для слайдеру на головній сторінці. Якщо залишити це поле пустим,
 відповідний спеціаліст не відображатиметься у слайдері."""
+NAME_LEN = OurTeam.name.type.length
+POSITION_LEN = OurTeam.position.type.length
+DESCRIPTION_LEN = OurTeam.description.type.length
 
 
 class OurTeamModelView(AdminModelView):
@@ -69,18 +74,18 @@ class OurTeamModelView(AdminModelView):
         ),
         "description": TextAreaField(
             label="Опис",
-            validators=[DataRequired(message="Це поле обов'язкове.")],
-            render_kw={"class": "form-control", "rows": 5, "maxlength": 3000},
-            description=f"{REQ_MAX_LEN % 3000} {REQ_HTML_M}",
+            validators=[DataRequired(message=DATA_REQUIRED)],
+            render_kw={"class": "form-control", "rows": 5, "maxlength": DESCRIPTION_LEN},
+            description=f"{REQ_MAX_LEN % DESCRIPTION_LEN} {REQ_HTML_M}",
         ),
         "delete_slider_photo": BooleanField("Видалити фото зі слайдеру"),
     }
     form_args = {
         "name": {
-            "description": REQ_MAX_LEN % 100,
+            "description": REQ_MAX_LEN % NAME_LEN,
         },
         "position": {
-            "description": REQ_MAX_LEN % 100,
+            "description": REQ_MAX_LEN % POSITION_LEN,
         },
     }
 
