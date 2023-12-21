@@ -280,6 +280,7 @@ body::before {
 /* Table styles */
 div[class="daterangepicker dropdown-menu single opensright show-calendar"] {
   top: 80px !important;
+  left: 50% !important;
 }
 div[class="calendar-date"] table[class="table-condensed"] tr th{
   font-size: 14px;
@@ -288,7 +289,10 @@ div[class="calendar-date"] table[class="table-condensed"] tr:hover td:first-chil
   background-color: rgba(255, 255, 255, 0.4);
   color: black;
 }
-
+div[class="calendar-date"] table[class="table-condensed"] td:hover{
+  background-color: green;
+  color: white;
+}
 div[class="range_inputs"] .btn-secondary {
   border: 1px solid darkred !important;
   border-radius: 0.2rem !important;

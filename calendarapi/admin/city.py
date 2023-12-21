@@ -1,9 +1,10 @@
 from markupsafe import Markup
 from wtforms import StringField, ValidationError
+from wtforms.validators import DataRequired
 
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import format_as_markup
-from calendarapi.commons.exeptions import IVNALID_COORDS, REQ_MAX_LEN
+from calendarapi.commons.exeptions import IVNALID_COORDS, REQ_MAX_LEN, DATA_REQUIRED
 
 ADDRESS_INFO = "Адреси відображатимуться на сайті, в розділі 'контакти'."
 COORDS_INFO = "Необхідні для відображення міток на карті"
@@ -57,10 +58,14 @@ class CityModelView(AdminModelView):
 
     form_extra_fields = {
         "latitude": StringField(
-            "Координати (Широта)", validators=[validate_float], description=COORDS_INFO
+            "Координати (Широта)",
+            validators=[DataRequired(message=DATA_REQUIRED), validate_float],
+            description=COORDS_INFO,
         ),
         "longitude": StringField(
-            "Координати (Довгота)", validators=[validate_float], description=COORDS_INFO
+            "Координати (Довгота)",
+            validators=[DataRequired(message=DATA_REQUIRED), validate_float],
+            description=COORDS_INFO,
         ),
     }
     form_args = {
