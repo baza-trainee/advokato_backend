@@ -17,6 +17,7 @@ BABEL_DEFAULT_LOCALE = "uk_UA"
 
 STORAGE = "CLOUDINARY"  # "STATIC" or "CLOUDINARY"
 MEDIA_PATH = os.path.join("calendarapi", "static", "media")
+ADMIN_CDN_URL = None  # caching static files
 
 IMAGE_SIZE = 30
 IMAGE_FORMATS = [
@@ -55,7 +56,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 CELERY = {
     "broker_url": os.getenv("CELERY_BROKER_URL"),
     "result_backend": os.getenv("CELERY_RESULT_BACKEND_URL"),
-    "result_expires": 3600*24*2,
+    "result_expires": 3600 * 24 * 2,
     "broker_connection_retry_on_startup": True,
 }
 

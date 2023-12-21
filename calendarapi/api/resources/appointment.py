@@ -104,7 +104,9 @@ class AppointmentResource(Resource):
             return {"message": "Time not available for this lawyer"}, 400
 
         try:
-            appointment = Appointment(visitor_id=existing_visitor.id, **appointment_data)
+            appointment = Appointment(
+                visitor_id=existing_visitor.id, **appointment_data
+            )
             db.session.add(appointment)
             lawyer_schedule.time = [str(t) for t in lawyer_schedule.time]
             lawyer_schedule.time.remove(

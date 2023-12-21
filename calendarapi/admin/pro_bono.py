@@ -6,7 +6,7 @@ from wtforms import TextAreaField, FileField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
 from calendarapi.admin.commons.validators import ImageValidator
-from calendarapi.commons.exeptions import DATA_REQUIRED
+from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_IMAGE
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 
 
@@ -17,17 +17,10 @@ class ProBonoModelView(AdminModelView):
         "description": "Опис",
     }
 
-    column_list = [
-        "photo_path",
-        "description",
-    ]
     form_columns = [
         "description",
         "photo_path",
     ]
-    column_descriptions = {
-        "description": """Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д., для покращення зручності читання."""
-    }
 
     column_formatters = {
         "photo_path": ThumbnailFormatter(),
@@ -38,13 +31,23 @@ class ProBonoModelView(AdminModelView):
         "photo_path": FileField(
             label="Виберіть фото партнера",
             validators=[ImageValidator()],
+            description=REQ_IMAGE,
         ),
         "description": TextAreaField(
             label="Опис",
-            render_kw={"class": "form-control", "rows": 5},
+            render_kw={"class": "form-control", "rows": 5, "maxlength": 3000},
             validators=[DataRequired(message=DATA_REQUIRED)],
         ),
     }
+
+    # form_args = {
+    #     "name": {
+    #         "description": REQ_MAX_LEN % 100,
+    #     },
+    #     "position": {
+    #         "description": REQ_MAX_LEN % 100,
+    #     },
+    # }
 
     def on_model_delete(self, model):
         custom_delete_file(model, field_name="photo_path")

@@ -3,6 +3,8 @@ from wtforms.validators import DataRequired
 from wtforms import TextAreaField, FileField
 
 from calendarapi.admin.base_admin import AdminModelView
+from calendarapi.commons.utils import custom_update_file
+from calendarapi.models.about_company import AboutCompany
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
 from calendarapi.admin.commons.validators import ImageValidator
 from calendarapi.commons.exeptions import (
@@ -11,10 +13,11 @@ from calendarapi.commons.exeptions import (
     REQ_IMAGE,
     REQ_MAX_LEN,
 )
-from calendarapi.commons.utils import custom_update_file
 
 MAIN_PAGE_INFO = "Відображається на головній сторінці під блоком Hero."
 OUR_TEAM_PAGE_INFO = 'Відображається на сторінці "Про компанію".'
+MAIN_PAGE_DESCRIPTION_LEN = AboutCompany.main_page_description.type.length
+OUR_TEAM_PAGE_DESCRIPTION_LEN = AboutCompany.our_team_page_description.type.length
 
 
 class AboutCompanyModelView(AdminModelView):
@@ -66,16 +69,24 @@ class AboutCompanyModelView(AdminModelView):
         ),
         "main_page_description": TextAreaField(
             label="Короткий опис для головної сторінки. ",
-            render_kw={"class": "form-control", "rows": 5, "maxlength": 500},
+            render_kw={
+                "class": "form-control",
+                "rows": 5,
+                "maxlength": MAIN_PAGE_DESCRIPTION_LEN,
+            },
             validators=[DataRequired(message=DATA_REQUIRED)],
-            description=f"{MAIN_PAGE_INFO} {REQ_MAX_LEN % 500}",
+            description=f"{MAIN_PAGE_INFO} {REQ_MAX_LEN % MAIN_PAGE_DESCRIPTION_LEN}",
         ),
         "our_team_page_description": TextAreaField(
             'Опис для сторінки "Наша компанія".',
-            render_kw={"class": "form-control", "rows": 5, "maxlength": 3000},
+            render_kw={
+                "class": "form-control",
+                "rows": 5,
+                "maxlength": OUR_TEAM_PAGE_DESCRIPTION_LEN,
+            },
             validators=[DataRequired(message=DATA_REQUIRED)],
             description=Markup(
-                f"{OUR_TEAM_PAGE_INFO} {REQ_MAX_LEN % 3000} {REQ_HTML_M}"
+                f"{OUR_TEAM_PAGE_INFO} {REQ_MAX_LEN % OUR_TEAM_PAGE_DESCRIPTION_LEN} {REQ_HTML_M}"
             ),
         ),
     }
