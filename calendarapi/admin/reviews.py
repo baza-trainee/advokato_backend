@@ -4,8 +4,13 @@ from wtforms import TextAreaField, FileField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
 from calendarapi.admin.commons.validators import ImageValidator
-from calendarapi.commons.exeptions import DATA_REQUIRED
+from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_IMAGE, REQ_MAX_LEN
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
+from calendarapi.models.reviews import Reviews
+
+NAME_LEN = Reviews.name.type.length
+POSITION_LEN = Reviews.position.type.length
+DESCRIPTION_LEN = Reviews.description.type.length
 
 
 class ReviewsModelView(AdminModelView):
@@ -27,9 +32,6 @@ class ReviewsModelView(AdminModelView):
     column_default_sort = [
         ("id", False),
     ]
-    column_descriptions = {
-        "description": """Ви можете використовувати HTML-теги, щоб зробити абзац, створити список і т. д., для покращення зручності читання."""
-    }
     column_list = [
         "photo_path",
         "name",
@@ -40,18 +42,23 @@ class ReviewsModelView(AdminModelView):
 
     column_formatters = {
         "photo_path": ThumbnailFormatter(width=80),
-        "description": format_as_markup,
     }
 
     form_extra_fields = {
         "photo_path": FileField(
             label="Виберіть фото для відгуку",
             validators=[ImageValidator()],
+            description=REQ_IMAGE,
         ),
         "description": TextAreaField(
             label="Опис",
-            render_kw={"class": "form-control", "rows": 5},
+            render_kw={
+                "class": "form-control",
+                "rows": 5,
+                "maxlength": DESCRIPTION_LEN,
+            },
             validators=[DataRequired(message=DATA_REQUIRED)],
+            description=REQ_MAX_LEN % DESCRIPTION_LEN,
         ),
     }
 
@@ -59,6 +66,8 @@ class ReviewsModelView(AdminModelView):
         "created_at": {
             "validators": [DataRequired(message=DATA_REQUIRED)],
         },
+        "name": {"description": REQ_MAX_LEN % NAME_LEN},
+        "position": {"description": REQ_MAX_LEN % POSITION_LEN},
     }
 
     def on_model_delete(self, model):
