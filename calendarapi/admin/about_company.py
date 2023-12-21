@@ -19,6 +19,7 @@ OUR_TEAM_PAGE_INFO = 'Відображається на сторінці "Про
 MAIN_PAGE_DESCRIPTION_LEN = AboutCompany.main_page_description.type.length
 OUR_TEAM_PAGE_DESCRIPTION_LEN = AboutCompany.our_team_page_description.type.length
 
+
 class AboutCompanyModelView(AdminModelView):
     can_set_page_size = True
     can_create = False
@@ -68,13 +69,21 @@ class AboutCompanyModelView(AdminModelView):
         ),
         "main_page_description": TextAreaField(
             label="Короткий опис для головної сторінки. ",
-            render_kw={"class": "form-control", "rows": 5, "maxlength": MAIN_PAGE_DESCRIPTION_LEN},
+            render_kw={
+                "class": "form-control",
+                "rows": 5,
+                "maxlength": MAIN_PAGE_DESCRIPTION_LEN,
+            },
             validators=[DataRequired(message=DATA_REQUIRED)],
             description=f"{MAIN_PAGE_INFO} {REQ_MAX_LEN % MAIN_PAGE_DESCRIPTION_LEN}",
         ),
         "our_team_page_description": TextAreaField(
             'Опис для сторінки "Наша компанія".',
-            render_kw={"class": "form-control", "rows": 5, "maxlength": OUR_TEAM_PAGE_DESCRIPTION_LEN},
+            render_kw={
+                "class": "form-control",
+                "rows": 5,
+                "maxlength": OUR_TEAM_PAGE_DESCRIPTION_LEN,
+            },
             validators=[DataRequired(message=DATA_REQUIRED)],
             description=Markup(
                 f"{OUR_TEAM_PAGE_INFO} {REQ_MAX_LEN % OUR_TEAM_PAGE_DESCRIPTION_LEN} {REQ_HTML_M}"

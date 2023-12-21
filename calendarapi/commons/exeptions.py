@@ -28,9 +28,7 @@ INVALID_EQUAL_PASSWORD = "Паролі повинні співпадати"
 BAD_LOGIN_DATA = "Невірний логін або пароль"
 
 # CONTACTS
-IVNALID_COORDS = (
-    "Невірний формат для координат. Приймаються лише числа."
-)
+IVNALID_COORDS = "Невірний формат для координат. Приймаються лише числа."
 
 # Admin USERS
 EXPIRED_TOKEN = "Недійсний token"
