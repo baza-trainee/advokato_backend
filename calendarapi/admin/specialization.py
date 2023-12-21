@@ -6,9 +6,16 @@ from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_m
 from calendarapi.admin.commons.validators import ImageValidator
 from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_HTML_M, REQ_MAX_LEN
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
+from calendarapi.models import Specialization
+
 
 SPECIALIZATION_DESCRIPTION_FULL_INFO = """Доповнення до опису. Відображається при натисканні на кнопку "Детальніше" 
 при перегляді практик."""
+SPECIALIZATION_NAME_LEN = Specialization.specialization_name.type.length
+SPECIALIZATION_DESCRIPTION_LEN = Specialization.specialization_description.type.length
+SPECIALIZATION_DESCRIPTION_FULL_LEN = (
+    Specialization.specialization_description_full.type.length
+)
 
 
 class SpecializationModelView(AdminModelView):
@@ -33,7 +40,7 @@ class SpecializationModelView(AdminModelView):
 
     form_args = {
         "specialization_name": {
-            "validators": [DataRequired(message="Це поле обов'язкове.")],
+            "validators": [DataRequired(message=DATA_REQUIRED)],
         }
     }
 
@@ -59,20 +66,28 @@ class SpecializationModelView(AdminModelView):
         ),
         "specialization_description": TextAreaField(
             label="Опис",
-            render_kw={"class": "form-control", "rows": 5, "maxlength": 1000},
+            render_kw={
+                "class": "form-control",
+                "rows": 5,
+                "maxlength": SPECIALIZATION_DESCRIPTION_LEN,
+            },
             validators=[DataRequired(message=DATA_REQUIRED)],
-            description=f"{REQ_MAX_LEN % 1000} {REQ_HTML_M}",
+            description=f"{REQ_MAX_LEN % SPECIALIZATION_DESCRIPTION_LEN} {REQ_HTML_M}",
         ),
         "specialization_description_full": TextAreaField(
             label="Детальніше",
-            render_kw={"class": "form-control", "rows": 5, "maxlength": 3000},
+            render_kw={
+                "class": "form-control",
+                "rows": 5,
+                "maxlength": SPECIALIZATION_DESCRIPTION_FULL_LEN,
+            },
             validators=[DataRequired(message=DATA_REQUIRED)],
-            description=f"{SPECIALIZATION_DESCRIPTION_FULL_INFO} {REQ_MAX_LEN % 3000} {REQ_HTML_M}",
+            description=f"{SPECIALIZATION_DESCRIPTION_FULL_INFO} {REQ_MAX_LEN % SPECIALIZATION_DESCRIPTION_FULL_LEN} {REQ_HTML_M}",
         ),
     }
     form_args = {
         "specialization_name": {
-            "description": f"{REQ_MAX_LEN % 255}",
+            "description": f"{REQ_MAX_LEN % SPECIALIZATION_NAME_LEN}",
         },
     }
 

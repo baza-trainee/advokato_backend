@@ -6,10 +6,15 @@ from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_m
 from calendarapi.admin.commons.validators import ImageValidator
 from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_MAX_LEN
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
+from calendarapi.models import Possibilities
+
 
 DESCRIPTION_INFO = "Відображається зліва або справа від фото."
 TITLE_INFO = "Заголовок під фото."
 SHORT_TEXT_INFO = "Текст який буде під заголовком, накладений на фото."
+TITLE_LEN = Possibilities.title.type.length
+SHORT_TEXT_LEN = Possibilities.short_text.type.length
+DESCRIPTION_LEN = Possibilities.description.type.length
 
 
 class PossibilitiesModelView(AdminModelView):
@@ -53,17 +58,17 @@ class PossibilitiesModelView(AdminModelView):
         ),
         "description": TextAreaField(
             label="Опис",
-            render_kw={"class": "form-control", "rows": 5, "maxlength": 500},
+            render_kw={"class": "form-control", "rows": 5, "maxlength": DESCRIPTION_LEN},
             validators=[DataRequired(message=DATA_REQUIRED)],
-            description=f"{DESCRIPTION_INFO} {REQ_MAX_LEN % 500}",
+            description=f"{DESCRIPTION_INFO} {REQ_MAX_LEN % DESCRIPTION_LEN}",
         ),
     }
     form_args = {
         "title": {
-            "description": f"{TITLE_INFO} {REQ_MAX_LEN % 100}",
+            "description": f"{TITLE_INFO} {REQ_MAX_LEN % TITLE_LEN}",
         },
         "short_text": {
-            "description": f"{SHORT_TEXT_INFO} {REQ_MAX_LEN % 300}",
+            "description": f"{SHORT_TEXT_INFO} {REQ_MAX_LEN % SHORT_TEXT_LEN}",
         },
     }
 

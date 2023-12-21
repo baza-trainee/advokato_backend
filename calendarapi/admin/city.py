@@ -5,9 +5,12 @@ from wtforms.validators import DataRequired
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import format_as_markup
 from calendarapi.commons.exeptions import IVNALID_COORDS, REQ_MAX_LEN, DATA_REQUIRED
+from calendarapi.models import City
 
 ADDRESS_INFO = "Адреси відображатимуться на сайті, в розділі 'контакти'."
 COORDS_INFO = "Необхідні для відображення міток на карті"
+CITY_NAME_LEN = City.city_name.type.length
+CITY_ADDRESS_LEN = City.address.type.length
 
 
 def validate_float(form, field):
@@ -70,9 +73,9 @@ class CityModelView(AdminModelView):
     }
     form_args = {
         "city_name": {
-            "description": REQ_MAX_LEN % 100,
+            "description": REQ_MAX_LEN % CITY_NAME_LEN,
         },
         "address": {
-            "description": f"{ADDRESS_INFO} {REQ_MAX_LEN % 200}",
+            "description": f"{ADDRESS_INFO} {REQ_MAX_LEN % CITY_ADDRESS_LEN}",
         },
     }
