@@ -295,7 +295,6 @@ class ScheduleModelView(AdminModelView):
         "lawyers",
         "date",
     ]
-
     column_searchable_list = [
         "lawyers.name",
         "date",
@@ -346,7 +345,8 @@ class ScheduleModelView(AdminModelView):
                 DataRequired(message="Це поле обов'язкове."),
                 validate_lawyers,
             ],
-            "description": "При створенні нового запису можна обрати декілька спеціалістів та розклад складеться для кожного з них. При редагуванні можна обирати лише 1.",
+            "description": """При створенні нового запису можна обрати декілька спеціалістів та розклад складеться
+для кожного з них. При редагуванні можна обрати лише 1.""",
         },
         "time": {
             "validators": [
@@ -354,15 +354,12 @@ class ScheduleModelView(AdminModelView):
                 validate_time_format,
             ],
             "description": Markup(
-                "Можна додавати кілька значень розділяючи їх пробілом у наступному вигляді:<br>"
-                + "<ul><li><b>HH:MM</b> приклад: 14:45</li><li><b>HH</b> приклад: 18</li>"
-                + "<li><b>start_HH-end_HH</b> приклад: 12-20 (кожну годину включаючи 12:00 та 20:00)</li>"
+                """Можна додавати декілька значень розділяючи їх пробілом у наступному вигляді:
+<br><ul><li><b>HH:MM</b> приклад: 14:45</li><li><b>HH</b> приклад: 18</li><li><b>start_HH-end_HH</b> приклад: 
+12-20 (кожну годину включаючи 12:00 та 20:00)</li>"""
             ),
         },
     }
-    # column_filters = [
-    #     "date",
-    # ]
 
     def on_model_change(self, form, model, is_created):
         model.lawyer_id = model.lawyers[0].id

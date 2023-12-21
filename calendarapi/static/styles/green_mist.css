@@ -279,8 +279,7 @@ body::before {
 
 /* Table styles */
 div[class="daterangepicker dropdown-menu single opensright show-calendar"] {
-  top: 80px !important;
-  left: 50% !important;
+  left: 40% !important;
 }
 div[class="calendar-date"] table[class="table-condensed"] tr th{
   font-size: 14px;
@@ -935,5 +934,11 @@ td[class="col-created_at"] {
 /* POSSIBILITIES */
 td[class="col-short_text"],
 td[class="col-description"] {
+  text-align: left;
+}
+
+/* HERO */
+td[class="col-left_text"],
+td[class="col-right_text"] {
   text-align: left;
 }

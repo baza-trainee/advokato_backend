@@ -13,9 +13,13 @@ from calendarapi.commons.exeptions import (
     INVALID_EMAIL,
     LOSS_USER_CONTROL,
     DELETE_CURRENT_USER,
+    REQ_MAX_LEN,
     REQ_PASSWORD,
     ZERO_ACTIVE_USER,
 )
+
+USERNAME_LEN = User.username.type.length
+DESCRIPTION_LEN = User.description.type.length
 
 
 class UserModelView(AdminModelView):
@@ -124,4 +128,6 @@ class UserModelView(AdminModelView):
         "is_active": {
             "description": "Якщо вимкнути - користувач не зможе увійти в панель адміністратора.",
         },
+        "username": {"description": REQ_MAX_LEN % USERNAME_LEN},
+        "description": {"description": REQ_MAX_LEN % USERNAME_LEN},
     }
