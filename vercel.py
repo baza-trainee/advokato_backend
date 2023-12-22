@@ -56,11 +56,10 @@ html_template = (
 <body>
     <div class="container">
         <h1>Hello from Flask@{__version__} app</h1>
-        <h3>Let's started?</h3>
+        <h3>Let's start?</h3>
         <hr>
         <ul>
             <li><h2><a href="/swagger-ui">/swagger-ui</a></h2></li>
-            <li><h2><a href="/redoc-ui">/redoc-ui</a></h2></li>
             <li><h2><a href="/admin">/admin</a></h2></li>
         <hr>
         </ul>

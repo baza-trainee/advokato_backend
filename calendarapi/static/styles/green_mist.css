@@ -889,13 +889,17 @@ ol {
 
 p {
   text-indent: 30px;
-  margin: 0 0 5px;
+  margin: 0 0 2px;
 }
 
 .city_coord_name,
 .city_coord_value {
   padding-left: 5px;
   padding-right: 5px;
+}
+.city_coordinates {
+  flex: 1;
+  text-align: left;
 }
 
 /* format columns in sections */

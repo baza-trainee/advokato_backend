@@ -61,7 +61,11 @@ class NewsModelView(AdminModelView):
         ),
         "description": TextAreaField(
             label="Опис",
-            render_kw={"class": "form-control", "rows": 5, "maxlength": DESCRIPTION_LEN},
+            render_kw={
+                "class": "form-control",
+                "rows": 5,
+                "maxlength": DESCRIPTION_LEN,
+            },
             validators=[DataRequired(message=DATA_REQUIRED)],
             description=f"{REQ_MAX_LEN % DESCRIPTION_LEN} {REQ_HTML_M}",
         ),

@@ -4,7 +4,12 @@ from wtforms import BooleanField, TextAreaField, FileField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
 from calendarapi.admin.commons.validators import ImageValidator
-from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_HTML_M, REQ_IMAGE, REQ_MAX_LEN
+from calendarapi.commons.exeptions import (
+    DATA_REQUIRED,
+    REQ_HTML_M,
+    REQ_IMAGE,
+    REQ_MAX_LEN,
+)
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 from calendarapi.models import OurTeam
 
@@ -75,7 +80,11 @@ class OurTeamModelView(AdminModelView):
         "description": TextAreaField(
             label="Опис",
             validators=[DataRequired(message=DATA_REQUIRED)],
-            render_kw={"class": "form-control", "rows": 5, "maxlength": DESCRIPTION_LEN},
+            render_kw={
+                "class": "form-control",
+                "rows": 5,
+                "maxlength": DESCRIPTION_LEN,
+            },
             description=f"{REQ_MAX_LEN % DESCRIPTION_LEN} {REQ_HTML_M}",
         ),
         "delete_slider_photo": BooleanField("Видалити фото зі слайдеру"),
