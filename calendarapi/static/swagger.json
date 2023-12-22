@@ -443,11 +443,11 @@
                                                 "type": "integer"
                                             },
                                             "specialization_id": {
-                                                "type": "integer"
+                                                "type": "integer",
+                                                "description": "Can be empty."
                                             }
                                         },
                                         "required": [
-                                            "specialization_id",
                                             "lawyer_id",
                                             "appointment_date",
                                             "appointment_time"
