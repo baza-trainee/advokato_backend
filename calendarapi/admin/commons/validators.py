@@ -6,6 +6,7 @@ from werkzeug.datastructures.file_storage import FileStorage
 
 from calendarapi.commons.exeptions import (
     DATA_REQUIRED,
+    INVALID_PASSWORD_EQ_LOGIN,
     REQ_PASSWORD,
     INVALID_EQUAL_PASSWORD,
     INVALID_PASSWORD_LEN,
@@ -53,6 +54,8 @@ def validate_password(form, field):
             raise ValidationError(
                 message=f"{INVALID_PASSWORD_LEN % password_len}. {REQ_PASSWORD}"
             )
+        if form.username.data.lower() in form.password.data.lower():
+            raise ValidationError(message=INVALID_PASSWORD_EQ_LOGIN)
         regex = (
             r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!?]*$"
         )

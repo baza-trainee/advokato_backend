@@ -13,20 +13,26 @@ CITY_NAME_LEN = City.city_name.type.length
 CITY_ADDRESS_LEN = City.address.type.length
 
 
-def validate_float(form, field):
+def validate_coord(form, field):
+    """>=0 <=0 and int/float"""
     try:
         field.data = field.data.strip().replace(",", ".")
-        float(field.data)
+        data = float(field.data)
+        if not (data < 0 or data > 0):
+            field.data = data
+            raise ValueError()
     except Exception:
         raise ValidationError(message=IVNALID_COORDS)
 
 
 def format_coords(view, context, model, name):
-    res = '<div class="city_coordinates">'
-    coords = [model.latitude, model.longitude]
-    if all(coords):
-        res += f'<span class="city_coord_name"> Широта:</span><span class="city_coord_value">{model.latitude}</span>'
-        res += f'<span class="city_coord_name"> Довгота:</span><span class="city_coord_value">{model.longitude}</span>'
+    res = '<div style="display: flex;">'
+    coords = {"Широта": model.latitude, "Довгота": model.longitude}
+    for coord_name, coord in coords.items():
+        # formatted_coord = "{:.100f}".format(coord) # higth accuracy
+        res += f'<div class="city_coordinates">'
+        res += f'<span class="city_coord_name"> {coord_name}:</span><span class="city_coord_value">{coord}</span>'
+        res += "</div>"
     res += "</div>"
     return Markup(res)
 
@@ -62,12 +68,12 @@ class CityModelView(AdminModelView):
     form_extra_fields = {
         "latitude": StringField(
             "Координати (Широта)",
-            validators=[DataRequired(message=DATA_REQUIRED), validate_float],
+            validators=[DataRequired(message=DATA_REQUIRED), validate_coord],
             description=COORDS_INFO,
         ),
         "longitude": StringField(
             "Координати (Довгота)",
-            validators=[DataRequired(message=DATA_REQUIRED), validate_float],
+            validators=[DataRequired(message=DATA_REQUIRED), validate_coord],
             description=COORDS_INFO,
         ),
     }

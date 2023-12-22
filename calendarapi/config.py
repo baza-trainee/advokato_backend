@@ -19,7 +19,7 @@ STORAGE = "CLOUDINARY"  # "STATIC" or "CLOUDINARY"
 MEDIA_PATH = os.path.join("calendarapi", "static", "media")
 ADMIN_CDN_URL = None  # caching static files
 
-IMAGE_SIZE = 30
+IMAGE_SIZE = 10
 IMAGE_FORMATS = [
     "jpg",
     "jpeg",
