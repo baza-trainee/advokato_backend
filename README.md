@@ -34,6 +34,30 @@ AC «STATUS» API – a powerful tool for efficient law firm website management.
 - **Email Handling:** Flask-Mail for email functionality
 - **Admin Panel:** Developed using Flask-Admin
 
+<p align="center">
+  <a href="https://flask-restful.readthedocs.io/en/latest/" target="_blank">
+    <img src="https://img.shields.io/badge/FlaskRESTful-000000?style=for-the-badge" alt="FlaskRESTful">
+  </a>
+  <a href="https://www.postgresql.org/" target="_blank">
+    <img src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge" alt="PostgreSQL">
+  </a>
+  <a href="https://redis.io/" target="_blank">
+    <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge" alt="Redis">
+  </a>
+  <a href="https://docs.celeryproject.org/en/stable/" target="_blank">
+    <img src="https://img.shields.io/badge/Celery-37814A?style=for-the-badge" alt="Celery">
+  </a>
+  <a href="https://flower.readthedocs.io/en/latest/" target="_blank">
+    <img src="https://img.shields.io/badge/Flower-474747?style=for-the-badge" alt="Flower">
+  </a>
+  <a href="https://pythonhosted.org/Flask-Mail/" target="_blank">
+    <img src="https://img.shields.io/badge/Flask--Mail-0078D4?style=for-the-badge" alt="Flask-Mail">
+  </a>
+  <a href="https://flask-admin.readthedocs.io/en/latest/" target="_blank">
+    <img src="https://img.shields.io/badge/Flask--Admin-0078D4?style=for-the-badge" alt="Flask-Admin">
+  </a>
+</p>
+
 <h2 align="center" style="color: #B5E5E8;">INSTALLATION</h2>
 
 To run the project, you will need [Docker](https://www.docker.com/) installed. Follow these steps to install and run the project:

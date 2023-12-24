@@ -30,7 +30,7 @@ def send_email(
             ],
         )
         lawyer_email_msg.body = (
-            f"Повідомлення:\n{message if message is not None else 'Передзвоніть мені, будь ласка.'}.\n\n"
+            f"Повідомлення:\n{message if message is not None else 'Передзвоніть мені, будь ласка.'}\n\n"
             f"Мій номер телефону: {visitor_phone_number}\n"
             f"Моя пошта: {visitor_email}"
         )
