@@ -6,9 +6,10 @@ WORKDIR /code
 COPY tox.ini ./
 COPY custom_dist custom_dist/
 COPY dependencies dependencies/
-COPY tests tests/
+COPY scripts scripts/
 
 RUN pip install -U pip
+RUN chmod a+x scripts/*.sh
 RUN pip install -r dependencies/requirements_prod.txt
 
 COPY calendarapi calendarapi/

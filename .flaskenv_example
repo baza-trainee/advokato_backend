@@ -13,8 +13,8 @@ POSTGRES_DB=calendarapi
 REDIS_PASS=reD1SaRt5
 REDIS_PORT=1234
 
-CELERY_BROKER_URL=redis://:$($REDIS_PASS)@redis:1234
-CELERY_RESULT_BACKEND_URL=redis://:$($REDIS_PASS)@redis:1234
+CELERY_BROKER_URL=redis://default:reD1SaRt5@redis:1234
+CELERY_RESULT_BACKEND_URL=redis://default:reD1SaRt5@redis:1234
 
 MAIL_SERVER = smtp.gmail.com
 MAIL_PORT = 587
