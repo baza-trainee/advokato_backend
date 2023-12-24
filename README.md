@@ -165,6 +165,7 @@ To debug the code, you can view the container logs using the command `docker log
 
 <h3 align="center" style="color: #B5E5E8;">Run locally</h3>
 If you need to run the application locally, stop the `web` container, change the database address in the `.env` file. 
+
 ```
 DATABASE_URI=postgresql://admin:admin@localhost:5432/calendarapi
 ```
