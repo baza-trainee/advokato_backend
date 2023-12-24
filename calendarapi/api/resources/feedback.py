@@ -46,7 +46,9 @@ class FeedbackResource(Resource):
             return {"error": "Invalid JSON"}, 400
         data = request.get_json()
         try:
-            self.validate_message_length(data.get("message", ""))
+            message = data.get("message", "")
+            if message: 
+                self.validate_message_length(message)
             validated_visitor_data: Visitor = self.visitor_schema.load(
                 {
                     "email": data.get("email"),
@@ -60,10 +62,10 @@ class FeedbackResource(Resource):
         try:
             send_email(
                 feedback=True,
-                visitor_name=data.get("name", "Не вказано"),
-                visitor_email=data.get("email", "Не вказана"),
+                visitor_name=data.get("name", None) or "Не вказано",
+                visitor_email= data.get("email", None) or "Не вказано",
                 visitor_phone_number=data.get("phone_number"),
-                message=data.get("message"),
+                message=message,
             )
         except SMTPException as e:
             return {"error": f"Email sending error: {str(e)}"}, 500
