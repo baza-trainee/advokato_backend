@@ -29,7 +29,7 @@ db-upgrade:
 	docker compose exec web flask db upgrade
 
 open-redis:
-	docker exec -it $$(docker compose ps -q redis) redis-cli -p $$REDIS_PORT
+	docker exec -it $$(docker compose ps -q redis) redis-cli -p 9351
 
 test:
 	docker compose stop celery # stop celery to avoid conflicts with celery tests
@@ -55,3 +55,14 @@ prod: down build run
 	docker compose exec web flask db upgrade
 	docker compose exec web flask init
 	@echo "Init done, all containers running"
+
+backup:
+	chmod +x scripts/backup.sh
+	if crontab -l 2>/dev/null; then crontab -l > mycron; else touch mycron; fi
+	echo "*/1 * * * * $(PWD)/scripts/backup.sh" >> mycron
+	crontab mycron
+	rm mycron
+
+restore:
+	chmod +x scripts/restore.sh
+	./scripts/restore.sh
