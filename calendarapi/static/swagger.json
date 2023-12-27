@@ -166,6 +166,10 @@
                     },
                     "id": {
                         "type": "integer"
+                    },
+                    "specialization_name": {
+                        "maxLength": 255,
+                        "type": "string"
                     }
                 },
                 "required": [
@@ -608,6 +612,10 @@
                                                                 {
                                                                     "type": "object",
                                                                     "properties": {
+                                                                        "id": {
+                                                                            "type":"integer",
+                                                                            "example": 1
+                                                                        },
                                                                         "phone": {
                                                                             "type": "string",
                                                                             "example": "+380123456789"
@@ -620,6 +628,10 @@
                                                                 {
                                                                     "type": "object",
                                                                     "properties": {
+                                                                        "id": {
+                                                                            "type":"integer",
+                                                                            "example": 2
+                                                                        },
                                                                         "mail": {
                                                                             "type": "string",
                                                                             "example": "example@example.com"
@@ -637,6 +649,10 @@
                                                         "items": {
                                                             "type": "object",
                                                             "properties": {
+                                                                "id": {
+                                                                    "type":"integer",
+                                                                    "example": 3
+                                                                },
                                                                 "title": {
                                                                     "type": "string"
                                                                 },
