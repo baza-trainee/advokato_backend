@@ -1,6 +1,6 @@
 from flask import flash
 from flask_login import current_user
-from sqlalchemy import and_, func, or_
+from sqlalchemy import and_, or_
 from wtforms import EmailField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, Email, StopValidation
 
@@ -14,7 +14,6 @@ from calendarapi.commons.exeptions import (
     DATA_REQUIRED,
     INVALID_EMAIL,
     LOSS_USER_CONTROL,
-    DELETE_CURRENT_USER,
     REQ_MAX_LEN,
     REQ_PASSWORD,
     ZERO_ACTIVE_USER,

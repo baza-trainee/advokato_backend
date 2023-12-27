@@ -18,6 +18,7 @@ our_team_data = [
         "name": "Адвокат Ірина Шуфрич",
         "position": "Адвокат",
         "photo_path": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701383584/eexrcaj7nalboorljws1.jpg",
+        "slider_photo_path": "https://res.cloudinary.com/dmfaqrftb/image/upload/v1703152795/xigtb9op7gm9oqi1ft7i.jpg",
         "description": """<ul>
 <li><strong>Адвокат з 2018 року</strong></li>
 <li><strong>Юридичний стаж 5 років</strong></li>
@@ -39,6 +40,7 @@ our_team_data = [
         "name": "Адвокат Аліна Ротар",
         "position": "Адвокат",
         "photo_path": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701383625/bkz4rd9nb9b3aoa7swst.jpg",
+        "slider_photo_path": "https://res.cloudinary.com/dmfaqrftb/image/upload/v1703152828/lb0yx6aze2o37pcacjve.jpg",
         "description": """<p>Аліна є фахівцем у сфері цивільного, сімейного, трудового та земельного права.</p>
 <p>Досвід роботи Аліни, а це більше 10 років в органах судової влади, дозволяє вирішувати будь-яке складне питання правового характеру.</p>
 <p>Завжди твердо відстоює інтереси клієнта, орієнтуючись тільки на досягнення результату.</p>
@@ -49,6 +51,7 @@ our_team_data = [
     {
         "name": "Юрист Максим Погорілий",
         "position": "Юрист",
+        "slider_photo_path": "https://res.cloudinary.com/dmfaqrftb/image/upload/v1703152849/z6t8pli4detwilhplrmy.jpg",
         "photo_path": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701383822/ar7t00wcwzv3mei55kde.jpg",
         "description": """<p>Максим уважний та зосереджений юрист, він ефективно застосовує професійні навички для представництва Ваших інтересів.</p>
 <p>Амбітність та цілеспрямованість Максима, дозволяють йому завжди досягати поставленої мети.</p>
@@ -60,6 +63,7 @@ our_team_data = [
     {
         "name": "Юрист Вікторія Шерстюк",
         "position": "Юрист",
+        "slider_photo_path": "https://res.cloudinary.com/dmfaqrftb/image/upload/v1703152867/scyc8hfwt9htpwzfmkow.jpg",
         "photo_path": "http://res.cloudinary.com/dmfaqrftb/image/upload/v1701383702/c2xr4ejdarqogxjcgoh1.jpg",
         "description": """<p>Вікторія передбачливий юрист, який відрізняється своїм відповідальним ставленням до роботи.</p>
 <p>Засвоїла основну нормативно-правову базу та навички юриспруденції в Миколаївському юридичному ліцеї.</p>
