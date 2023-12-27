@@ -31,10 +31,10 @@ def validate_date(form, field):
 
     list_dates = [form.data["date"]]
     if form.data["end_date"]:
-        list_dates += [
-            form.data["date"] + timedelta(days=day)
-            for day in range((form.data["end_date"] - form.data["date"]).days + 1)
-        ]
+        for day in range((form.data["end_date"] - form.data["date"]).days + 1):
+            date = form.data["date"] + timedelta(days=day)
+            if date.weekday() not in [5, 6]:
+                list_dates.append(date)
 
     lawyers_shedule = []
     shedule_error = []
@@ -129,81 +129,6 @@ def _validate_time_format(time_list: list, skip_raise=False) -> list[time]:
 
 class ScheduleModelView(AdminModelView):
     can_set_page_size = True
-    # list_template = "admin/custom_list.html"
-    # current_lawyer = "Оберіть юриста"
-
-    # def _reset_current_lawyer(self):
-    #     self.current_lawyer = "Оберіть юриста"
-
-    # def get_lawyers(self):
-    #     lawyers = db.session.query(Lawyer).all()
-    #     return lawyers
-
-    # @expose("/", methods=["POST"])
-    # def get_selected_lawyer(self):
-    #     selected_lawyer = request.form.get("lawyer")
-
-    #     if selected_lawyer == "Усі юристи" or not selected_lawyer:
-    #         self._reset_current_lawyer()
-    #         selected_lawyer = None
-
-    #     self.current_lawyer = selected_lawyer
-    #     return redirect(f"?lawyer={selected_lawyer}" if selected_lawyer else url_for("schedule.get_selected_lawyer"))
-
-    # def get_query(self):
-    #     self.selected_lawyer = request.args.get("lawyer")
-    #     if self.selected_lawyer:
-    #         self.query = db.session.query(Schedule).filter(Schedule.lawyers.any(Lawyer.name == self.selected_lawyer))
-    #     else:
-    #         self._reset_current_lawyer()
-    #         self.query = db.session.query(Schedule)
-    #     return self.query
-
-    def get_query(self):
-        current_date = datetime.now().date()
-        old_shedules = (
-            db.session.query(Schedule).where(Schedule.date < current_date).all()
-        )
-        for shedule in old_shedules:
-            db.session.delete(shedule)
-        db.session.commit()
-        return super().get_query()
-
-    # @expose("/ajax/lookup/")
-    # def ajax_lookup(self):
-    #     selected_city = self.selected_city  # select city from path args
-    #     name = request.args.get("name")
-    #     query = request.args.get("query")
-    #     offset = request.args.get("offset", type=int)
-    #     limit = request.args.get("limit", 10, type=int)
-    #     loader = self._form_ajax_refs.get(name)
-    #     if not loader:
-    #         abort(404)
-
-    #     if selected_city is None or selected_city == "all":
-    #         data = [loader.format(m) for m in loader.get_list(query, offset, limit)]
-    #     else:
-    #         sql_query = (
-    #             db.session.query(Lawyer)
-    #             .filter(
-    #                 and_(
-    #                     Lawyer.cities.any(City.city_name == selected_city),
-    #                     or_(
-    #                         Lawyer.name.ilike(f"%{query}%"),
-    #                     ),
-    #                 )
-    #             )
-    #             .offset(offset)
-    #             .limit(limit)
-    #         )
-    #         lawyer_list_output = [
-    #             lawyer
-    #             for lawyer in sql_query
-    #             if selected_city in [str(city) for city in lawyer.cities]
-    #         ]
-    #         data = [loader.format(lawyer) for lawyer in lawyer_list_output]
-
-    #     return Response(json.dumps(data), mimetype="application/json")
 
     column_labels = {
         "lawyers": "Спеціалісти",
@@ -217,79 +142,6 @@ class ScheduleModelView(AdminModelView):
         "date",
         "time",
     ]
-
-    def get_list(
-        self,
-        page,
-        sort_column,
-        sort_desc,
-        search,
-        filters,
-        execute=True,
-        page_size=None,
-    ):
-        selected_lawyer = request.args.get("lawyer")
-
-        # Will contain join paths with optional aliased object
-        joins = {}
-        count_joins = {}
-
-        query = self.get_query()
-        count_query = self.get_count_query() if not self.simple_list_pager else None
-
-        # Ignore eager-loaded relations (prevent unnecessary joins)
-        # TODO: Separate join detection for query and count query?
-        if hasattr(query, "_join_entities"):
-            for entity in query._join_entities:
-                for table in entity.tables:
-                    joins[table] = None
-
-        # Apply search criteria
-        if self._search_supported and search:
-            search = search.strip()
-            query, count_query, joins, count_joins = self._apply_search(
-                query, count_query, joins, count_joins, search
-            )
-
-        # Apply filters
-        # if selected_lawyer and selected_lawyer != "all": #TODO (для відображення кількості в СПИСОК)
-        #     count_query = (
-        #         self.session.query(func.count("*"))
-        #         .select_from(self.model)
-        #         .filter(Schedule.lawyers.any(Lawyer.cities.any(City.city_name == self.selected_lawyer)))
-        #     )
-        #     query = query.filter(Schedule.lawyers.any(Lawyer.name == self.selected_lawyer))
-
-        # Calculate number of rows if necessary
-        count = count_query.scalar() if count_query else None
-
-        # Auto join
-        for j in self._auto_joins:
-            query = query.options(joinedload(j))
-
-        # Sorting
-        if sort_column == "date":
-            if sort_desc:
-                query = query.order_by(self.model.date.desc())
-            else:
-                query = query.order_by(self.model.date)
-        elif sort_column == "lawyers":
-            if sort_desc:
-                query = query.order_by(self.model.lawyer_id.desc())
-            else:
-                query = query.order_by(self.model.lawyer_id)
-        else:
-            query, joins = self._apply_sorting(query, joins, sort_column, sort_desc)
-
-        # Pagination
-        query = self._apply_pagination(query, page, page_size)
-
-        # Execute if needed
-        if execute:
-            query = query.all()
-
-        return count, query
-
     column_sortable_list = [
         "id",
         "lawyers",
@@ -326,7 +178,7 @@ class ScheduleModelView(AdminModelView):
         "end_date": DateField(
             label="Кінцева дата",
             validators=[Optional(), validate_end_date],
-            description="Якщо бажаєте додати розклад для певного проміжку часу, а не на 1 день. Початкова та кінцева дата включно.",
+            description="Якщо бажаєте додати розклад для певного проміжку часу, а не на 1 день (суботи та неділі пропускаються автоматично). Початкова та кінцева дата включно.",
         ),
     }
 
@@ -360,6 +212,37 @@ class ScheduleModelView(AdminModelView):
             ),
         },
     }
+
+    def get_query(self):
+        current_date = datetime.now().date()
+        old_shedules = (
+            db.session.query(Schedule).where(Schedule.date < current_date).all()
+        )
+        for shedule in old_shedules:
+            db.session.delete(shedule)
+        db.session.commit()
+        return super().get_query()
+
+    def _apply_sorting(self, query, joins, sort_column, sort_desc):
+        joins = {}
+        if sort_column == "date":
+            if sort_desc:
+                query = query.order_by(self.model.date.desc())
+            else:
+                query = query.order_by(self.model.date)
+        elif sort_column == "lawyers":
+            if sort_desc:
+                query = query.order_by(self.model.lawyer_id.desc())
+            else:
+                query = query.order_by(self.model.lawyer_id)
+        else:
+            query, joins = super()._apply_sorting(query, joins, sort_column, sort_desc)
+
+        return query, joins
+
+    def _apply_search(self, query, count_query, joins, count_joins, search):
+        search = search.strip()
+        return super()._apply_search(query, count_query, joins, count_joins, search)
 
     def on_model_change(self, form, model, is_created):
         model.lawyer_id = model.lawyers[0].id

@@ -72,7 +72,6 @@ def init():
             spec_list = [Specialization(**data) for data in specializations]
             possibilities_list = [Possibilities(**data) for data in possibilities]
             probono_list = [ProBono(**data) for data in probono]
-            news_list = [News(**data) for data in news]
             clients_list = [Client(**data) for data in clients]
             reviews_list = [Reviews(**data) for data in reviews]
 
@@ -83,7 +82,6 @@ def init():
                     *contact_list,
                     *possibilities_list,
                     *probono_list,
-                    *news_list,
                     *clients_list,
                     *reviews_list,
                     AboutCompany(**about_company),
@@ -124,5 +122,12 @@ def init():
 
         else:
             click.echo("Users is already exist")
+
+        if db.session.query(News).count() == 0:
+            news_list = [News(**data) for data in news]
+            db.session.add_all(news_list)
+            db.session.commit()
+        else:
+            click.echo("News is already exist")
     else:
         click.echo("VERCEL MODE ON")
