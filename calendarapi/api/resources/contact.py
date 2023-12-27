@@ -16,16 +16,22 @@ class ContactResource(Resource):
             contacts = db.session.query(Contact).all()
             cities = db.session.query(City).all()
 
-            data = {contact.contact_type: contact.value for contact in contacts}
             output_data = [
                 {
                     "contacts": [
-                        {"id": contact.id, contact.contact_type: contact.value}
+                        {
+                            "id": contact.id,
+                            contact.contact_type: contact.value,
+                        }
                         for contact in contacts
                         if contact.contact_type in ["phone", "mail"]
                     ],
                     "social": [
-                        {"id": contact.id, contact.contact_type: contact.value}
+                        {
+                            "id": contact.id,
+                            "title": contact.contact_type,
+                            "url": contact.value,
+                        }
                         for contact in contacts
                         if contact.contact_type not in ["phone", "mail"]
                     ],
