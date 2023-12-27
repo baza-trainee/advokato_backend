@@ -20,10 +20,15 @@ class ContactResource(Resource):
             output_data = [
                 {
                     "contacts": [
-                        {"phone": data.pop("phone")},
-                        {"mail": data.pop("mail")},
+                        {"id": contact.id, contact.contact_type: contact.value}
+                        for contact in contacts
+                        if contact.contact_type in ["phone", "mail"]
                     ],
-                    "social": [{"title": k, "url": v} for k, v in data.items()],
+                    "social": [
+                        {"id": contact.id, contact.contact_type: contact.value}
+                        for contact in contacts
+                        if contact.contact_type not in ["phone", "mail"]
+                    ],
                 }
             ]
             cities_data = [

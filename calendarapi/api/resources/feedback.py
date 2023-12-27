@@ -47,7 +47,7 @@ class FeedbackResource(Resource):
         data = request.get_json()
         try:
             message = data.get("message", "")
-            if message: 
+            if message:
                 self.validate_message_length(message)
             validated_visitor_data: Visitor = self.visitor_schema.load(
                 {
@@ -63,7 +63,7 @@ class FeedbackResource(Resource):
             send_email(
                 feedback=True,
                 visitor_name=data.get("name", None) or "Не вказано",
-                visitor_email= data.get("email", None) or "Не вказано",
+                visitor_email=data.get("email", None) or "Не вказано",
                 visitor_phone_number=data.get("phone_number"),
                 message=message,
             )
