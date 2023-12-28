@@ -29,7 +29,7 @@ class ClientsModelView(AdminModelView):
             validators=[ImageValidator()],
             description=REQ_IMAGE,
         ),
-        "link": TextAreaField(description=URL_FORMAT % 300)
+        "link": TextAreaField(description=URL_FORMAT % 300),
     }
     form_args = {
         "link": {

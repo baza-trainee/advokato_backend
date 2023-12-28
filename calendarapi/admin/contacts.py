@@ -1,10 +1,12 @@
 from wtforms import TextAreaField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import format_as_markup
-from calendarapi.commons.exeptions import REQ_MAX_LEN, URL_FORMAT
-from flask_admin.model.form import converts
+from calendarapi.commons.exeptions import URL_FORMAT
+from calendarapi.models import Contact
 
-from calendarapi.models.contacts import Contact
+
+CONTACT_LEN = Contact.value.type.length
+
 
 class ContactModelView(AdminModelView):
     can_set_page_size = True
@@ -26,7 +28,7 @@ class ContactModelView(AdminModelView):
     form_columns = [
         "value",
     ]
-    form_args = {"value": {"description": URL_FORMAT % 500}}
+    form_args = {"value": {"description": URL_FORMAT % CONTACT_LEN}}
     column_formatters = {
         "value": format_as_markup,
     }
