@@ -2,11 +2,12 @@ from wtforms.validators import DataRequired
 from wtforms import TextAreaField, FileField
 
 from calendarapi.admin.base_admin import AdminModelView
-from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
+from calendarapi.admin.commons.formatters import ThumbnailFormatter
 from calendarapi.admin.commons.validators import ImageValidator
 from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_IMAGE, REQ_MAX_LEN
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 from calendarapi.models.reviews import Reviews
+
 
 NAME_LEN = Reviews.name.type.length
 POSITION_LEN = Reviews.position.type.length

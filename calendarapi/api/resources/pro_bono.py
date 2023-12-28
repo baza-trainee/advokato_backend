@@ -3,6 +3,7 @@ from typing import List
 from flask_restful import Resource
 
 from calendarapi.api.schemas import ProBonoSchema
+from sqlalchemy import exc
 
 # from calendarapi.config import DAY
 from calendarapi.extensions import (
@@ -17,5 +18,8 @@ class ProBonoResource(Resource):
 
     # @cache.cached(key_prefix="pro_bono", timeout=DAY)
     def get(self):
-        data: List[ProBono] = db.session.query(ProBono).all()
+        try:
+            data: List[ProBono] = db.session.query(ProBono).order_by("id").all()
+        except exc.SQLAlchemyError as e:
+            return {"error": f"Database error: {str(e)}"}, 500
         return self.pro_bono.dump(data, many=True), 200

@@ -1,5 +1,3 @@
-import os
-
 from wtforms.validators import DataRequired
 from wtforms import TextAreaField, FileField
 
@@ -14,6 +12,7 @@ from calendarapi.commons.exeptions import (
 )
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 from calendarapi.models.pro_bono import ProBono
+
 
 DESCRIPTION_LEN = ProBono.description.type.length
 
@@ -34,6 +33,10 @@ class ProBonoModelView(AdminModelView):
         "photo_path": ThumbnailFormatter(),
         "description": format_as_markup,
     }
+
+    column_default_sort = [
+        ("id", False),
+    ]
 
     form_extra_fields = {
         "photo_path": FileField(

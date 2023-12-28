@@ -1,7 +1,7 @@
 from typing import List
 
 from flask_restful import Resource
-from sqlalchemy import desc
+from sqlalchemy import desc, exc
 
 # from calendarapi.config import DAY
 from calendarapi.api.schemas import NewsSchema
@@ -17,5 +17,10 @@ class NewsResource(Resource):
 
     # @cache.cached(key_prefix="news_list", timeout=DAY)
     def get(self):
-        news: List[News] = db.session.query(News).order_by(desc(News.created_at)).all()
+        try:
+            news: List[News] = (
+                db.session.query(News).order_by(desc(News.created_at)).all()
+            )
+        except exc.SQLAlchemyError as e:
+            return {"error": f"Database error: {str(e)}"}, 500
         return self.news_schema.dump(news, many=True), 200

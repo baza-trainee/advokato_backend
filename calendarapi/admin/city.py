@@ -7,6 +7,7 @@ from calendarapi.admin.commons.formatters import format_as_markup
 from calendarapi.commons.exeptions import IVNALID_COORDS, REQ_MAX_LEN, DATA_REQUIRED
 from calendarapi.models import City
 
+
 ADDRESS_INFO = "Адреси відображатимуться на сайті, в розділі 'контакти'."
 COORDS_INFO = "Необхідні для відображення міток на карті"
 CITY_NAME_LEN = City.city_name.type.length

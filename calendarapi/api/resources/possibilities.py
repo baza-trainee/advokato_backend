@@ -1,6 +1,7 @@
 from typing import List
 
 from flask_restful import Resource
+from sqlalchemy import exc
 
 from calendarapi.api.schemas import PossibilitiesSchema
 
@@ -17,5 +18,10 @@ class PossibilitiesResource(Resource):
 
     # @cache.cached(key_prefix="possibilities", timeout=DAY)
     def get(self):
-        possibilities: List[Possibilities] = db.session.query(Possibilities).all()
+        try:
+            possibilities: List[Possibilities] = (
+                db.session.query(Possibilities).order_by("id").all()
+            )
+        except exc.SQLAlchemyError as e:
+            return {"error": f"Database error: {str(e)}"}, 500
         return self.possibilities_schema.dump(possibilities, many=True), 200

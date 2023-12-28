@@ -1,11 +1,12 @@
-from wtforms import FileField
+from wtforms import FileField, TextAreaField
 
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter
 from calendarapi.admin.commons.validators import ImageValidator
-from calendarapi.commons.exeptions import REQ_IMAGE, REQ_MAX_LEN
+from calendarapi.commons.exeptions import REQ_IMAGE, REQ_MAX_LEN, URL_FORMAT
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 from calendarapi.models.clients import Client
+
 
 LINK_LEN = Client.link.type.length
 
@@ -28,12 +29,16 @@ class ClientsModelView(AdminModelView):
             validators=[ImageValidator()],
             description=REQ_IMAGE,
         ),
+        "link": TextAreaField(description=URL_FORMAT % 300)
     }
     form_args = {
         "link": {
             "description": REQ_MAX_LEN % LINK_LEN,
         }
     }
+    column_default_sort = [
+        ("id", False),
+    ]
 
     def on_model_delete(self, model):
         custom_delete_file(model, "photo_path")

@@ -5,6 +5,7 @@ from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.commons.exeptions import DATA_REQUIRED, INVALID_EMAIL, REQ_MAX_LEN
 from calendarapi.models.lawyer import Lawyer
 
+
 NAME_LEN = Lawyer.name.type.length
 
 
