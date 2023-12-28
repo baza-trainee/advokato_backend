@@ -21,6 +21,7 @@ from calendarapi.commons.exeptions import (
 )
 from calendarapi.models.user_permissions import Permission
 
+
 USERNAME_LEN = User.username.type.length
 DESCRIPTION_LEN = User.description.type.length
 

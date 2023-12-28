@@ -14,6 +14,7 @@ from calendarapi.commons.exeptions import (
     REQ_MAX_LEN,
 )
 
+
 MAIN_PAGE_INFO = "Відображається на головній сторінці під блоком Hero."
 OUR_TEAM_PAGE_INFO = 'Відображається на сторінці "Про компанію".'
 MAIN_PAGE_DESCRIPTION_LEN = AboutCompany.main_page_description.type.length

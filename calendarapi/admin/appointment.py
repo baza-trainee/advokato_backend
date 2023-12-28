@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from sqlalchemy.orm import joinedload
 
 from calendarapi.admin.base_admin import AdminModelView
@@ -6,6 +7,7 @@ from calendarapi.models import Visitor
 from calendarapi.extensions import db
 from calendarapi.models.appointment import Appointment
 from calendarapi.commons.exeptions import REQ_MAX_LEN
+
 
 SPECIALIZATION_LEN = Appointment.specialization.type.length
 LAWYER_LEN = Appointment.lawyer.type.length

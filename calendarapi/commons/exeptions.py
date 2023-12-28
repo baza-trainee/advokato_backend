@@ -19,6 +19,9 @@ BAD_LOGIN_DATA = "Невірний логін або пароль"
 
 # CONTACTS
 IVNALID_COORDS = "Некоректні координати. Вкажіть число, яке менше або більше за 0"
+URL_FORMAT = "Посилання мають бути у наступному форматі: \
+<b style='color: aqua'>https://хххххххх</b> або <b style='color: aqua'>http://хххххххх</b>. \
+Максимальна довжина %s символів."
 
 # Admin USERS
 EXPIRED_TOKEN = "Недійсний token"

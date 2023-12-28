@@ -1,10 +1,8 @@
 from wtforms.validators import DataRequired
 from wtforms import TextAreaField, FileField
-from flask_admin.form.fields import Select2Field
-from flask_admin.form.widgets import Select2TagsWidget
 from flask_admin.contrib.sqla.fields import QuerySelectField
+
 from calendarapi.models import Specialization
-from flask import request
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
 from calendarapi.admin.commons.validators import ImageValidator
@@ -17,6 +15,7 @@ from calendarapi.commons.exeptions import (
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 from calendarapi.models import News
 from calendarapi.extensions import db
+
 
 NAME_LEN = News.name.type.length
 DESCRIPTION_LEN = News.description.type.length

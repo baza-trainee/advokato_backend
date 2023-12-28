@@ -1,6 +1,11 @@
+from wtforms import TextAreaField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import format_as_markup
-from calendarapi.commons.exeptions import REQ_MAX_LEN
+from calendarapi.commons.exeptions import URL_FORMAT
+from calendarapi.models import Contact
+
+
+CONTACT_LEN = Contact.value.type.length
 
 
 class ContactModelView(AdminModelView):
@@ -23,7 +28,7 @@ class ContactModelView(AdminModelView):
     form_columns = [
         "value",
     ]
-    form_args = {"value": {"description": REQ_MAX_LEN % 500}}
+    form_args = {"value": {"description": URL_FORMAT % CONTACT_LEN}}
     column_formatters = {
         "value": format_as_markup,
     }

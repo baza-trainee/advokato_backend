@@ -5,6 +5,7 @@ from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_MAX_LEN
 from calendarapi.models import HeroBlock
 
+
 SLOGAN_INFO = "Перше, що бачать користувачі сайту."
 LEFT_TEXT_INFO = "Короткий текст зліва під гаслом."
 RIGHT_TEXT_INFO = "Короткий текст справа під гаслом."

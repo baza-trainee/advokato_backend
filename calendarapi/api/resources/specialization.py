@@ -2,6 +2,7 @@ from flask_restful import Resource
 
 from calendarapi.api.schemas import SpecializationSchema
 from calendarapi.models import Specialization, Lawyer
+from sqlalchemy import exc
 
 # from calendarapi.config import DAY
 from calendarapi.extensions import (
@@ -30,7 +31,7 @@ class AllSpecializationsResource(Resource):
     # @cache.cached(key_prefix="specialization_list", timeout=DAY)
     def get(self):
         try:
-            all_specializations = db.session.query(Specialization).all()
-            return self.specialization_schema.dump(all_specializations, many=True), 200
-        except Exception as e:
-            return {"message": "Internal Server Error"}, 500
+            all_specializations = db.session.query(Specialization).order_by("id").all()
+        except exc.SQLAlchemyError as e:
+            return {"error": f"Database error: {str(e)}"}, 500
+        return self.specialization_schema.dump(all_specializations, many=True), 200
