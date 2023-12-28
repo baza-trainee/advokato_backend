@@ -25,7 +25,7 @@ class OurTeamResource(Resource):
             AboutCompany.our_team_page_description,
             AboutCompany.our_team_page_photo_path,
         ).first()
-        team: List[OurTeam] = db.session.query(OurTeam).all()
+        team: List[OurTeam] = db.session.query(OurTeam).order_by("id").all()
         if is_slider:
             team = [
                 {
