@@ -29,12 +29,10 @@ class ClientsModelView(AdminModelView):
             validators=[ImageValidator()],
             description=REQ_IMAGE,
         ),
-        "link": TextAreaField(description=URL_FORMAT % 300),
-    }
-    form_args = {
-        "link": {
-            "description": REQ_MAX_LEN % LINK_LEN,
-        }
+        "link": TextAreaField(
+            label="Посилання",
+            description=URL_FORMAT % LINK_LEN,
+        ),
     }
     column_default_sort = [
         ("id", False),

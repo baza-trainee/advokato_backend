@@ -3,7 +3,7 @@ from wtforms import TextAreaField, FileField
 
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter
-from calendarapi.admin.commons.validators import ImageValidator
+from calendarapi.admin.commons.validators import ImageValidator, validate_text
 from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_IMAGE, REQ_MAX_LEN
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 from calendarapi.models.reviews import Reviews
@@ -58,7 +58,7 @@ class ReviewsModelView(AdminModelView):
                 "rows": 5,
                 "maxlength": DESCRIPTION_LEN,
             },
-            validators=[DataRequired(message=DATA_REQUIRED)],
+            validators=[DataRequired(message=DATA_REQUIRED), validate_text],
             description=REQ_MAX_LEN % DESCRIPTION_LEN,
         ),
     }

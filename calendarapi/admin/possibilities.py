@@ -3,7 +3,7 @@ from wtforms import TextAreaField, FileField
 
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
-from calendarapi.admin.commons.validators import ImageValidator
+from calendarapi.admin.commons.validators import ImageValidator, validate_text
 from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_MAX_LEN
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 from calendarapi.models import Possibilities
@@ -56,6 +56,16 @@ class PossibilitiesModelView(AdminModelView):
             label="Виберіть фото.",
             validators=[ImageValidator()],
         ),
+        "short_text": TextAreaField(
+            label="Короткий опис",
+            render_kw={
+                "class": "form-control",
+                "rows": 3,
+                "maxlength": SHORT_TEXT_LEN,
+            },
+            validators=[DataRequired(message=DATA_REQUIRED), validate_text],
+            description=f"{SHORT_TEXT_INFO} {REQ_MAX_LEN % SHORT_TEXT_LEN}",
+        ),
         "description": TextAreaField(
             label="Опис",
             render_kw={
@@ -63,16 +73,13 @@ class PossibilitiesModelView(AdminModelView):
                 "rows": 5,
                 "maxlength": DESCRIPTION_LEN,
             },
-            validators=[DataRequired(message=DATA_REQUIRED)],
+            validators=[DataRequired(message=DATA_REQUIRED), validate_text],
             description=f"{DESCRIPTION_INFO} {REQ_MAX_LEN % DESCRIPTION_LEN}",
         ),
     }
     form_args = {
         "title": {
             "description": f"{TITLE_INFO} {REQ_MAX_LEN % TITLE_LEN}",
-        },
-        "short_text": {
-            "description": f"{SHORT_TEXT_INFO} {REQ_MAX_LEN % SHORT_TEXT_LEN}",
         },
     }
 

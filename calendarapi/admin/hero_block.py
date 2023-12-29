@@ -2,6 +2,7 @@ from wtforms import TextAreaField
 from wtforms.validators import DataRequired
 
 from calendarapi.admin.base_admin import AdminModelView
+from calendarapi.admin.commons.validators import validate_text
 from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_MAX_LEN
 from calendarapi.models import HeroBlock
 
@@ -34,19 +35,19 @@ class HeroModelView(AdminModelView):
         "slogan": TextAreaField(
             label="Гасло.",
             render_kw={"class": "form-control", "rows": 1},
-            validators=[DataRequired(message=DATA_REQUIRED)],
+            validators=[DataRequired(message=DATA_REQUIRED), validate_text],
             description=REQ_MAX_LEN % SLOGAN_LEN,
         ),
         "left_text": TextAreaField(
             label="Опис зліва.",
             render_kw={"class": "form-control", "rows": 3},
-            validators=[DataRequired(message=DATA_REQUIRED)],
+            validators=[DataRequired(message=DATA_REQUIRED), validate_text],
             description=REQ_MAX_LEN % LEFT_TEXT_LEN,
         ),
         "right_text": TextAreaField(
             label="Опис справа.",
             render_kw={"class": "form-control", "rows": 3},
-            validators=[DataRequired(message=DATA_REQUIRED)],
+            validators=[DataRequired(message=DATA_REQUIRED), validate_text],
             description=REQ_MAX_LEN % RIGHT_TEXT_LEN,
         ),
     }

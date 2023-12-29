@@ -45,6 +45,14 @@ class ImageValidator:
             )
 
 
+def validate_text(form, field):
+    if field.data and "\n" in field.data:
+        output = field.data.split("\n")
+        output = map(lambda s: s.strip(), output)
+        output = " ".join(output)
+        field.data = output.replace("\r", "")
+
+
 def validate_password(form, field):
     if field.data:
         if form.password.data != form.confirm_password.data:
