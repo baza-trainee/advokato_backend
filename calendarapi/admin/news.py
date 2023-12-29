@@ -5,7 +5,7 @@ from flask_admin.contrib.sqla.fields import QuerySelectField
 from calendarapi.models import Specialization
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
-from calendarapi.admin.commons.validators import ImageValidator
+from calendarapi.admin.commons.validators import ImageValidator, validate_text
 from calendarapi.commons.exeptions import (
     DATA_REQUIRED,
     REQ_HTML_M,
@@ -14,7 +14,6 @@ from calendarapi.commons.exeptions import (
 )
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 from calendarapi.models import News
-from calendarapi.extensions import db
 
 
 NAME_LEN = News.name.type.length
@@ -75,7 +74,7 @@ class NewsModelView(AdminModelView):
                 "rows": 5,
                 "maxlength": DESCRIPTION_LEN,
             },
-            validators=[DataRequired(message=DATA_REQUIRED)],
+            validators=[DataRequired(message=DATA_REQUIRED), validate_text],
             description=f"{REQ_MAX_LEN % DESCRIPTION_LEN} {REQ_HTML_M}",
         ),
         "specialization_name": QuerySelectField(

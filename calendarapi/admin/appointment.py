@@ -6,7 +6,6 @@ from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.models import Visitor
 from calendarapi.extensions import db
 from calendarapi.models.appointment import Appointment
-from calendarapi.commons.exeptions import REQ_MAX_LEN
 
 
 SPECIALIZATION_LEN = Appointment.specialization.type.length
@@ -69,15 +68,6 @@ class AppointmentModelView(AdminModelView):
         "appointment_date",
         "visitor_id",
     ]
-
-    # form_args = {
-    #     "specialization": {
-    #         "description": REQ_MAX_LEN % SPECIALIZATION_LEN,
-    #     },
-    #     "lawyer": {
-    #         "description": REQ_MAX_LEN % LAWYER_LEN,
-    #     },
-    # }
 
     def get_list(
         self,

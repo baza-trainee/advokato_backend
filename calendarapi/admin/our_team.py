@@ -3,7 +3,7 @@ from wtforms import BooleanField, TextAreaField, FileField
 
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
-from calendarapi.admin.commons.validators import ImageValidator
+from calendarapi.admin.commons.validators import ImageValidator, validate_text
 from calendarapi.commons.exeptions import (
     DATA_REQUIRED,
     REQ_HTML_M,
@@ -79,7 +79,7 @@ class OurTeamModelView(AdminModelView):
         ),
         "description": TextAreaField(
             label="Опис",
-            validators=[DataRequired(message=DATA_REQUIRED)],
+            validators=[DataRequired(message=DATA_REQUIRED), validate_text],
             render_kw={
                 "class": "form-control",
                 "rows": 5,

@@ -32,3 +32,8 @@ class ContactModelView(AdminModelView):
     column_formatters = {
         "value": format_as_markup,
     }
+
+    def on_form_prefill(self, form, id):
+        if form._obj.contact_type in ["phone", "mail"]:
+            form.value.description = None
+        return super().on_form_prefill(form, id)
