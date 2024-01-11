@@ -1,6 +1,6 @@
 from calendarapi.extensions import db
 
-# from calendarapi.services.cache_invalidator import invalidate_cache
+from calendarapi.services.cache_invalidator import invalidate_cache
 
 
 class Possibilities(db.Model):
@@ -13,4 +13,4 @@ class Possibilities(db.Model):
     description = db.Column(db.String(500), nullable=False)
 
 
-# invalidate_cache(Possibilities, "possibilities")
+invalidate_cache(Possibilities, "possibilities")

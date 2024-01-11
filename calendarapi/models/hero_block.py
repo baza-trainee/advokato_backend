@@ -1,6 +1,6 @@
 from calendarapi.extensions import db
 
-# from calendarapi.services.cache_invalidator import invalidate_cache
+from calendarapi.services.cache_invalidator import invalidate_cache
 
 
 class HeroBlock(db.Model):
@@ -12,4 +12,4 @@ class HeroBlock(db.Model):
     right_text = db.Column(db.String(200), nullable=False)
 
 
-# invalidate_cache(HeroBlock, "hero_block")
+invalidate_cache(HeroBlock, "hero_block")

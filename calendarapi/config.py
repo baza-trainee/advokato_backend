@@ -27,12 +27,12 @@ IMAGE_FORMATS = [
     "webp",
 ]
 
-# CACHE_TYPE = "RedisCache"
-# CACHE_DEFAULT_TIMEOUT = 30
-# CACHE_REDIS_HOST = "redis"
-# CACHE_REDIS_PORT = os.getenv("REDIS_PORT")
-# CACHE_REDIS_PASSWORD = os.getenv("REDIS_PASS")
-# DAY = 86400
+CACHE_TYPE = "RedisCache"
+CACHE_DEFAULT_TIMEOUT = 30
+CACHE_REDIS_HOST = "redis"
+CACHE_REDIS_PORT = os.getenv("REDIS_PORT")
+CACHE_REDIS_PASSWORD = os.getenv("REDIS_PASS")
+DAY = 86400
 
 SWAGGER_URL = "/swagger-ui"
 SWAGGER_PATH = "/static/swagger.json"

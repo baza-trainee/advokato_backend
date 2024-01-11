@@ -4,10 +4,10 @@ from sqlalchemy import exc
 from calendarapi.api.schemas import AboutCompanySchema, HeroBlockSchema
 from calendarapi.models import HeroBlock, AboutCompany
 
-# from calendarapi.config import DAY
+from calendarapi.config import DAY
 from calendarapi.extensions import (
     db,
-    # cache,
+    cache,
 )
 
 
@@ -15,7 +15,7 @@ class HeroBlockResource(Resource):
     company_schema: AboutCompanySchema = AboutCompanySchema()
     hero_schema: HeroBlockSchema = HeroBlockSchema()
 
-    # @cache.cached(key_prefix="hero_block", timeout=DAY)
+    @cache.cached(key_prefix="hero_block", timeout=DAY)
     def get(self):
         try:
             hero_data = db.session.query(HeroBlock).first()

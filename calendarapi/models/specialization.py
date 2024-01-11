@@ -1,6 +1,6 @@
 from calendarapi.extensions import db
 
-# from calendarapi.services.cache_invalidator import invalidate_cache
+from calendarapi.services.cache_invalidator import invalidate_cache
 
 
 class Specialization(db.Model):
@@ -16,4 +16,4 @@ class Specialization(db.Model):
         return f"{self.specialization_name}"
 
 
-# invalidate_cache(Specialization, "specialization_list")
+invalidate_cache(Specialization, "specialization_list")

@@ -12,7 +12,7 @@ class NewsSchema(fm.SQLAlchemyAutoSchema):
     description = ma.fields.String(
         required=True, validate=ma.fields.validate.Length(min=2, max=1000)
     )
-    created_at = ma.fields.DateTime(format='%d/%m/%Y')
+    created_at = ma.fields.DateTime(format="%d/%m/%Y")
 
     class Meta:
         model = News

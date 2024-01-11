@@ -3,19 +3,19 @@ from typing import List
 from flask_restful import Resource
 from sqlalchemy import desc, exc
 
-# from calendarapi.config import DAY
+from calendarapi.config import DAY
 from calendarapi.api.schemas import NewsSchema
 from calendarapi.models import News
 from calendarapi.extensions import (
     db,
-    # cache,
+    cache,
 )
 
 
 class NewsResource(Resource):
     news_schema: NewsSchema = NewsSchema()
 
-    # @cache.cached(key_prefix="news_list", timeout=DAY)
+    @cache.cached(key_prefix="news_list", timeout=DAY)
     def get(self):
         try:
             news: List[News] = (

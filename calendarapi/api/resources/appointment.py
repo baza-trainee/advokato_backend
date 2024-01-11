@@ -115,13 +115,13 @@ class AppointmentResource(Resource):
             if not lawyer_schedule.time:
                 db.session.delete(lawyer_schedule)
             db.session.commit()
-            send_email(
+            send_email.delay(
                 visitor_name=existing_visitor.name,
                 visitor_email=existing_visitor.email,
                 visitor_phone_number=existing_visitor.phone_number,
                 appointment_date=appointment.appointment_date,
                 appointment_time=str(appointment.appointment_time)[:-3],
-                # lawyer_email=lawyer.lawyer_mail,
+                lawyer_email=lawyer.lawyer_mail,
                 lawyer_name=appointment.lawyer,
                 specialization_name=appointment.specialization,
             )

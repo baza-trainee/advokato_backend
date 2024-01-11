@@ -2,7 +2,7 @@ from datetime import date
 
 from calendarapi.extensions import db
 
-# from calendarapi.services.cache_invalidator import invalidate_cache
+from calendarapi.services.cache_invalidator import invalidate_cache
 
 
 class Reviews(db.Model):
@@ -16,4 +16,4 @@ class Reviews(db.Model):
     created_at = db.Column(db.Date, default=date.today())
 
 
-# invalidate_cache(Reviews, "reviews_list")
+invalidate_cache(Reviews, "reviews_list")

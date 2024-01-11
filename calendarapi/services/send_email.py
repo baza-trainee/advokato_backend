@@ -2,12 +2,12 @@ from flask_mail import Message
 from flask import current_app
 
 from calendarapi.extensions import (
-    # celery,
+    celery,
     mail,
 )
 
 
-# @celery.task
+@celery.task
 def send_email(
     visitor_name: str = None,
     visitor_email: str = None,

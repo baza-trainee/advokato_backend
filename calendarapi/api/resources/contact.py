@@ -3,14 +3,14 @@ from flask_restful import Resource
 from calendarapi.models import Contact, City
 from calendarapi.extensions import (
     db,
-    # cache,
+    cache,
 )
 
-# from calendarapi.config import DAY
+from calendarapi.config import DAY
 
 
 class ContactResource(Resource):
-    # @cache.cached(key_prefix="contact_list", timeout=DAY)
+    @cache.cached(key_prefix="contact_list", timeout=DAY)
     def get(self):
         try:
             contacts = db.session.query(Contact).all()

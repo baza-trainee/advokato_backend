@@ -9,6 +9,7 @@ DATABASE_URI=postgresql://admin:admin@localhost:5432/calendarapi
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=admin
 POSTGRES_DB=calendarapi
+POSTGRESS_PORT=5432
 
 REDIS_PASS=reD1SaRt5
 REDIS_PORT=1234

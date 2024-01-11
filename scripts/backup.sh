@@ -8,7 +8,7 @@ DB_CONTAINER=postgres_db
 BACKUP_DIR=./backup-postgres-db
 
 # Database
-DATABASE_URI=postgresql://admin:admin@postgres:5432/calendarapi
+DATABASE_URI=postgresql://admin:admin@postgres:6002/calendarapi
 # Backup max count
 MAX_BACKUPS=3
 
