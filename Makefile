@@ -14,7 +14,7 @@ down:
 	docker compose down
 
 run:
-	docker compose up -d postgres redis celery flower web
+	docker compose up -d postgres redis celery web
 
 init-postgres:
 	docker compose up -d postgres

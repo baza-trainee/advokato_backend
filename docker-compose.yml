@@ -71,23 +71,23 @@ services:
     networks:
       - backend
 
-  flower:
-    image: mher/flower
-    container_name: flower
-    build: .
-    restart: always
-    env_file:
-      - ./.env
-    command: ["scripts/docker.sh", "flower"]
-    volumes:
-      - flower-data:/data
-    ports:
-      - "$FLOWER_PORT:$FLOWER_PORT"
-    depends_on:
-      - celery
-      - redis
-    networks:
-      - backend
+  # flower:
+  #   image: mher/flower
+  #   container_name: flower
+  #   build: .
+  #   restart: always
+  #   env_file:
+  #     - ./.env
+  #   command: ["scripts/docker.sh", "flower"]
+  #   volumes:
+  #     - flower-data:/data
+  #   ports:
+  #     - "$FLOWER_PORT:$FLOWER_PORT"
+  #   depends_on:
+  #     - celery
+  #     - redis
+  #   networks:
+  #     - backend
 
 networks:
   backend:
