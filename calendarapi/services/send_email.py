@@ -27,7 +27,7 @@ def send_email(
             recipients=[
                 current_app.config["MAIL_DEFAULT_SENDER"],
                 "deadroll95@gmail.com",
-                "Lilyaka@ukr.net",
+                "smile.to.alice@gmail.com",
             ],
         )
         lawyer_email_msg.body = (

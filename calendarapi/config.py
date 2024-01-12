@@ -29,7 +29,7 @@ IMAGE_FORMATS = [
 
 CACHE_TYPE = "RedisCache"
 CACHE_DEFAULT_TIMEOUT = 30
-CACHE_REDIS_HOST = "redis"
+CACHE_REDIS_HOST = os.getenv("CACHE_REDIS_HOST")
 CACHE_REDIS_PORT = os.getenv("REDIS_PORT")
 CACHE_REDIS_PASSWORD = os.getenv("REDIS_PASS")
 DAY = 86400
@@ -61,7 +61,7 @@ CELERY = {
 }
 
 cloudinary.config(
-    cloud_name=os.environ.get("CLOUD_NAME"),
-    api_key=os.environ.get("API_KEY"),
-    api_secret=os.environ.get("API_SECRET"),
+    cloud_name=os.environ.get("CLOUD_NAME", None),
+    api_key=os.environ.get("API_KEY", None),
+    api_secret=os.environ.get("API_SECRET", None),
 )

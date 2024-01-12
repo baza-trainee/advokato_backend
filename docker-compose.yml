@@ -57,7 +57,7 @@ services:
   celery:
     image: calendarapi
     container_name: celery
-    command: ["scripts/docker.sh", "celery"]
+    command: ["scripts/dockmakeer.sh", "celery"]
     restart: always
     env_file:
       - ./.env

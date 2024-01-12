@@ -13,6 +13,7 @@ POSTGRES_PORT = 6002
 POSTGRES_DB = advokato_db
 DATABASE_URI = postgresql://user:password@postgres:5432/advokato_db
 
+CACHE_REDIS_HOST=redis
 REDIS_PASS = password
 REDIS_PORT = 6003
 
