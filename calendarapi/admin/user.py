@@ -83,7 +83,6 @@ class UserModelView(AdminModelView):
                 "rows": 3,
                 "maxlength": DESCRIPTION_LEN,
             },
-            validators=[DataRequired(message=DATA_REQUIRED)],
             description=REQ_MAX_LEN % DESCRIPTION_LEN,
         ),
     }

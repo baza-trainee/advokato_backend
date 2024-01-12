@@ -15,7 +15,7 @@ MAIN_PAGE_URL = os.getenv("MAIN_PAGE_URL")
 
 BABEL_DEFAULT_LOCALE = "uk_UA"
 
-STORAGE = "CLOUDINARY"  # "STATIC" or "CLOUDINARY"
+STORAGE = "STATIC"  # "STATIC" or "CLOUDINARY"
 MEDIA_PATH = os.path.join("calendarapi", "static", "media")
 ADMIN_CDN_URL = None  # caching static files
 
