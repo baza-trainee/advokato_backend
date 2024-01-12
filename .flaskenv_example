@@ -1,6 +1,7 @@
 FLASK_ENV = prod
 FLASK_APP = calendarapi.app:create_app
 FLASK_PORT = 6001
+BASE_URL = http://localhost:6001
 
 MAIN_PAGE_URL = https://statusac.com.ua
 SECRET_KEY = changeme

@@ -1,0 +1,13 @@
+vercel*
+tox.ini
+Makefile
+README.md
+Dockerfile
+docker-compose.yml
+venv
+requirements.txt
+.testenv
+.flaskenv_example
+.gitignore
+.dockerignore
+.git

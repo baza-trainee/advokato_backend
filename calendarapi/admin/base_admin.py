@@ -1,3 +1,4 @@
+from re import search
 import uuid
 
 from flask import current_app, redirect, url_for, request, flash
@@ -15,7 +16,10 @@ from calendarapi.commons.exeptions import (
     BAD_LOGIN_DATA,
     DATA_REQUIRED,
     EXPIRED_TOKEN,
+    INVALID_PASSWORD_EQ_LOGIN,
+    INVALID_PASSWORD_LEN,
     NOT_FOUND_TOKEN,
+    REQ_PASSWORD,
     USER_IS_NOT_ADMIN,
 )
 
@@ -130,6 +134,7 @@ class CustomAdminIndexView(AdminIndexView):
 
     @expose("/forgot_password/", methods=["GET", "POST"])
     def forgot_password(self):
+        self.base_url = current_app.config.get("BASE_URL")
         if request.method == "POST":
             email = request.form.get("email")
             user = db.session.query(User).filter_by(email=email).one_or_none()
@@ -148,9 +153,9 @@ class CustomAdminIndexView(AdminIndexView):
 
                 db.session.commit()
 
-                text = f"Ви отримали цей лист через те, що зробили запит на перевстановлення пароля для облікового запису користувача на {request.host_url}admin"
+                text = f"Ви отримали цей лист через те, що зробили запит на перевстановлення пароля для облікового запису користувача на {current_app.config.get('BASE_URL')}/admin"
                 text += "\n\nБудь ласка, перейдіть на цю сторінку, та оберіть новий пароль: "
-                text += f"\n{request.host_url}admin/reset_password/?token={user_security.token}\n"
+                text += f"\n{current_app.config.get('BASE_URL')}/admin/reset_password/?token={user_security.token}\n"
                 text += f"\nВаше користувацьке ім'я: {user.username}"
                 text += "\n\nДякуємо за користування нашим сайтом!"
 
@@ -165,7 +170,7 @@ class CustomAdminIndexView(AdminIndexView):
                 "Якщо email вказано вірно, на нього буде відправлено повідомлення з інструкціями для відновлення доступу.",
                 "success",
             )
-            return redirect(f"{request.host_url}admin")
+            return redirect(f"{current_app.config.get('BASE_URL')}/admin")
         else:
             form = ForgotForm(request.form)
             flash(
@@ -180,30 +185,45 @@ class CustomAdminIndexView(AdminIndexView):
             password = request.form.get("password")
             confirm_password = request.form.get("confirm_password")
             if password == confirm_password:
-                token = request.args.get("token", default=None)
-                if token:
-                    user_security = (
-                        db.session.query(UserSecurity)
-                        .filter_by(token=token)
-                        .one_or_none()
+                password_len = len(password)
+                regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!?]*$"
+                if not 8 <= password_len <= 64:
+                    flash(
+                        f"{INVALID_PASSWORD_LEN % password_len}. {REQ_PASSWORD}",
+                        "error",
                     )
-                    if user_security:
-                        user = (
-                            db.session.query(User)
-                            .filter_by(id=user_security.user_id)
+                elif not search(regex, password):
+                    flash(REQ_PASSWORD, "error")
+                else:
+                    token = request.args.get("token", default=None)
+                    if token:
+                        user_security = (
+                            db.session.query(UserSecurity)
+                            .filter_by(token=token)
                             .one_or_none()
                         )
-                        user.password = password
-                        db.session.delete(user_security)
-                        db.session.commit()
-                        flash("Пароль успішно змінено.", "success")
+                        if user_security:
+                            user = (
+                                db.session.query(User)
+                                .filter_by(id=user_security.user_id)
+                                .one_or_none()
+                            )
+                            if user.username.lower() in password.lower():
+                                flash(INVALID_PASSWORD_EQ_LOGIN, "error")
+                            else:
+                                user.password = password
+                                db.session.delete(user_security)
+                                db.session.commit()
+                                flash("Пароль успішно змінено.", "success")
+                        else:
+                            flash(EXPIRED_TOKEN, "error")
                     else:
-                        flash(EXPIRED_TOKEN, "error")
-                else:
-                    flash(NOT_FOUND_TOKEN, "error")
+                        flash(NOT_FOUND_TOKEN, "error")
             else:
                 flash(INVALID_EQUAL_PASSWORD, "error")
-                return redirect(request.url)
+                return redirect(
+                    f"{current_app.config.get('BASE_URL')}/{'/'.join(request.url.split('/')[-3:])}"
+                )
         else:
             token = request.args.get("token", default=None)
             if token:
@@ -224,4 +244,4 @@ class CustomAdminIndexView(AdminIndexView):
             else:
                 flash(NOT_FOUND_TOKEN, "error")
 
-        return redirect(f"{request.host_url}admin")
+        return redirect(f"{current_app.config.get('BASE_URL')}/admin")

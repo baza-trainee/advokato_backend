@@ -12,6 +12,7 @@ ADMIN_DEFAULT_LOGIN = os.getenv("ADMIN_DEFAULT_LOGIN")
 ADMIN_DEFAULT_PASSWORD = os.getenv("ADMIN_DEFAULT_PASSWORD")
 PERMISSION_ALL = "Усі розділи"
 MAIN_PAGE_URL = os.getenv("MAIN_PAGE_URL")
+BASE_URL = os.getenv("BASE_URL")
 
 BABEL_DEFAULT_LOCALE = "uk_UA"
 
@@ -37,7 +38,7 @@ DAY = 86400
 SWAGGER_URL = "/swagger-ui"
 SWAGGER_PATH = "/static/swagger.json"
 SWAGGER_CONFIG = {
-    "app_name": "Lawyer API",
+    "app_name": "Status-AC API",
     "syntaxHighlight.theme": "obsidian",
     "tryItOutEnabled": True,
     "requestSnippets": True,

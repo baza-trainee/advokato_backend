@@ -15,7 +15,7 @@ class ThumbnailFormatter:
             return ""
 
         if current_app.config["STORAGE"] == "STATIC":
-            url = os.path.join(request.host_url, field_value)
+            url = os.path.join(current_app.config.get("BASE_URL"), field_value)
         else:
             url = field_value
 

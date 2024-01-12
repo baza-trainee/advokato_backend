@@ -50,8 +50,6 @@ clean:
 	sudo find . | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs sudo rm -rf
 
 prod: down build run
-	docker compose exec web flask db init
-	docker compose exec web flask db migrate
 	docker compose exec web flask db upgrade
 	docker compose exec web flask init
 	@echo "Init done, all containers running"
