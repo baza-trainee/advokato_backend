@@ -6,7 +6,7 @@
     {% if admin_view.category == "Головна" %}
         Admin - {{ admin_view.name }} - Status-AC
     {% else %}
-        {{ admin_view.category }} - {{ admin_view.name }} - Status-AC
+        {% if admin_view.category %} {{ admin_view.category }} - {% endif %}{{ admin_view.name }} - Status-AC
     {% endif %}
 {% endblock %}
 </title>
