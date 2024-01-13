@@ -160,7 +160,7 @@ class CustomAdminIndexView(AdminIndexView):
                 text += "\n\nДякуємо за користування нашим сайтом!"
 
                 message = Message(
-                    "Відновлення доступу до Advocato-admin",
+                    "Відновлення доступу до Status-AC-Admin",
                     recipients=[user.email],
                     body=text,
                 )

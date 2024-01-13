@@ -55,12 +55,11 @@ prod: down build run
 	@echo "Init done, all containers running"
 
 backup:
-	chmod +x scripts/backup.sh
-	if crontab -l 2>/dev/null; then crontab -l > mycron; else touch mycron; fi
-	echo "*/1 * * * * $(PWD)/scripts/backup.sh" >> mycron
-	crontab mycron
-	rm mycron
+	@echo "* * * * * cd $(PWD) && python3 scripts/backup.py" | crontab -
+	@echo "backup script started"
+
+stop_backup:
+	crontab -r
 
 restore:
-	chmod +x scripts/restore.sh
-	./scripts/restore.sh
+	python3 scripts/restore.py
