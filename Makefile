@@ -1,10 +1,10 @@
 .PHONY: init init-migration down build run db-migrate test tox
 
-init: down init-postgres
+init: down run init-postgres
 	sleep 2
 	flask db upgrade
 	flask init
-	flask --debug run
+	flask --debug run --port=6001
 	@echo "Init done, postgres container running"
 
 build:

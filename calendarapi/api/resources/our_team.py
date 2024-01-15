@@ -1,4 +1,5 @@
 from typing import List
+from flask import current_app
 
 from flask_restful import Resource, request
 
@@ -32,13 +33,17 @@ class OurTeamResource(Resource):
                     "id": member.id,
                     "name": member.name,
                     "position": member.position,
-                    "slider_photo_path": member.slider_photo_path,
+                    "slider_photo_path": f"{current_app.config.get('BASE_URL')}/{member.slider_photo_path}",
                 }
                 for member in team
                 if member.slider_photo_path
             ]
             return self.our_team_schema.dump(team, many=True)
+        company_data = self.company_schema.dump(company)
         return {
-            "company": self.company_schema.dump(company, many=False),
+            "company": {
+                "our_team_page_description": company_data["our_team_page_description"],
+                "our_team_page_photo_path": f"{current_app.config.get('BASE_URL')}/{company_data['our_team_page_photo_path']}",
+            },
             "team": self.our_team_schema.dump(team, many=True),
         }, 200

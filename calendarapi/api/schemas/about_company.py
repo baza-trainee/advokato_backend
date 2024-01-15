@@ -1,15 +1,20 @@
+from flask import current_app
+from marshmallow import pre_dump
 from calendarapi.models import AboutCompany
 from calendarapi.extensions import fm, ma, db
 
 
 class AboutCompanySchema(fm.SQLAlchemyAutoSchema):
-    title = ma.fields.String(
-        required=True, validate=ma.fields.validate.Length(min=4, max=100)
-    )
-    photo_path = ma.fields.String(
+    main_page_photo_path = ma.fields.String(
         required=True, validate=ma.fields.validate.Length(min=2, max=300)
     )
-    description = ma.fields.String(
+    main_page_description = ma.fields.String(
+        required=True, validate=ma.fields.validate.Length(min=2, max=500)
+    )
+    our_team_page_photo_path = ma.fields.String(
+        required=True, validate=ma.fields.validate.Length(min=2, max=300)
+    )
+    our_team_page_description = ma.fields.String(
         required=True, validate=ma.fields.validate.Length(min=2, max=3000)
     )
 
