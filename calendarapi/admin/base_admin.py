@@ -184,12 +184,13 @@ class CustomAdminIndexView(AdminIndexView):
         if request.method == "POST":
             password = request.form.get("password")
             confirm_password = request.form.get("confirm_password")
+            validation_ok = False
             if password == confirm_password:
                 password_len = len(password)
                 regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!?]*$"
                 if not 8 <= password_len <= 64:
                     flash(
-                        f"{INVALID_PASSWORD_LEN % password_len}. {REQ_PASSWORD}",
+                        f"{INVALID_PASSWORD_LEN % password_len} {REQ_PASSWORD}",
                         "error",
                     )
                 elif not search(regex, password):
@@ -211,6 +212,7 @@ class CustomAdminIndexView(AdminIndexView):
                             if user.username.lower() in password.lower():
                                 flash(INVALID_PASSWORD_EQ_LOGIN, "error")
                             else:
+                                validation_ok = True
                                 user.password = password
                                 db.session.delete(user_security)
                                 db.session.commit()
@@ -219,7 +221,8 @@ class CustomAdminIndexView(AdminIndexView):
                             flash(EXPIRED_TOKEN, "error")
                     else:
                         flash(NOT_FOUND_TOKEN, "error")
-            else:
+
+            if not validation_ok:
                 flash(INVALID_EQUAL_PASSWORD, "error")
                 return redirect(
                     f"{current_app.config.get('BASE_URL')}/{'/'.join(request.url.split('/')[-3:])}"

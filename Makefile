@@ -4,7 +4,7 @@ init: down run init-postgres
 	sleep 2
 	flask db upgrade
 	flask init
-	flask --debug run --port=6001
+	flask --debug run --port=5000
 	@echo "Init done, postgres container running"
 
 build:

@@ -1,5 +1,6 @@
 from flask import current_app
 from marshmallow import pre_dump
+
 from calendarapi.models import News
 from calendarapi.extensions import fm, ma, db
 
