@@ -93,7 +93,7 @@ drop_db: down
 		docker volume rm $$(basename "$$(pwd)")_postgres_data; \
 		echo "successfully drop_db command";\
 	fi
-	# sudo rm -rf ./calendarapi/static/media
+	sudo rm -rf ./calendarapi/static/media
 
 prune: down
 	docker system prune -a
