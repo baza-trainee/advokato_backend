@@ -12,3 +12,6 @@ requirements.txt
 .dockerignore
 .git
 backup.py
+dist.tar.xz
+backup-postgres-advokato
+backup-static-advokato

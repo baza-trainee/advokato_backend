@@ -1,75 +1,66 @@
-version: "3.7"
+version: "3.9"
 
 services:
 
   postgres:
-    image: postgres:latest
-    container_name: postgres_db
-    restart: always
+    image: postgres:16.1
+    container_name: postgres_advokato
     ports:
       - $POSTGRES_PORT:5432
     env_file:
-      - ./.env
-    environment:
-      - ./.env
+      - .env
     volumes:
-      - postgres-data:/data
-    networks:
-      - backend
-
-  web:
-    image: calendarapi
-    container_name: web
-    build: .
+      - postgres_data:/var/lib/postgresql/data
     restart: always
-    command: ["./scripts/docker.sh", "web"]
-    env_file:
-      - ./.env
-    environment:
-      - DATABASE_URI=$DATABASE_URI
-      - CELERY_BROKER_URL=$CELERY_BROKER_URL
-      - CELERY_RESULT_BACKEND_URL=$CELERY_RESULT_BACKEND_URL
-    volumes:
-      - main-app-data:/data
-    ports:
-      - "$FLASK_PORT:$FLASK_PORT"
-    depends_on:
-      - postgres
     networks:
-      - backend
+      - advokato
 
   redis:
-    image: redis:7.2.3
+    image: redis:7.2.4
     container_name: redis
     restart: always
     ports:
       - $REDIS_PORT:$REDIS_PORT
     volumes:
-      - redis-data:/data
-    command:
-      - redis-server
-      - --port $REDIS_PORT
-      - --requirepass $REDIS_PASS
-      - --maxmemory 150mb
+      - redis_data:/data
+    command: redis-server --port $REDIS_PORT --requirepass $REDIS_PASS --maxmemory 200mb
     networks:
-      - backend
+      - advokato
+
+  backend:
+    image: backend_advokato-image
+    container_name: backend_advokato
+    build: 
+      dockerfile: Dockerfile.backend
+    env_file:
+      - .env
+    ports:
+      - "$FLASK_PORT:$FLASK_PORT"
+    volumes:
+      - ./calendarapi/static/media:/backend_app/calendarapi/static/media
+    depends_on:
+      - postgres
+      - redis
+    restart: always
+    networks:
+      - advokato
 
   celery:
-    image: calendarapi
-    container_name: celery
+    image: backend_advokato-image
+    container_name: celery_advokato
     command: ["scripts/docker.sh", "celery"]
-    restart: always
     env_file:
       - ./.env
     volumes:
-      - celery-data:/data
+      - celery_data:/data
     depends_on:
-      - redis
+      - backend
     environment:
       - CELERY_BROKER_URL=$CELERY_BROKER_URL
       - CELERY_RESULT_BACKEND_URL=$CELERY_BROKER_URL
+    restart: always
     networks:
-      - backend
+      - advokato
 
   # flower:
   #   image: mher/flower
@@ -87,16 +78,31 @@ services:
   #     - celery
   #     - redis
   #   networks:
+  #     - advokato
+
+  # frontend:
+  #   container_name: frontend_advokato
+  #   build:
+  #     dockerfile: Dockerfile.frontend
+  #   restart: always
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
   #     - backend
+  #   volumes:
+  #     - frontend_data:/data
+  #   networks:
+  #     - advokato
+
 
 networks:
-  backend:
+  advokato:
     driver: bridge
 
 volumes:
-  postgres-test-data:
-  postgres-data:
-  main-app-data:
-  celery-data:
-  flower-data:
-  redis-data:
+  postgres_data:
+  redis_data:
+  celery_data:
+  backend_data:
+  # frontend_data:
+  # flower-data:

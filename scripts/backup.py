@@ -2,8 +2,8 @@ import os
 from datetime import datetime
 import shutil
 
-DB_CONTAINER = "postgres_db"
-WEB_CONTAINER = "web"
+DB_CONTAINER = "postgres_advokato"
+WEB_CONTAINER = "backend_advokato"
 MAX_BACKUPS = 3
 
 BACKUP_DIR = "backup-postgres-advokato"
@@ -13,15 +13,23 @@ TIMESTAMP = datetime.now().strftime(TIME_FORMAT)
 BACKUP_PATH = os.path.join(BACKUP_DIR, f"backup_{TIMESTAMP}.sql")
 STATIC_BACKUP_PATH = os.path.join(STATIC_BACKUP_DIR, f"static_{TIMESTAMP}")
 
+env_file_path = ".env"
+config = dict()
+if os.path.exists(env_file_path):
+    with open(env_file_path, "r") as file:
+        lines = file.readlines()
+        for line in lines:
+            if "=" in line and not line.startswith("#"):
+                key, value = line.strip().split("=", 1)
+                config[key] = value
+
+DATABASE_URI = config.get("DATABASE_URI")
+
 os.makedirs(BACKUP_DIR, exist_ok=True)
 os.makedirs(STATIC_BACKUP_DIR, exist_ok=True)
 
-cmd_db = (
-    f"docker exec {DB_CONTAINER} pg_dump {os.environ['DATABASE_URI']} > {BACKUP_PATH}"
-)
-cmd_static = (
-    f"docker cp {WEB_CONTAINER}:/code/calendarapi/static/media {STATIC_BACKUP_PATH}"
-)
+cmd_db = f"docker exec {DB_CONTAINER} pg_dump {DATABASE_URI} > {BACKUP_PATH}"
+cmd_static = f"docker cp {WEB_CONTAINER}:/backend_app/calendarapi/static/media {STATIC_BACKUP_PATH}"
 
 os.system(cmd_db)
 os.system(cmd_static)

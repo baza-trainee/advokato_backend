@@ -1,14 +1,25 @@
 from datetime import datetime
 import os
 
-DB_CONTAINER = "postgres_db"
-WEB_CONTAINER = "web"
-DATABASE_URI = os.environ["DATABASE_URI"]
+DB_CONTAINER = "postgres_advokato"
+WEB_CONTAINER = "backend_advokato"
 
 BACKUP_DIR = "backup-postgres-advokato"
 STATIC_BACKUP_DIR = "backup-static-advokato"
 
 TIME_FORMAT = "%Y%m%d_%H%M%S"
+
+env_file_path = ".env"
+config = dict()
+if os.path.exists(env_file_path):
+    with open(env_file_path, "r") as file:
+        lines = file.readlines()
+        for line in lines:
+            if "=" in line and not line.startswith("#"):
+                key, value = line.strip().split("=", 1)
+                config[key] = value
+
+DATABASE_URI = config.get("DATABASE_URI")
 
 if not os.path.exists(BACKUP_DIR):
     print("Backup directory does not exist. Exiting.")
@@ -45,8 +56,7 @@ os.system(
 )
 
 # media
-os.system(f"docker exec -it {WEB_CONTAINER} rm -r /code/calendarapi/static/media")
-
+os.system(f"sudo rm -rf calendarapi/static/media")
 os.system(
-    f"cd {STATIC_BACKUP_DIR}/{BACKUPS_STATIC[choice - 1]} && docker cp . {WEB_CONTAINER}:/code/calendarapi/static/media/"
+    f"cd {STATIC_BACKUP_DIR}/{BACKUPS_STATIC[choice - 1]} && docker cp . {WEB_CONTAINER}:/backend_app/calendarapi/static/media/"
 )
