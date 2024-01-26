@@ -8,5 +8,5 @@ elif [[ "${1}" == "flower" ]]; then
 elif [[ "${1}" == "backend" ]]; then
   flask db upgrade
   flask init
-  gunicorn --workers 2 --bind=0.0.0.0:$FLASK_PORT --log-level=warning calendarapi.wsgi:app
+  gunicorn -c scripts/gunicorn.conf.py calendarapi.wsgi:app
  fi
