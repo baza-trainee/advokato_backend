@@ -46,7 +46,7 @@ services:
       - advokato
 
   celery:
-    image: backend_advokato-image
+    image: backend_advokato_image
     container_name: celery_advokato
     command: ["scripts/docker.sh", "celery"]
     env_file:
