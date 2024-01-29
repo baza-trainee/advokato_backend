@@ -7,7 +7,7 @@ with open(os.path.join("calendarapi", "templates", "req_markup.html"), "r") as f
 REQ_PASSWORD = "Пароль повинен містити мінімум 1 спецсимвол (#$%^&+=!?), 1 цифру та 1 велику і маленьку літеру. Усі літери повинні бути латиницею."
 REQ_IMAGE = f"Розмір файлу не повинен перевищувати {IMAGE_SIZE} мб, підтримуються такі формати: {', '.join(IMAGE_FORMATS)}."
 REQ_MAX_LEN = "Максимальна кількість символів - %s."
-
+REQ_IMAGE_RESOLUTION = "Рекомендоване розширення для фото %sx%s."
 
 # GLOBAL
 DATA_REQUIRED = "Це поле обов'язкове."

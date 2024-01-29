@@ -10,6 +10,7 @@ from calendarapi.commons.exeptions import (
     DATA_REQUIRED,
     REQ_HTML_M,
     REQ_IMAGE,
+    REQ_IMAGE_RESOLUTION,
     REQ_MAX_LEN,
 )
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
@@ -18,6 +19,7 @@ from calendarapi.models import News
 
 NAME_LEN = News.name.type.length
 DESCRIPTION_LEN = News.description.type.length
+REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (348, 272)
 
 
 class NewsModelView(AdminModelView):
@@ -65,7 +67,7 @@ class NewsModelView(AdminModelView):
         "photo_path": FileField(
             label="Виберіть фото для новини",
             validators=[ImageValidator()],
-            description=REQ_IMAGE,
+            description=f"{REQ_IMAGE} {REQ_PHOTO_PATH}",
         ),
         "description": TextAreaField(
             label="Опис",

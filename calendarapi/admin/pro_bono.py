@@ -7,6 +7,7 @@ from calendarapi.admin.commons.validators import ImageValidator, validate_text
 from calendarapi.commons.exeptions import (
     DATA_REQUIRED,
     REQ_IMAGE,
+    REQ_IMAGE_RESOLUTION,
     REQ_MAX_LEN,
     REQ_HTML_M,
 )
@@ -15,6 +16,7 @@ from calendarapi.models.pro_bono import ProBono
 
 
 DESCRIPTION_LEN = ProBono.description.type.length
+REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (400, 552)
 
 
 class ProBonoModelView(AdminModelView):
@@ -42,7 +44,7 @@ class ProBonoModelView(AdminModelView):
         "photo_path": FileField(
             label="Виберіть фото партнера",
             validators=[ImageValidator()],
-            description=REQ_IMAGE,
+            description=f"{REQ_IMAGE} {REQ_PHOTO_PATH}",
         ),
         "description": TextAreaField(
             label="Опис",

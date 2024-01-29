@@ -8,6 +8,7 @@ from calendarapi.commons.exeptions import (
     DATA_REQUIRED,
     REQ_HTML_M,
     REQ_IMAGE,
+    REQ_IMAGE_RESOLUTION,
     REQ_MAX_LEN,
 )
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
@@ -20,6 +21,8 @@ SLIDER_PHOTO_PATH_INFO = """Фото для слайдеру на головні
 NAME_LEN = OurTeam.name.type.length
 POSITION_LEN = OurTeam.position.type.length
 DESCRIPTION_LEN = OurTeam.description.type.length
+REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (524, 640)
+REQ_SLIDER_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1120, 600)
 
 
 class OurTeamModelView(AdminModelView):
@@ -70,12 +73,12 @@ class OurTeamModelView(AdminModelView):
         "photo_path": FileField(
             label="Виберіть фото партнера",
             validators=[ImageValidator()],
-            description=REQ_IMAGE,
+            description=f"{REQ_IMAGE} {REQ_PHOTO_PATH}",
         ),
         "slider_photo_path": FileField(
             label="Виберіть фото партнера для слайдеру.",
             validators=[ImageValidator(required=False)],
-            description=f"{SLIDER_PHOTO_PATH_INFO} {REQ_IMAGE}",
+            description=f"{SLIDER_PHOTO_PATH_INFO} {REQ_IMAGE} {REQ_SLIDER_PHOTO_PATH}",
         ),
         "description": TextAreaField(
             label="Опис",

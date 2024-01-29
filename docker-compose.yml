@@ -28,7 +28,7 @@ services:
       - advokato
 
   backend:
-    image: backend_advokato-image
+    image: backend_advokato_image
     container_name: backend_advokato
     build: 
       dockerfile: Dockerfile.backend
@@ -37,7 +37,7 @@ services:
     ports:
       - "$FLASK_PORT:$FLASK_PORT"
     volumes:
-      - ./calendarapi/static/media:/backend_app/calendarapi/static/media
+      - backend_data:/backend_app/calendarapi/static/media
     depends_on:
       - postgres
       - redis

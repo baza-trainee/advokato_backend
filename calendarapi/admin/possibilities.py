@@ -4,7 +4,12 @@ from wtforms import TextAreaField, FileField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
 from calendarapi.admin.commons.validators import ImageValidator, validate_text
-from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_MAX_LEN
+from calendarapi.commons.exeptions import (
+    DATA_REQUIRED,
+    REQ_IMAGE,
+    REQ_IMAGE_RESOLUTION,
+    REQ_MAX_LEN,
+)
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 from calendarapi.models import Possibilities
 
@@ -15,6 +20,7 @@ SHORT_TEXT_INFO = "Текст який буде під заголовком, н�
 TITLE_LEN = Possibilities.title.type.length
 SHORT_TEXT_LEN = Possibilities.short_text.type.length
 DESCRIPTION_LEN = Possibilities.description.type.length
+REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (548, 384)
 
 
 class PossibilitiesModelView(AdminModelView):
@@ -55,6 +61,7 @@ class PossibilitiesModelView(AdminModelView):
         "photo_path": FileField(
             label="Виберіть фото.",
             validators=[ImageValidator()],
+            description=f"{REQ_IMAGE} {REQ_PHOTO_PATH}",
         ),
         "short_text": TextAreaField(
             label="Короткий опис",

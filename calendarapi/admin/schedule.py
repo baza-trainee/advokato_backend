@@ -12,7 +12,7 @@ from calendarapi.extensions import db
 
 
 def validate_lawyers(form, field):
-    if not form.data["end_date"] and len(form.data["lawyers"]) > 1:
+    if len(form.data["lawyers"]) > 1:
         raise ValidationError("При редагуванні можна обрати лише одного спеціаліста.")
 
 
@@ -171,7 +171,7 @@ class ScheduleModelView(AdminModelView):
                 DataRequired(),
                 validate_date,
             ],
-            default=datetime.now().date(),
+            default=datetime.now().date() + timedelta(hours=1),
         ),
         "end_date": DateField(
             label="Кінцева дата",
@@ -181,11 +181,9 @@ class ScheduleModelView(AdminModelView):
     }
 
     column_formatters = {
-        "time": lambda view, context, model, name: [
-            item.strftime("%H:%M") for item in model.time
-        ]
-        if model.time
-        else "",
+        "time": lambda view, context, model, name: (
+            [item.strftime("%H:%M") for item in model.time] if model.time else ""
+        ),
     }
 
     form_args = {
@@ -193,7 +191,6 @@ class ScheduleModelView(AdminModelView):
             "label": "Спеціалісти",
             "validators": [
                 DataRequired(message="Це поле обов'язкове."),
-                validate_lawyers,
             ],
             "description": """При створенні нового запису можна обрати декілька спеціалістів та розклад складеться
 для кожного з них. При редагуванні можна обрати лише 1.""",
@@ -254,4 +251,10 @@ class ScheduleModelView(AdminModelView):
                 else []
             )
         del form._fields["end_date"]
+        form.lawyers.validators += [validate_lawyers]
         return super().on_form_prefill(form, id)
+
+    # def edit_form(self, obj=None):
+    #     form = super().edit_form(obj)
+    #     form.lawyers.validators = []
+    #     return form

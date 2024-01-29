@@ -4,12 +4,13 @@ BACKUP_COMMAND := 0 1 * * * cd "$(PWD)" && python3 scripts/backup.py
 
 prod: down build run
 
-init: down run init-postgres
+dev: down
+	docker compose up -d postgres redis
 	sleep 3
 	flask db upgrade
 	flask init
 	flask --debug run --port=5000
-	@echo "Init done, postgres container running"
+	@echo "dev init done, postgres & redis containers running"
 
 build:
 	docker compose build
@@ -23,32 +24,8 @@ run:
 init-postgres:
 	docker compose up -d postgres
 
-db-init:
-	docker compose exec backend flask db init
-
-db-migrate:
-	docker compose exec backend flask db migrate
-
-db-upgrade:
-	docker compose exec backend flask db upgrade
-
 open-redis:
 	docker exec -it $$(docker compose ps -q redis) redis-cli -p 9351
-
-test:
-	docker compose stop celery # stop celery to avoid conflicts with celery tests
-	docker compose start rabbitmq redis # ensuring both redis and rabbitmq are started
-	docker compose run --rm -v "$(PWD)/tests:/code/tests:ro" backend tox -e test -- -v
-	docker compose start celery
-
-tox:
-	docker compose stop celery # stop celery to avoid conflicts with celery tests
-	docker compose start rabbitmq redis # ensuring both redis and rabbitmq are started
-	docker compose run --rm -v $(PWD)/tests:/code/tests:ro backend tox -e py311
-	docker compose start celery
-
-lint:
-	docker compose run --rm backend tox -e lint
 
 clean:
 	sudo find . | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs sudo rm -rf
@@ -87,10 +64,13 @@ frontend_export:
 	sudo mkdir -p /var/www/advokato/
 	sudo tar -xJvf dist.tar.xz -C /var/www/advokato/
 
-
 drop_db: down
 	if docker volume ls -q | grep -q $$(basename "$$(pwd)")_postgres_data; then \
 		docker volume rm $$(basename "$$(pwd)")_postgres_data; \
+		echo "successfully drop_db command";\
+	fi
+	if docker volume ls -q | grep -q $$(basename "$$(pwd)")_backend_data; then \
+		docker volume rm $$(basename "$$(pwd)")_backend_data; \
 		echo "successfully drop_db command";\
 	fi
 	sudo rm -rf ./calendarapi/static/media
@@ -98,3 +78,18 @@ drop_db: down
 prune: down
 	docker system prune -a
 	docker volume prune -a
+
+test:
+	docker compose stop celery # stop celery to avoid conflicts with celery tests
+	docker compose start rabbitmq redis # ensuring both redis and rabbitmq are started
+	docker compose run --rm -v "$(PWD)/tests:/code/tests:ro" backend tox -e test -- -v
+	docker compose start celery
+
+tox:
+	docker compose stop celery # stop celery to avoid conflicts with celery tests
+	docker compose start rabbitmq redis # ensuring both redis and rabbitmq are started
+	docker compose run --rm -v $(PWD)/tests:/code/tests:ro backend tox -e py311
+	docker compose start celery
+
+lint:
+	docker compose run --rm backend tox -e lint

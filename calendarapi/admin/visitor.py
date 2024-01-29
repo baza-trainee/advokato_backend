@@ -24,9 +24,9 @@ class VisitorModelView(AdminModelView):
     }
 
     column_formatters = {
-        "is_beneficiary": lambda view, context, model, name: "так"
-        if model.is_beneficiary
-        else "ні",
+        "is_beneficiary": lambda view, context, model, name: (
+            "так" if model.is_beneficiary else "ні"
+        ),
     }
 
     column_searchable_list = [

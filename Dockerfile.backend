@@ -12,4 +12,5 @@ RUN pip install -U pip
 RUN pip install -r dependencies/requirements_prod.txt
 
 RUN chmod a+x scripts/docker.sh
+
 CMD ["./scripts/docker.sh", "backend"]

@@ -11,6 +11,7 @@ from calendarapi.commons.exeptions import (
     DATA_REQUIRED,
     REQ_HTML_M,
     REQ_IMAGE,
+    REQ_IMAGE_RESOLUTION,
     REQ_MAX_LEN,
 )
 
@@ -19,6 +20,8 @@ MAIN_PAGE_INFO = "Відображається на головній сторі�
 OUR_TEAM_PAGE_INFO = 'Відображається на сторінці "Про компанію".'
 MAIN_PAGE_DESCRIPTION_LEN = AboutCompany.main_page_description.type.length
 OUR_TEAM_PAGE_DESCRIPTION_LEN = AboutCompany.our_team_page_description.type.length
+REQ_MAIN_PAGE_PHOTO = REQ_IMAGE_RESOLUTION % (677, 915)
+REQ_OUR_TEAM_PAGE_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (524, 772)
 
 
 class AboutCompanyModelView(AdminModelView):
@@ -61,12 +64,12 @@ class AboutCompanyModelView(AdminModelView):
         "main_page_photo_path": FileField(
             label="Виберіть фото для головної сторінки.",
             validators=[ImageValidator()],
-            description=f"{MAIN_PAGE_INFO} {REQ_IMAGE}",
+            description=f"{MAIN_PAGE_INFO} {REQ_IMAGE} {REQ_MAIN_PAGE_PHOTO}",
         ),
         "our_team_page_photo_path": FileField(
             'Виберіть фото для сторінки "Наша компанія".',
             validators=[ImageValidator()],
-            description=f"{OUR_TEAM_PAGE_INFO} {REQ_IMAGE}",
+            description=f"{OUR_TEAM_PAGE_INFO} {REQ_IMAGE} {REQ_OUR_TEAM_PAGE_PHOTO_PATH}",
         ),
         "main_page_description": TextAreaField(
             label="Короткий опис для головної сторінки. ",

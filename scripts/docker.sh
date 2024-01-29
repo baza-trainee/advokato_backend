@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 if [[ "${1}" == "celery" ]]; then
   celery -A calendarapi.celery_app:app worker -B --loglevel=warning
 elif [[ "${1}" == "flower" ]]; then
