@@ -26,8 +26,6 @@ def send_email(
             f"Запит на зворотній зв'язок. Клієнт: {visitor_name}",
             recipients=[
                 current_app.config["MAIL_DEFAULT_SENDER"],
-                "deadroll95@gmail.com",
-                "smile.to.alice@gmail.com",
             ],
         )
         lawyer_email_msg.body = (

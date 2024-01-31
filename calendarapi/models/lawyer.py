@@ -6,7 +6,7 @@ class Lawyer(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    lawyer_mail = db.Column(db.String(100), nullable=False, unique=True)
+    lawyer_mail = db.Column(db.String(100), nullable=False)
 
     specializations = db.relationship(
         "Specialization",
