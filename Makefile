@@ -1,6 +1,6 @@
 .PHONY: init init-migration down build run db-migrate test tox prod drop_db auto_backup backup restore prune frontend_build frontend_export
 
-BACKUP_COMMAND := 0 1 * * * cd "$(PWD)" && python3 scripts/backup.py
+BACKUP_COMMAND := 0 0 * * * cd "$(PWD)" && python3 scripts/backup.py
 
 prod: down build run
 
@@ -46,7 +46,8 @@ backup:
 	@echo "Backup complete"
 	
 stop_backup:
-	crontab -l | grep -v '$(BACKUP_COMMAND)' | crontab -
+	# crontab -l | grep -v '$(BACKUP_COMMAND)' | crontab -
+	contab -r
 
 restore:
 	python3 scripts/restore.py
