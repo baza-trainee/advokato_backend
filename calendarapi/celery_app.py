@@ -11,8 +11,8 @@ app.conf.imports = app.conf.imports + (
 )
 
 app.conf.beat_schedule = {
-    "every_day_at_7_am": {
+    "every_day_at_8_am": {
         "task": "calendarapi.services.reminder.check_appointments",
-        "schedule": crontab(hour=5, minute=0),
+        "schedule": crontab(hour=6, minute=0),
     }
 }
