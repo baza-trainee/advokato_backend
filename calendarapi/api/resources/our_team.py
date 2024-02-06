@@ -27,7 +27,9 @@ class OurTeamResource(Resource):
             AboutCompany.our_team_page_photo_path,
         ).first()
         team: List[OurTeam] = db.session.query(OurTeam).order_by("id").all()
+
         if is_slider:
+            first_slide = db.session.query(AboutCompany).first()
             team = [
                 {
                     "id": member.id,
@@ -38,7 +40,17 @@ class OurTeamResource(Resource):
                 for member in team
                 if member.slider_photo_path
             ]
-            return self.our_team_schema.dump(team, many=True)
+            schema = [
+                {
+                    "name": "",
+                    "position": "",
+                    "slider_photo_path": f"{current_app.config.get('BASE_URL')}/{first_slide.first_slider_photo_path}",
+                    "id": 0,
+                }
+            ]
+            schema += self.our_team_schema.dump(team, many=True)
+            return schema
+
         company_data = self.company_schema.dump(company)
         return {
             "company": {

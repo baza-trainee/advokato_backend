@@ -12,6 +12,9 @@ class AboutCompanySchema(fm.SQLAlchemyAutoSchema):
     our_team_page_photo_path = ma.fields.String(
         required=True, validate=ma.fields.validate.Length(min=2, max=300)
     )
+    first_slider_photo_path = ma.fields.String(
+        required=True, validate=ma.fields.validate.Length(min=2, max=300)
+    )
     our_team_page_description = ma.fields.String(
         required=True, validate=ma.fields.validate.Length(min=2, max=3000)
     )
