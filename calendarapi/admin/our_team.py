@@ -21,8 +21,8 @@ SLIDER_PHOTO_PATH_INFO = """Фото для слайдеру на головні
 NAME_LEN = OurTeam.name.type.length
 POSITION_LEN = OurTeam.position.type.length
 DESCRIPTION_LEN = OurTeam.description.type.length
-REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (524, 640)
-REQ_SLIDER_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1120, 600)
+REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1572, 1920)
+REQ_SLIDER_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1920, 1028)
 
 
 class OurTeamModelView(AdminModelView):

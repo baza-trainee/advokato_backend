@@ -9,7 +9,7 @@ from calendarapi.models.clients import Client
 
 
 LINK_LEN = Client.link.type.length
-REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (300, 180)
+REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (600, 360)
 
 
 class ClientsModelView(AdminModelView):

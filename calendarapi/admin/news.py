@@ -19,7 +19,7 @@ from calendarapi.models import News
 
 NAME_LEN = News.name.type.length
 DESCRIPTION_LEN = News.description.type.length
-REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (348, 272)
+REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1920, 1291)
 
 
 class NewsModelView(AdminModelView):

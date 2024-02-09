@@ -22,7 +22,7 @@ SPECIALIZATION_DESCRIPTION_LEN = Specialization.specialization_description.type.
 SPECIALIZATION_DESCRIPTION_FULL_LEN = (
     Specialization.specialization_description_full.type.length
 )
-REQ_SPECIALIZATION_PHOTO = REQ_IMAGE_RESOLUTION % (348, 272)
+REQ_SPECIALIZATION_PHOTO = REQ_IMAGE_RESOLUTION % (1347, 1920)
 
 
 class SpecializationModelView(AdminModelView):

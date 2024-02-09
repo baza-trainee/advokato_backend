@@ -21,10 +21,9 @@ OUR_TEAM_PAGE_INFO = 'Відображається на сторінці "Про
 SLIDER_MAIN_INFO = "Відображається першою в слайдері на головній сторінці."
 MAIN_PAGE_DESCRIPTION_LEN = AboutCompany.main_page_description.type.length
 OUR_TEAM_PAGE_DESCRIPTION_LEN = AboutCompany.our_team_page_description.type.length
-REQ_MAIN_PAGE_PHOTO = REQ_IMAGE_RESOLUTION % (677, 915)
-REQ_OUR_TEAM_PAGE_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (524, 772)
-MAIL_PAGE_SLIDER_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1120, 600)
-
+REQ_MAIN_PAGE_PHOTO = REQ_IMAGE_RESOLUTION % (1303, 1920)
+REQ_OUR_TEAM_PAGE_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1303, 1920)
+MAIL_PAGE_SLIDER_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1920, 1028)
 
 class AboutCompanyModelView(AdminModelView):
     can_set_page_size = True

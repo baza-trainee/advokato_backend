@@ -20,7 +20,7 @@ SHORT_TEXT_INFO = "Текст який буде під заголовком, н�
 TITLE_LEN = Possibilities.title.type.length
 SHORT_TEXT_LEN = Possibilities.short_text.type.length
 DESCRIPTION_LEN = Possibilities.description.type.length
-REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (548, 384)
+REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1920, 1359)
 
 
 class PossibilitiesModelView(AdminModelView):

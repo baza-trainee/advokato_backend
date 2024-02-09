@@ -17,7 +17,7 @@ from calendarapi.models.reviews import Reviews
 NAME_LEN = Reviews.name.type.length
 POSITION_LEN = Reviews.position.type.length
 DESCRIPTION_LEN = Reviews.description.type.length
-REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (80, 80)
+REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (240, 240)
 
 
 class ReviewsModelView(AdminModelView):

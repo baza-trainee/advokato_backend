@@ -16,7 +16,7 @@ from calendarapi.models.pro_bono import ProBono
 
 
 DESCRIPTION_LEN = ProBono.description.type.length
-REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (400, 552)
+REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1678, 1920)
 
 
 class ProBonoModelView(AdminModelView):
