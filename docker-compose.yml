@@ -14,23 +14,31 @@ services:
     restart: always
     networks:
       - advokato
+    healthcheck:
+      test: "pg_isready -d $POSTGRES_DB -U $POSTGRES_USER"
+      interval: 2s
+      timeout: 15s
 
   redis:
     image: redis:7.2.4
-    container_name: redis
+    container_name: redis_advokato
     restart: always
     ports:
       - $REDIS_PORT:$REDIS_PORT
     volumes:
       - redis_data:/data
-    command: redis-server --port $REDIS_PORT --requirepass $REDIS_PASS --maxmemory 200mb
+    command: ['--requirepass $REDIS_PASS', '--maxmemory 250mb']
     networks:
       - advokato
+    healthcheck:
+      test: "redis-cli --raw ping"
+      interval: 2s
+      timeout: 15s
 
   backend:
     image: backend_advokato_image
     container_name: backend_advokato
-    build: 
+    build:
       dockerfile: Dockerfile.backend
     env_file:
       - .env
@@ -39,8 +47,10 @@ services:
     volumes:
       - backend_data:/backend_app/calendarapi/static/media
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: always
     networks:
       - advokato
@@ -48,9 +58,9 @@ services:
   celery:
     image: backend_advokato_image
     container_name: celery_advokato
-    command: ["scripts/docker.sh", "celery"]
+    entrypoint: [ "scripts/docker.sh", "celery" ]
     env_file:
-      - ./.env
+      - .env
     volumes:
       - celery_data:/data
     depends_on:
@@ -61,7 +71,7 @@ services:
     restart: always
     networks:
       - advokato
-
+  
   # flower:
   #   image: mher/flower
   #   container_name: flower
@@ -104,5 +114,5 @@ volumes:
   redis_data:
   celery_data:
   backend_data:
-  # frontend_data:
-  # flower-data:
+    # frontend_data:
+    # flower-data:

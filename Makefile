@@ -1,6 +1,6 @@
 .PHONY: init init-migration down build run db-migrate test tox prod drop_db auto_backup backup restore prune frontend_build frontend_export
 
-BACKUP_COMMAND := 0 0 * * * cd "$(PWD)" && python3 scripts/backup.py
+BACKUP_COMMAND := "0 0 * * * cd \"$(PWD)\" && python3 scripts/backup.py"
 
 prod: down build run
 
@@ -36,7 +36,7 @@ auto_backup:
 	else \
 		touch mycron ; \
 	fi
-	@echo '$(BACKUP_COMMAND)' >> mycron
+	@echo $(BACKUP_COMMAND) >> mycron
 	@crontab mycron
 	@rm mycron
 	@echo "Backup script added to cron"
@@ -46,8 +46,7 @@ backup:
 	@echo "Backup complete"
 	
 stop_backup:
-	# crontab -l | grep -v '$(BACKUP_COMMAND)' | crontab -
-	contab -r
+	crontab -l | grep -v -F $(BACKUP_COMMAND) | crontab -
 
 restore:
 	python3 scripts/restore.py
@@ -68,11 +67,15 @@ frontend_export:
 drop_db: down
 	if docker volume ls -q | grep -q $$(basename "$$(pwd)")_postgres_data; then \
 		docker volume rm $$(basename "$$(pwd)")_postgres_data; \
-		echo "successfully drop_db command";\
+		echo "successfully drop_db postgres_data";\
+	fi
+	if docker volume ls -q | grep -q $$(basename "$$(pwd)")_redis_data; then \
+		docker volume rm $$(basename "$$(pwd)")_redis_data; \
+		echo "successfully drop_db redis_data";\
 	fi
 	if docker volume ls -q | grep -q $$(basename "$$(pwd)")_backend_data; then \
 		docker volume rm $$(basename "$$(pwd)")_backend_data; \
-		echo "successfully drop_db command";\
+		echo "successfully drop_db backend_data";\
 	fi
 
 prune: down

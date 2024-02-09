@@ -25,6 +25,7 @@ REQ_MAIN_PAGE_PHOTO = REQ_IMAGE_RESOLUTION % (1303, 1920)
 REQ_OUR_TEAM_PAGE_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1303, 1920)
 MAIL_PAGE_SLIDER_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1920, 1028)
 
+
 class AboutCompanyModelView(AdminModelView):
     can_set_page_size = True
     can_create = False

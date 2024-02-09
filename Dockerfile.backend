@@ -6,11 +6,13 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /backend_app
 WORKDIR /backend_app
 
-COPY . .
-
 RUN pip install -U pip 
+
+COPY custom_dist/ custom_dist/
+COPY dependencies/ dependencies/
 RUN pip install -r dependencies/requirements_prod.txt
 
-RUN chmod a+x scripts/docker.sh
+COPY . .
 
-CMD ["./scripts/docker.sh", "backend"]
+RUN chmod a+x scripts/docker.sh
+ENTRYPOINT ["scripts/docker.sh", "backend"]
