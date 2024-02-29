@@ -4,7 +4,13 @@ from wtforms import TextAreaField, FileField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter, format_as_markup
 from calendarapi.admin.commons.validators import ImageValidator, validate_text
-from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_HTML_M, REQ_MAX_LEN
+from calendarapi.commons.exeptions import (
+    DATA_REQUIRED,
+    REQ_HTML_M,
+    REQ_IMAGE,
+    REQ_IMAGE_RESOLUTION,
+    REQ_MAX_LEN,
+)
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 from calendarapi.models import Specialization
 
@@ -16,6 +22,7 @@ SPECIALIZATION_DESCRIPTION_LEN = Specialization.specialization_description.type.
 SPECIALIZATION_DESCRIPTION_FULL_LEN = (
     Specialization.specialization_description_full.type.length
 )
+REQ_SPECIALIZATION_PHOTO = REQ_IMAGE_RESOLUTION % (1347, 1920)
 
 
 class SpecializationModelView(AdminModelView):
@@ -63,6 +70,7 @@ class SpecializationModelView(AdminModelView):
         "specialization_photo": FileField(
             label="Виберіть фото для спеціалізації",
             validators=[ImageValidator()],
+            description=f"{REQ_IMAGE} {REQ_SPECIALIZATION_PHOTO}",
         ),
         "specialization_description": TextAreaField(
             label="Опис",

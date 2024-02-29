@@ -1,3 +1,5 @@
+# for vercel need cp requirements.txt in root folder
+
 from flask import __version__
 
 html_template = (

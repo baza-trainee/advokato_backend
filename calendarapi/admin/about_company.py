@@ -11,14 +11,19 @@ from calendarapi.commons.exeptions import (
     DATA_REQUIRED,
     REQ_HTML_M,
     REQ_IMAGE,
+    REQ_IMAGE_RESOLUTION,
     REQ_MAX_LEN,
 )
 
 
 MAIN_PAGE_INFO = "Відображається на головній сторінці під блоком Hero."
 OUR_TEAM_PAGE_INFO = 'Відображається на сторінці "Про компанію".'
+SLIDER_MAIN_INFO = "Відображається першою в слайдері на головній сторінці."
 MAIN_PAGE_DESCRIPTION_LEN = AboutCompany.main_page_description.type.length
 OUR_TEAM_PAGE_DESCRIPTION_LEN = AboutCompany.our_team_page_description.type.length
+REQ_MAIN_PAGE_PHOTO = REQ_IMAGE_RESOLUTION % (1303, 1920)
+REQ_OUR_TEAM_PAGE_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1303, 1920)
+MAIL_PAGE_SLIDER_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (1920, 1028)
 
 
 class AboutCompanyModelView(AdminModelView):
@@ -29,12 +34,14 @@ class AboutCompanyModelView(AdminModelView):
     column_labels = {
         "main_page_photo_path": "Фото(головна)",
         "our_team_page_photo_path": "Фото(про компанію)",
+        "first_slider_photo_path": "Фото(слайдер)",
         "main_page_description": "Опис(головна)",
         "our_team_page_description": "Опис(про компанію)",
     }
     column_list = [
         "main_page_photo_path",
         "our_team_page_photo_path",
+        "first_slider_photo_path",
         "main_page_description",
         "our_team_page_description",
     ]
@@ -43,10 +50,12 @@ class AboutCompanyModelView(AdminModelView):
         "our_team_page_description",
         "main_page_photo_path",
         "our_team_page_photo_path",
+        "first_slider_photo_path",
     ]
     column_descriptions = {
         "main_page_photo_path": MAIN_PAGE_INFO,
         "our_team_page_photo_path": OUR_TEAM_PAGE_INFO,
+        "first_slider_photo_path": SLIDER_MAIN_INFO,
         "main_page_description": MAIN_PAGE_INFO,
         "our_team_page_description": OUR_TEAM_PAGE_INFO,
     }
@@ -54,6 +63,7 @@ class AboutCompanyModelView(AdminModelView):
     column_formatters = {
         "main_page_photo_path": ThumbnailFormatter(),
         "our_team_page_photo_path": ThumbnailFormatter(),
+        "first_slider_photo_path": ThumbnailFormatter(),
         "our_team_page_description": format_as_markup,
     }
 
@@ -61,12 +71,17 @@ class AboutCompanyModelView(AdminModelView):
         "main_page_photo_path": FileField(
             label="Виберіть фото для головної сторінки.",
             validators=[ImageValidator()],
-            description=f"{MAIN_PAGE_INFO} {REQ_IMAGE}",
+            description=f"{MAIN_PAGE_INFO} {REQ_IMAGE} {REQ_MAIN_PAGE_PHOTO}",
         ),
         "our_team_page_photo_path": FileField(
             'Виберіть фото для сторінки "Наша компанія".',
             validators=[ImageValidator()],
-            description=f"{OUR_TEAM_PAGE_INFO} {REQ_IMAGE}",
+            description=f"{OUR_TEAM_PAGE_INFO} {REQ_IMAGE} {REQ_OUR_TEAM_PAGE_PHOTO_PATH}",
+        ),
+        "first_slider_photo_path": FileField(
+            "Виберіть фото для слайдеру на головній сторінці.",
+            validators=[ImageValidator()],
+            description=f"{SLIDER_MAIN_INFO} {REQ_IMAGE} {MAIL_PAGE_SLIDER_PHOTO_PATH}",
         ),
         "main_page_description": TextAreaField(
             label="Короткий опис для головної сторінки. ",
@@ -95,4 +110,5 @@ class AboutCompanyModelView(AdminModelView):
     def on_model_change(self, form, model, is_created):
         custom_update_file(model, form, field_name="main_page_photo_path")
         custom_update_file(model, form, field_name="our_team_page_photo_path")
+        custom_update_file(model, form, field_name="first_slider_photo_path")
         return super().on_model_change(form, model, is_created)

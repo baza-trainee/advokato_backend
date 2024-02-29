@@ -1,6 +1,6 @@
 from calendarapi.extensions import db
 
-# from calendarapi.services.cache_invalidator import invalidate_cache
+from calendarapi.services.cache_invalidator import invalidate_cache
 
 
 class ProBono(db.Model):
@@ -11,4 +11,4 @@ class ProBono(db.Model):
     description = db.Column(db.String(650), nullable=False, unique=True)
 
 
-# invalidate_cache(ProBono, "pro_bono")
+invalidate_cache(ProBono, "pro_bono")

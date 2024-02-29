@@ -28,7 +28,7 @@ def custom_save_file(media_path: str, file):
 
 def custom_delete_file(model, field_name: str):
     media_url = getattr(model, field_name, None)
-    if media_url:
+    if media_url and "media" in media_url:
         media_path = generate_media_path(model.__tablename__)
         if current_app.config["STORAGE"] == "STATIC":
             file_name = media_url.split(os.path.sep)[-1]

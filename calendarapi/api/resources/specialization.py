@@ -4,10 +4,10 @@ from calendarapi.api.schemas import SpecializationSchema
 from calendarapi.models import Specialization, Lawyer
 from sqlalchemy import exc
 
-# from calendarapi.config import DAY
+from calendarapi.config import DAY
 from calendarapi.extensions import (
     db,
-    # cache,
+    cache,
 )
 
 
@@ -28,7 +28,7 @@ class SpecializationListResource(Resource):
 class AllSpecializationsResource(Resource):
     specialization_schema: SpecializationSchema = SpecializationSchema()
 
-    # @cache.cached(key_prefix="specialization_list", timeout=DAY)
+    @cache.cached(key_prefix="specialization_list", timeout=DAY)
     def get(self):
         try:
             all_specializations = db.session.query(Specialization).order_by("id").all()

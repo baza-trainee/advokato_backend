@@ -2,12 +2,12 @@ from flask_mail import Message
 from flask import current_app
 
 from calendarapi.extensions import (
-    # celery,
+    celery,
     mail,
 )
 
 
-# @celery.task
+@celery.task
 def send_email(
     visitor_name: str = None,
     visitor_email: str = None,
@@ -26,8 +26,6 @@ def send_email(
             f"Запит на зворотній зв'язок. Клієнт: {visitor_name}",
             recipients=[
                 current_app.config["MAIL_DEFAULT_SENDER"],
-                "deadroll95@gmail.com",
-                "Lilyaka@ukr.net",
             ],
         )
         lawyer_email_msg.body = (

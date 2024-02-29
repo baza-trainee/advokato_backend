@@ -12,8 +12,8 @@ from calendarapi.admin.our_team import OurTeamModelView
 from calendarapi.extensions import (
     db,
     migrate,
-    # celery,
-    # cache,
+    celery,
+    cache,
 )
 from calendarapi.admin import (
     UserModelView,
@@ -69,9 +69,9 @@ def create_app(testing=False):
     configure_cli(app)
     configure_mails(app)
     register_blueprints(app)
-    # init_celery(app)
-    # if app.config["DEBUG"]:
-    #     app.after_request(sql_debug)
+    init_celery(app)
+    if app.config["DEBUG"]:
+        app.after_request(sql_debug)
     return app
 
 
@@ -136,7 +136,7 @@ def configure_extensions(app):
     """Configure flask extensions"""
     db.init_app(app)
     migrate.init_app(app, db)
-    # cache.init_app(app)
+    cache.init_app(app)
 
 
 def configure_cli(app):
@@ -162,19 +162,19 @@ def register_blueprints(app):
     )
 
 
-# def init_celery(app=None):
-#     app = app or create_app()
-#     celery.conf.update(app.config.get("CELERY", {}))
+def init_celery(app=None):
+    app = app or create_app()
+    celery.conf.update(app.config.get("CELERY", {}))
 
-#     class ContextTask(celery.Task):
-#         """Make celery tasks work with Flask app context"""
+    class ContextTask(celery.Task):
+        """Make celery tasks work with Flask app context"""
 
-#         def __call__(self, *args, **kwargs):
-#             with app.app_context():
-#                 return self.run(*args, **kwargs)
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
 
-#     celery.Task = ContextTask
-#     return celery
+    celery.Task = ContextTask
+    return celery
 
 
 def sql_debug(response):

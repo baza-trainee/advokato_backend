@@ -90,6 +90,7 @@ To run the project, you will need [Docker](https://www.docker.com/) installed. F
 
     <b class="variable-name">FLASK_ENV</b>=<span class="variable-value">development</span><br>
     <b class="variable-name">FLASK_APP</b>=<span class="variable-value">calendarapi.app:create_app</span><br>
+    <b class="variable-name">FLASK_PORT</b>=<span class="variable-value">8000</span><br>
     <b class="variable-name">SECRET_KEY</b>=<span class="variable-value">the_most_secret_key_in_the_world</span><br>
     <b class="variable-name">ADMIN_DEFAULT_LOGIN</b>=<span class="variable-value">admin</span><br>
     <b class="variable-name">ADMIN_DEFAULT_PASSWORD</b>=<span class="variable-value">admin</span><br>
@@ -135,14 +136,6 @@ To run the project, you will need [Docker](https://www.docker.com/) installed. F
     <b class="variable-name">MAIL_PASSWORD</b>=<span class="variable-value">your_mail_api_key</span>
     </details>
 
-    <details class="custom-details">
-    <summary><b>Cloudinary settings</b></summary>
-    <p class="custom-details-description"><i>Variable for configuring Cloudinary service.</i></p>
-
-    <b class="variable-name">CLOUD_NAME</b>=<span class="variable-value">yourcloudname</span><br>
-    <b class="variable-name">API_KEY</b>=<span class="variable-value">yourapikey</span><br>
-    <b class="variable-name">API_SECRET</b>=<span class="variable-value">yourapisecret</span><br>
-    </details>
     <br>
 
 7. Initialize and start the containers:
@@ -180,7 +173,7 @@ To debug the code, you can view the container logs using the command `docker log
     <br>
 </div>
 
-- `web` - The Flask application container.
+- `backend` - The Flask application container.
 - `postgres` - The PostgreSQL database container.
 - `redis` - The Redis container used for caching and storing the results of asynchronous tasks.
 - `celery` - The Celery task worker container.
@@ -237,19 +230,18 @@ http://localhost:5555
 
 <h2 align="center" style="color: #B5E5E8;">MAKEFILE COMMANDS</h2>
 
-- `init`: Initialize the project by bringing up the Postgres container, upgrading the database, and then initializing the application.
+- `prod`: Build Docker images, start containers, initialize the database and initialize the application. This command sets up the project for production use.
 - `build:` Build Docker images for the project.
 - `down:` Stop and remove all Docker containers.
-- `run`: Start Docker containers including Postgres, Redis, Celery, Flower, and the web application.
-- `init-postgres`: Start only the Postgres container.
-- `db-init`: Initialize the database by running Flask database initialization command inside the web container.
-- `db-migrate`: Create a migration file inside the web container.
-- `db-upgrade`: Apply database migrations inside the web container.
+- `run`: Start Docker containers including Postgres, Redis, Celery and the web application.
 - `open-redis`: Open a Redis CLI session for the Redis container.
 - `test`: Run the project tests using Tox in a web container, and then restart the Celery container.
 - `lint`: Run the linter inside the web container to check the code.
 - `tox`: Run code linting and tests using Tox in a web container.
 - `clean`: Remove Python-related files such as __pycache__, .pyc, and .pyo from the project.
-- `prod`: Build Docker images, start containers, initialize the database and initialize the application. This command sets up the project for production use.
-- `backup`: Make the backup script executable, add a cron job to run the backup script every midnight.
+- `auto_backup`: Make the backup script executable, add a cron job to run the backup script every midnight.
+- `backup`: Make the backup script executable once.
 - `restore`: Make the restore script executable and execute it to restore the database.
+- `frontend_build` : Archives the **dist** folder in the root with static frontend data to a **dist.tar.xz** archive
+- `frontend_export` : (for production) Unzips **dist.tar.xz** to a special directory **/var/www/advokato/dist** that is processed by nginx 
+- `prune` : Delete all docker data and volumes

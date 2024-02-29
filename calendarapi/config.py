@@ -2,6 +2,7 @@
 
 Use env var to override
 """
+
 import os
 import cloudinary
 
@@ -12,10 +13,11 @@ ADMIN_DEFAULT_LOGIN = os.getenv("ADMIN_DEFAULT_LOGIN")
 ADMIN_DEFAULT_PASSWORD = os.getenv("ADMIN_DEFAULT_PASSWORD")
 PERMISSION_ALL = "Усі розділи"
 MAIN_PAGE_URL = os.getenv("MAIN_PAGE_URL")
+BASE_URL = os.getenv("BASE_URL")
 
 BABEL_DEFAULT_LOCALE = "uk_UA"
 
-STORAGE = "CLOUDINARY"  # "STATIC" or "CLOUDINARY"
+STORAGE = "STATIC"  # "STATIC" or "CLOUDINARY"
 MEDIA_PATH = os.path.join("calendarapi", "static", "media")
 ADMIN_CDN_URL = None  # caching static files
 
@@ -27,17 +29,17 @@ IMAGE_FORMATS = [
     "webp",
 ]
 
-# CACHE_TYPE = "RedisCache"
-# CACHE_DEFAULT_TIMEOUT = 30
-# CACHE_REDIS_HOST = "redis"
-# CACHE_REDIS_PORT = os.getenv("REDIS_PORT")
-# CACHE_REDIS_PASSWORD = os.getenv("REDIS_PASS")
-# DAY = 86400
+CACHE_TYPE = "RedisCache"
+CACHE_DEFAULT_TIMEOUT = 30
+CACHE_REDIS_HOST = os.getenv("CACHE_REDIS_HOST")
+CACHE_REDIS_PORT = os.getenv("REDIS_PORT")
+CACHE_REDIS_PASSWORD = os.getenv("REDIS_PASS")
+DAY = 86400
 
 SWAGGER_URL = "/swagger-ui"
 SWAGGER_PATH = "/static/swagger.json"
 SWAGGER_CONFIG = {
-    "app_name": "Lawyer API",
+    "app_name": "Status-AC API",
     "syntaxHighlight.theme": "obsidian",
     "tryItOutEnabled": True,
     "requestSnippets": True,
@@ -61,7 +63,7 @@ CELERY = {
 }
 
 cloudinary.config(
-    cloud_name=os.environ.get("CLOUD_NAME"),
-    api_key=os.environ.get("API_KEY"),
-    api_secret=os.environ.get("API_SECRET"),
+    cloud_name=os.environ.get("CLOUD_NAME", None),
+    api_key=os.environ.get("API_KEY", None),
+    api_secret=os.environ.get("API_SECRET", None),
 )

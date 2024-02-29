@@ -3,6 +3,7 @@
 Heavily inspired by
 https://github.com/vimalloc/flask-jwt-extended/blob/master/examples/blocklist_database.py
 """
+
 from datetime import datetime
 
 from flask_jwt_extended import decode_token

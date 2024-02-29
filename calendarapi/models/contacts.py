@@ -1,6 +1,6 @@
 from calendarapi.extensions import db
 
-# from calendarapi.services.cache_invalidator import invalidate_cache
+from calendarapi.services.cache_invalidator import invalidate_cache
 
 
 class Contact(db.Model):
@@ -14,4 +14,4 @@ class Contact(db.Model):
         return f"{self.contact_type}: {self.value}"
 
 
-# invalidate_cache(Contact, "contact_list")
+invalidate_cache(Contact, "contact_list")

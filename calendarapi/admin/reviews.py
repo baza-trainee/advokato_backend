@@ -4,7 +4,12 @@ from wtforms import TextAreaField, FileField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter
 from calendarapi.admin.commons.validators import ImageValidator, validate_text
-from calendarapi.commons.exeptions import DATA_REQUIRED, REQ_IMAGE, REQ_MAX_LEN
+from calendarapi.commons.exeptions import (
+    DATA_REQUIRED,
+    REQ_IMAGE,
+    REQ_IMAGE_RESOLUTION,
+    REQ_MAX_LEN,
+)
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 from calendarapi.models.reviews import Reviews
 
@@ -12,6 +17,7 @@ from calendarapi.models.reviews import Reviews
 NAME_LEN = Reviews.name.type.length
 POSITION_LEN = Reviews.position.type.length
 DESCRIPTION_LEN = Reviews.description.type.length
+REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (240, 240)
 
 
 class ReviewsModelView(AdminModelView):
@@ -49,7 +55,7 @@ class ReviewsModelView(AdminModelView):
         "photo_path": FileField(
             label="Виберіть фото для відгуку",
             validators=[ImageValidator()],
-            description=REQ_IMAGE,
+            description=f"{REQ_IMAGE} {REQ_PHOTO_PATH}",
         ),
         "description": TextAreaField(
             label="Опис",

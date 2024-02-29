@@ -1,6 +1,6 @@
 from calendarapi.extensions import db
 
-# from calendarapi.services.cache_invalidator import invalidate_cache
+from calendarapi.services.cache_invalidator import invalidate_cache
 
 
 class Client(db.Model):
@@ -8,7 +8,7 @@ class Client(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     photo_path = db.Column(db.String(300), nullable=False)
-    link = db.Column(db.String(300), unique=True, nullable=True)
+    link = db.Column(db.String(300), nullable=True)
 
 
-# invalidate_cache(Client, "client_list")
+invalidate_cache(Client, "client_list")

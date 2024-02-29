@@ -1,6 +1,6 @@
 from calendarapi.extensions import db
 
-# from calendarapi.services.cache_invalidator import invalidate_cache
+from calendarapi.services.cache_invalidator import invalidate_cache
 
 
 class City(db.Model):
@@ -16,4 +16,4 @@ class City(db.Model):
         return f"{self.city_name}"
 
 
-# invalidate_cache(City, "contact_list")
+invalidate_cache(City, "contact_list")

@@ -60,7 +60,7 @@ class FeedbackResource(Resource):
             return {"error": str(e)}, 400
         self.find_or_create_visitor(**self.visitor_schema.dump(validated_visitor_data))
         try:
-            send_email(
+            send_email.delay(
                 feedback=True,
                 visitor_name=data.get("name", None) or "Не вказано",
                 visitor_email=data.get("email", None) or "Не вказано",

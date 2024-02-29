@@ -3,12 +3,13 @@ from wtforms import FileField, TextAreaField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import ThumbnailFormatter
 from calendarapi.admin.commons.validators import ImageValidator
-from calendarapi.commons.exeptions import REQ_IMAGE, REQ_MAX_LEN, URL_FORMAT
+from calendarapi.commons.exeptions import REQ_IMAGE, REQ_IMAGE_RESOLUTION, URL_FORMAT
 from calendarapi.commons.utils import custom_delete_file, custom_update_file
 from calendarapi.models.clients import Client
 
 
 LINK_LEN = Client.link.type.length
+REQ_PHOTO_PATH = REQ_IMAGE_RESOLUTION % (600, 360)
 
 
 class ClientsModelView(AdminModelView):
@@ -27,7 +28,7 @@ class ClientsModelView(AdminModelView):
         "photo_path": FileField(
             label="Виберіть фото для новини",
             validators=[ImageValidator()],
-            description=REQ_IMAGE,
+            description=f"{REQ_IMAGE} {REQ_PHOTO_PATH}",
         ),
         "link": TextAreaField(
             label="Посилання",

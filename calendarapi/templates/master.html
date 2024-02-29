@@ -2,9 +2,13 @@
 {% block head %}
 <link rel="shortcut icon" href="{{ url_for('static', filename='interface/favicon.ico') }}">
 <title>
-    {% block title %}
-    {% if admin_view.category %}{{ admin_view.category }} - {% endif %}{{ admin_view.name }} - CalendarApi
-    {% endblock %}
+  {% block title %}
+    {% if admin_view.category == "Головна" %}
+        Admin - {{ admin_view.name }} - Status-AC
+    {% else %}
+        {% if admin_view.category %} {{ admin_view.category }} - {% endif %}{{ admin_view.name }} - Status-AC
+    {% endif %}
+{% endblock %}
 </title>
 {{ super() }}
 {% endblock %}

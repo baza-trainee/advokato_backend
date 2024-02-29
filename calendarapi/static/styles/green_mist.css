@@ -263,6 +263,11 @@ body::before {
   border-color: #575757 !important;
 }
 
+.select2-container .select2-choice > .select2-chosen {
+  background: darkgray;
+  color: black;
+}
+
 .container {
   max-width: 99%;
 }

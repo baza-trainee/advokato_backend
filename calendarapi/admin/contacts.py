@@ -1,4 +1,3 @@
-from wtforms import TextAreaField
 from calendarapi.admin.base_admin import AdminModelView
 from calendarapi.admin.commons.formatters import format_as_markup
 from calendarapi.commons.exeptions import URL_FORMAT

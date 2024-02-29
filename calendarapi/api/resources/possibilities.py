@@ -5,18 +5,18 @@ from sqlalchemy import exc
 
 from calendarapi.api.schemas import PossibilitiesSchema
 
-# from calendarapi.config import DAY
+from calendarapi.config import DAY
 from calendarapi.models import Possibilities
 from calendarapi.extensions import (
     db,
-    # cache,
+    cache,
 )
 
 
 class PossibilitiesResource(Resource):
     possibilities_schema: PossibilitiesSchema = PossibilitiesSchema()
 
-    # @cache.cached(key_prefix="possibilities", timeout=DAY)
+    @cache.cached(key_prefix="possibilities", timeout=DAY)
     def get(self):
         try:
             possibilities: List[Possibilities] = (

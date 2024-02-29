@@ -1,26 +1,27 @@
-FLASK_ENV=development
+FLASK_ENV=prod
 FLASK_APP=calendarapi.app:create_app
-SECRET_KEY=changeme
+FLASK_PORT=8000
+BASE_URL=http://localhost:8000
+
 MAIN_PAGE_URL=https://statusac.com.ua
-ADMIN_DEFAULT_LOGIN = admin
-ADMIN_DEFAULT_PASSWORD = admin
-DATABASE_URI=postgresql://admin:admin@localhost:5432/calendarapi
+SECRET_KEY=changeme
+ADMIN_DEFAULT_LOGIN=admin
+ADMIN_DEFAULT_PASSWORD=admin
 
-POSTGRES_USER=admin
-POSTGRES_PASSWORD=admin
-POSTGRES_DB=calendarapi
+POSTGRES_USER=user
+POSTGRES_PASSWORD=password
+POSTGRES_PORT=5432
+POSTGRES_DB=advokato_db
+DATABASE_URI=postgresql://user:password@postgres:5432/advokato_db
 
-REDIS_PASS=reD1SaRt5
-REDIS_PORT=1234
+CACHE_REDIS_HOST=redis
+REDIS_PASS=password
+REDIS_PORT=6379
 
-CELERY_BROKER_URL=redis://default:reD1SaRt5@redis:1234
-CELERY_RESULT_BACKEND_URL=redis://default:reD1SaRt5@redis:1234
+CELERY_BROKER_URL=redis://default:password@redis:6379
+CELERY_RESULT_BACKEND_URL=redis://default:password@redis:6379
 
-MAIL_SERVER = smtp.gmail.com
-MAIL_PORT = 587
-MAIL_USERNAME = syniava.roksolan1996@gmail.com
-MAIL_PASSWORD = uimxjctqcgexixvu
-
-CLOUD_NAME=asdasda
-API_KEY=123123123
-API_SECRET=7dsadasdasdasfdssfd
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=email@gmail.com
+MAIL_PASSWORD=uimxjpassword
