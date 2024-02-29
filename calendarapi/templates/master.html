@@ -1,0 +1,31 @@
+{% extends 'admin/base.html' %}
+{% block head %}
+<link rel="shortcut icon" href="{{ url_for('static', filename='interface/favicon.ico') }}">
+<title>
+  {% block title %}
+    {% if admin_view.category == "Головна" %}
+        Admin - {{ admin_view.name }} - Status-AC
+    {% else %}
+        {% if admin_view.category %} {{ admin_view.category }} - {% endif %}{{ admin_view.name }} - Status-AC
+    {% endif %}
+{% endblock %}
+</title>
+{{ super() }}
+{% endblock %}
+{% block access_control %}
+{% if current_user.is_authenticated %}
+<a class="btn" href="{{ url_for('admin.logout_view') }}" title="Вийти з панелі адміністратора"><img
+        src="/static/interface/logout.png" height="25"></a>
+{% endif %}
+{% endblock%}
+
+{% block page_body %}
+{{ super() }}
+<script>
+    setTimeout(function() {
+      document.querySelectorAll('.alert').forEach(function(alert) {
+        alert.remove();
+      });
+    }, 5000);
+  </script>
+{% endblock %}

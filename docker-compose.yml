@@ -1,0 +1,118 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:16.1
+    container_name: postgres_advokato
+    ports:
+      - $POSTGRES_PORT:5432
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - advokato
+    healthcheck:
+      test: "pg_isready -d $POSTGRES_DB -U $POSTGRES_USER"
+      interval: 2s
+      timeout: 15s
+
+  redis:
+    image: redis:7.2.4
+    container_name: redis_advokato
+    restart: always
+    ports:
+      - $REDIS_PORT:$REDIS_PORT
+    volumes:
+      - redis_data:/data
+    command: ['--requirepass $REDIS_PASS', '--maxmemory 250mb']
+    networks:
+      - advokato
+    healthcheck:
+      test: "redis-cli --raw ping"
+      interval: 2s
+      timeout: 15s
+
+  backend:
+    image: backend_advokato_image
+    container_name: backend_advokato
+    build:
+      dockerfile: Dockerfile.backend
+    env_file:
+      - .env
+    ports:
+      - "$FLASK_PORT:$FLASK_PORT"
+    volumes:
+      - backend_data:/backend_app/calendarapi/static/media
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+    networks:
+      - advokato
+
+  celery:
+    image: backend_advokato_image
+    container_name: celery_advokato
+    entrypoint: [ "scripts/docker.sh", "celery" ]
+    env_file:
+      - .env
+    volumes:
+      - celery_data:/data
+    depends_on:
+      - backend
+    environment:
+      - CELERY_BROKER_URL=$CELERY_BROKER_URL
+      - CELERY_RESULT_BACKEND_URL=$CELERY_BROKER_URL
+    restart: always
+    networks:
+      - advokato
+  
+  # flower:
+  #   image: mher/flower
+  #   container_name: flower
+  #   build: .
+  #   restart: always
+  #   env_file:
+  #     - ./.env
+  #   command: ["scripts/docker.sh", "flower"]
+  #   volumes:
+  #     - flower-data:/data
+  #   ports:
+  #     - "$FLOWER_PORT:$FLOWER_PORT"
+  #   depends_on:
+  #     - celery
+  #     - redis
+  #   networks:
+  #     - advokato
+
+  # frontend:
+  #   container_name: frontend_advokato
+  #   build:
+  #     dockerfile: Dockerfile.frontend
+  #   restart: always
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - backend
+  #   volumes:
+  #     - frontend_data:/data
+  #   networks:
+  #     - advokato
+
+
+networks:
+  advokato:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  celery_data:
+  backend_data:
+    # frontend_data:
+    # flower-data:

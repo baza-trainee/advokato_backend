@@ -1,0 +1,1184 @@
+{
+    "components": {
+        "schemas": {
+            "AppointmentSchema": {
+                "properties": {
+                    "appointment_date": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "appointment_time": {
+                        "pattern": "^(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$",
+                        "type": "string"
+                    },
+                    "lawyer": {
+                        "type": "string"
+                    },
+                    "specialization": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "appointment_date",
+                    "appointment_time",
+                    "lawyer",
+                    "specialization"
+                ],
+                "type": "object"
+            },
+            "CitySchema": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "city_name": {
+                        "maxLength": 100,
+                        "type": "string",
+                        "example": "Миколаїв"
+                    },
+                    "address": {
+                        "maxLength": 200,
+                        "type": "string",
+                        "example": "вул. Третя Костильна, 12"
+                    },
+                    "coords": {
+                        "type": "object",
+                        "properties": {
+                            "lat": {
+                                "type": "number",
+                                "example": "45.408166"
+                            },
+                            "lng": {
+                                "type": "number",
+                                "example": "-123.008118"
+                            }
+                        },
+                        "required": [
+                            "lat",
+                            "lng"
+                        ]
+                    }
+                },
+                "required": [
+                    "address",
+                    "city_name",
+                    "coords"
+                ],
+                "type": "object"
+            },
+            "ClientSchema": {
+                "properties": {
+                    "link": {
+                        "maxLength": 300,
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "photo_path": {
+                        "maxLength": 300,
+                        "minLength": 2,
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "photo_path"
+                ],
+                "type": "object"
+            },
+            "Lawyer": {
+                "properties": {
+                    "city_id": {
+                        "maximum": 3,
+                        "minimum": 1,
+                        "type": "integer"
+                    },
+                    "lawyer_mail": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "maxLength": 100,
+                        "minLength": 2,
+                        "type": "string"
+                    },
+                    "specializations": {
+                        "items": {
+                            "$ref": "#/components/schemas/Specialization"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "lawyer_mail",
+                    "name"
+                ],
+                "type": "object"
+            },
+            "LawyerSchema": {
+                "properties": {
+                    "city_id": {
+                        "maximum": 3,
+                        "minimum": 1,
+                        "type": "integer"
+                    },
+                    "id": {
+                        "type": "integer"
+                    },
+                    "lawyer_mail": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "maxLength": 100,
+                        "minLength": 2,
+                        "type": "string"
+                    },
+                    "specializations": {
+                        "items": {
+                            "$ref": "#/components/schemas/Specialization"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "lawyer_mail",
+                    "name"
+                ],
+                "type": "object"
+            },
+            "NewsSchema": {
+                "properties": {
+                    "created_at": {
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "description": {
+                        "maxLength": 1000,
+                        "minLength": 2,
+                        "type": "string"
+                    },
+                    "name": {
+                        "maxLength": 100,
+                        "minLength": 4,
+                        "type": "string"
+                    },
+                    "photo_path": {
+                        "maxLength": 300,
+                        "minLength": 2,
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "integer"
+                    },
+                    "specialization_name": {
+                        "maxLength": 255,
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "description",
+                    "name",
+                    "photo_path"
+                ],
+                "type": "object"
+            },
+            "OurTeamSchema": {
+                "properties": {
+                    "description": {
+                        "maxLength": 500,
+                        "minLength": 2,
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "maxLength": 100,
+                        "minLength": 4,
+                        "type": "string"
+                    },
+                    "photo_path": {
+                        "maxLength": 300,
+                        "minLength": 2,
+                        "type": "string"
+                    },
+                    "position": {
+                        "maxLength": 100,
+                        "minLength": 4,
+                        "type": "string"
+                    },
+                    "slider_photo_path": {
+                        "maxLength": 300,
+                        "minLength": 2,
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "description",
+                    "name",
+                    "photo_path",
+                    "position",
+                    "slider_photo_path"
+                ],
+                "type": "object"
+            },
+            "ProBonoSchema": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "description": {
+                        "maxLength": 3000,
+                        "minLength": 2,
+                        "type": "string"
+                    },
+                    "photo_path": {
+                        "maxLength": 300,
+                        "minLength": 2,
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "description",
+                    "photo_path"
+                ],
+                "type": "object"
+            },
+            "ReviewsSchema": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "maxLength": 100,
+                        "minLength": 4,
+                        "type": "string"
+                    },
+                    "position": {
+                        "maxLength": 100,
+                        "minLength": 2,
+                        "type": "string"
+                    },
+                    "photo_path": {
+                        "maxLength": 300,
+                        "minLength": 2,
+                        "type": "string"
+                    },
+                    "description": {
+                        "maxLength": 1000,
+                        "minLength": 2,
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "format": "date",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "description",
+                    "name",
+                    "photo_path",
+                    "position"
+                ],
+                "type": "object"
+            },
+            "ScheduleSchema": {
+                "properties": {
+                    "date": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "lawyer_id": {
+                        "type": "integer"
+                    },
+                    "time": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "time"
+                        },
+                        "description": "Array of time slots",
+                        "example": [
+                            "10:30",
+                            "13:50",
+                            "16:00"
+                        ]
+                    }
+                },
+                "required": [
+                    "date",
+                    "time",
+                    "lawyer_id"
+                ],
+                "type": "object"
+            },
+            "Specialization": {
+                "properties": {
+                    "specialization_name": {
+                        "maxLength": 255,
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "specialization_name"
+                ],
+                "type": "object"
+            },
+            "SpecializationSchema": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "specialization_description": {
+                        "maxLength": 1000,
+                        "type": "string"
+                    },
+                    "specialization_description_full": {
+                        "maxLength": 3000,
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "specialization_name": {
+                        "maxLength": 100,
+                        "type": "string"
+                    },
+                    "specialization_photo": {
+                        "maxLength": 300,
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "specialization_name",
+                    "specialization_description",
+                    "specialization_photo"
+                ],
+                "type": "object"
+            },
+            "VisitorSchema": {
+                "properties": {
+                    "email": {
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "is_beneficiary": {
+                        "type": "boolean"
+                    },
+                    "name": {
+                        "maxLength": 100,
+                        "minLength": 2,
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "phone_number": {
+                        "pattern": "^(?:\\+?380|\\b380|0)[0-9]{9,13}$",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "phone_number"
+                ],
+                "type": "object"
+            },
+            "PossibilitiesSchema": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Title of the possibilities",
+                        "minLength": 4,
+                        "maxLength": 100
+                    },
+                    "photo_path": {
+                        "type": "string",
+                        "description": "Path to the possibilities photo",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+                    "short_text": {
+                        "type": "string",
+                        "description": "Short text description of the possibilities",
+                        "minLength": 2,
+                        "maxLength": 300
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Full description of the possibilities",
+                        "minLength": 2,
+                        "maxLength": 500
+                    },
+                    "id": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "title",
+                    "photo_path",
+                    "short_text",
+                    "description"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "Status-AC API",
+        "version": "1.1.0"
+    },
+    "openapi": "3.0.2",
+    "paths": {
+        "/api/v1/appointment": {
+            "post": {
+                "description": "Create a new appointment by providing visitor and appointment data in the request body.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "appointment": {
+                                        "properties": {
+                                            "appointment_date": {
+                                                "format": "date",
+                                                "type": "string",
+                                                "description": "Date in the format YYYY-MM-DD"
+                                            },
+                                            "appointment_time": {
+                                                "format": "time",
+                                                "type": "string",
+                                                "pattern": "^(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$",
+                                                "description": "Time in 24-hour format (e.g., '14:30')"
+                                            },
+                                            "lawyer_id": {
+                                                "type": "integer"
+                                            },
+                                            "specialization_id": {
+                                                "type": "integer",
+                                                "description": "Can be empty."
+                                            }
+                                        },
+                                        "required": [
+                                            "lawyer_id",
+                                            "appointment_date",
+                                            "appointment_time"
+                                        ],
+                                        "type": "object"
+                                    },
+                                    "visitor": {
+                                        "properties": {
+                                            "email": {
+                                                "type": "string",
+                                                "format": "email",
+                                                "description": "Visitor's email address",
+                                                "nullable": true
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Visitor's name",
+                                                "minLength": 2,
+                                                "maxLength": 100,
+                                                "nullable": true
+                                            },
+                                            "phone_number": {
+                                                "type": "string",
+                                                "description": "Visitor's phone number",
+                                                "pattern": "^(?:\\+?380|\b380|0)[0-9]{9,13}$"
+                                            }
+                                        },
+                                        "required": [
+                                            "phone_number"
+                                        ],
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "Appointment created successfully."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "Bad request."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "Internal server error."
+                    }
+                },
+                "summary": "Create a new appointment.",
+                "tags": [
+                    "Calendar"
+                ]
+            }
+        },
+        "/api/v1/clients": {
+            "get": {
+                "description": "Get a list of clients with photo_path and link.",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "link": {
+                                                "type": "string",
+                                                "description": "Client's link",
+                                                "maxLength": 300,
+                                                "nullable": true
+                                            },
+                                            "photo_path": {
+                                                "type": "string",
+                                                "description": "Client's photo path",
+                                                "minLength": 2,
+                                                "maxLength": 300
+                                            }
+                                        },
+                                        "required": [
+                                            "photo_path"
+                                        ],
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "List of clients"
+                    },
+                    "404": {
+                        "description": "No clients found."
+                    }
+                },
+                "summary": "Get a list of clients with photo_path and link.",
+                "tags": [
+                    "Website content"
+                ]
+            }
+        },
+        "/api/v1/contacts": {
+            "get": {
+                "description": "Get a list of contacts and cities.",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "contacts": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "contacts": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "anyOf": [
+                                                                {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "id": {
+                                                                            "type":"integer",
+                                                                            "example": 1
+                                                                        },
+                                                                        "phone": {
+                                                                            "type": "string",
+                                                                            "example": "+380123456789"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "phone"
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "id": {
+                                                                            "type":"integer",
+                                                                            "example": 2
+                                                                        },
+                                                                        "mail": {
+                                                                            "type": "string",
+                                                                            "example": "example@example.com"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "mail"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    },
+                                                    "social": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type":"integer",
+                                                                    "example": 3
+                                                                },
+                                                                "title": {
+                                                                    "type": "string"
+                                                                },
+                                                                "url": {
+                                                                    "type": "string",
+                                                                    "maxLength": 500
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "title",
+                                                                "url"
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "required": [
+                                                    "contacts",
+                                                    "social"
+                                                ]
+                                            }
+                                        },
+                                        "cities": {
+                                            "items": {
+                                                "$ref": "#/components/schemas/CitySchema"
+                                            },
+                                            "type": "array"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "List of contacts and cities."
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                },
+                "summary": "Get a list of contacts and cities.",
+                "tags": [
+                    "Website content"
+                ]
+            }
+        },
+        "/api/v1/feedback": {
+            "post": {
+                "description": "Submit feedback from users.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "description": "Visitor's email address"
+                                    },
+                                    "message": {
+                                        "description": "Feedback message.",
+                                        "type": "string",
+                                        "maxLength": 2000
+                                    },
+                                    "name": {
+                                        "description": "Visitor's name.",
+                                        "type": "string"
+                                    },
+                                    "phone_number": {
+                                        "type": "string",
+                                        "example": "+380123456789",
+                                        "description": "Visitor's phone number",
+                                        "pattern": "^(?:\\+?380|\b380|0)[0-9]{9,13}$"
+                                    }
+                                },
+                                "required": [
+                                    "phone_number"
+                                ],
+                                "type": "object"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "description": "Indicates if the feedback was successfully submitted.",
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "Feedback submitted successfully."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Error message.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "Bad Request. Invalid JSON or missing required fields."
+                    }
+                },
+                "summary": "Submit feedback.",
+                "tags": [
+                    "Website content"
+                ]
+            }
+        },
+        "/api/v1/hero": {
+            "get": {
+                "description": "Retrieve data for the hero block, including slogan, left text, and right text.",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "company": {
+                                            "properties": {
+                                                "main_page_description": {
+                                                    "type": "string",
+                                                    "description": "Description for the main page",
+                                                    "minLength": 2,
+                                                    "maxLength": 500
+                                                },
+                                                "main_page_photo_path": {
+                                                    "type": "string",
+                                                    "description": "Path to the main page photo",
+                                                    "minLength": 2,
+                                                    "maxLength": 300
+                                                }
+                                            },
+                                            "required": [
+                                                "main_page_description",
+                                                "main_page_photo_path"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        "hero": {
+                                            "properties": {
+                                                "left_text": {
+                                                    "type": "string",
+                                                    "description": "Text on the left side of the hero block",
+                                                    "minLength": 2,
+                                                    "maxLength": 200
+                                                },
+                                                "right_text": {
+                                                    "type": "string",
+                                                    "description": "Text on the right side of the hero block",
+                                                    "minLength": 2,
+                                                    "maxLength": 200
+                                                },
+                                                "slogan": {
+                                                    "type": "string",
+                                                    "description": "Hero block slogan",
+                                                    "minLength": 2,
+                                                    "maxLength": 30
+                                                }
+                                            },
+                                            "required": [
+                                                "left_text",
+                                                "right_text",
+                                                "slogan"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "Information about the hero block."
+                    },
+                    "404": {
+                        "description": "No information found."
+                    }
+                },
+                "summary": "Get information about the hero block.",
+                "tags": [
+                    "Website content"
+                ]
+            }
+        },
+        "/api/v1/lawyer-specs": {
+            "get": {
+                "description": "Get a list of specializations.",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "specialization_name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "List of specializations."
+                    }
+                },
+                "summary": "Get a list of specializations.",
+                "tags": [
+                    "Calendar"
+                ]
+            }
+        },
+        "/api/v1/lawyers": {
+            "get": {
+                "description": "Get a list of lawyers.",
+                "parameters": [
+                    {
+                        "description": "ID of the specialization the lawyers should have.",
+                        "in": "query",
+                        "name": "specialization_id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": [
+                                    {
+                                        "id": 1,
+                                        "name": "John Doe"
+                                    },
+                                    {
+                                        "id": 2,
+                                        "name": "Jane Smith"
+                                    }
+                                ],
+                                "schema": {
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "The ID of the lawyer.",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "The name of the lawyer.",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "List of lawyers"
+                    },
+                    "404": {
+                        "description": "No lawyers found"
+                    }
+                },
+                "summary": "Get a list of lawyers.",
+                "tags": [
+                    "Calendar"
+                ]
+            }
+        },
+        "/api/v1/news": {
+            "get": {
+                "description": "Get a list of news.",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/NewsSchema"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "List of news"
+                    },
+                    "404": {
+                        "description": "No news found."
+                    }
+                },
+                "summary": "Get a list of news.",
+                "tags": [
+                    "Website content"
+                ]
+            }
+        },
+        "/api/v1/our-team": {
+            "get": {
+                "description": "If the `is_slider` parameter is set to `True`, the response will include only the fields: id, name, position, and slider_photo_path.\n",
+                "parameters": [
+                    {
+                        "description": "Flag to determine whether to return slider data. Returns only records that have a photo for the slider.",
+                        "in": "query",
+                        "name": "is_slider",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "company": {
+                                            "properties": {
+                                                "our_team_page_description": {
+                                                    "type": "string",
+                                                    "description": "Description for the our team page",
+                                                    "minLength": 2,
+                                                    "maxLength": 3000
+                                                },
+                                                "our_team_page_photo_path": {
+                                                    "type": "string",
+                                                    "description": "Path to the our team page photo",
+                                                    "minLength": 2,
+                                                    "maxLength": 300
+                                                }
+                                            },
+                                            "required": [
+                                                "our_team_page_description",
+                                                "our_team_page_photo_path"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        "team": {
+                                            "items": {
+                                                "$ref": "#/components/schemas/OurTeamSchema",
+                                                "type": "object"
+                                            },
+                                            "type": "array"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "Information about the company and its team."
+                    },
+                    "404": {
+                        "description": "No information found."
+                    }
+                },
+                "summary": "Get information about the company and its team.",
+                "tags": [
+                    "Website content"
+                ]
+            }
+        },
+        "/api/v1/possibilities": {
+            "get": {
+                "description": "Get a list of possibilities.",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/PossibilitiesSchema"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "List of possibilities"
+                    },
+                    "404": {
+                        "description": "No possibilities found."
+                    }
+                },
+                "summary": "Get a list of possibilities.",
+                "tags": [
+                    "Website content"
+                ]
+            }
+        },
+        "/api/v1/pro_bono": {
+            "get": {
+                "description": "Get a list of Pro Bono.",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProBonoSchema"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "List of Pro Bono"
+                    },
+                    "404": {
+                        "description": "No data found."
+                    }
+                },
+                "summary": "Get a list of Pro Bono.",
+                "tags": [
+                    "Website content"
+                ]
+            }
+        },
+        "/api/v1/reviews": {
+            "get": {
+                "description": "Get a list of reviews.",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/ReviewsSchema"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "List of reviews"
+                    },
+                    "404": {
+                        "description": "No reviews found."
+                    }
+                },
+                "summary": "Get a list of reviews.",
+                "tags": [
+                    "Website content"
+                ]
+            }
+        },
+        "/api/v1/schedule": {
+            "get": {
+                "description": "Get the schedule for a specific lawyer based on their ID.",
+                "parameters": [
+                    {
+                        "description": "ID of the lawyer to retrieve the schedule for.",
+                        "in": "query",
+                        "name": "lawyer_id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/ScheduleSchema"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "Lawyer's schedule retrieved successfully."
+                    },
+                    "400": {
+                        "description": "Bad request. Lawyer ID is required."
+                    },
+                    "404": {
+                        "description": "Schedule not found for the specified lawyer ID."
+                    }
+                },
+                "summary": "Get a lawyer's schedule.",
+                "tags": [
+                    "Calendar"
+                ]
+            }
+        },
+        "/api/v1/specializations": {
+            "get": {
+                "description": "Get a list of all specializations including their photos and descriptions.",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/SpecializationSchema"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "List of all specializations with photos and descriptions."
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                },
+                "summary": "Get a list of all specializations with photos and descriptions.",
+                "tags": [
+                    "Website content"
+                ]
+            }
+        }
+    }
+}

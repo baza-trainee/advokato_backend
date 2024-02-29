@@ -1,0 +1,13 @@
+vercel*
+Makefile
+README.md
+Dockerfile*
+docker-compose.yml
+venv
+.flaskenv_example
+.gitignore
+.dockerignore
+.git
+dist.tar.xz
+backup*
+nginx*

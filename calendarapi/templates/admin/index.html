@@ -1,0 +1,66 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{{ super() }}
+<div class="row-fluid">
+  <div>
+    {% if current_user.is_authenticated %}
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        position: relative;
+        background: url(/static/interface/home-img.png) no-repeat center center fixed;
+        background-size: cover;
+      }
+      
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url(/static/interface/logotype.svg) no-repeat center center fixed;
+        background-size: 30%;
+        background-color: rgba(0, 0, 0, 0.5); /* Добавляем прозрачное затемнение поверх второго фона */
+        z-index: -1; /* Устанавливаем z-index, чтобы второй фон был поверх первого */
+      }
+      .bg-dark {
+        border: solid 1px #222222;
+        border-top: 0px;
+      }
+    </style>
+    {% else %}
+    <form method="POST" action="" style="text-align: center; margin-top: 50px">
+      {{ form.hidden_tag() if form.hidden_tag }}
+      {% for f in form if f.type != 'CSRFTokenField' %}
+      {% if f.errors %}
+      <div class="list-group">
+        {% for e in f.errors %}
+        <a href="#" class="list-group-item list-group-item-action list-group-item-danger">{{ e }}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="form-group" >
+        {{ f.label }}
+        {% if f.name == 'login' %}
+          {{ f(placeholder="username") }}
+        {% elif f.name == 'password' %}
+          {{ f(placeholder="password") }}
+        {% else %}
+          {{ f }}
+        {% endif %}
+      </div>
+      {% endfor %}
+      <div class="form-group" >
+        <a class="forgot_password" href="{{ url_for('admin.forgot_password') }}"><u><b>Забули пароль?</b></u></a>
+      </div>
+      <button class="btn btn-dark" type="submit">Увійти</button>
+    </form>
+    {{ link | safe }}
+    {% endif %}
+  </div>
+</div>
+{% endblock body %}

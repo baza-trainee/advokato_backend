@@ -1,0 +1,18 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN mkdir /backend_app
+WORKDIR /backend_app
+
+RUN pip install -U pip 
+
+COPY custom_dist/ custom_dist/
+COPY dependencies/ dependencies/
+RUN pip install -r dependencies/requirements_prod.txt
+
+COPY . .
+
+RUN chmod a+x scripts/docker.sh
+ENTRYPOINT ["scripts/docker.sh", "backend"]

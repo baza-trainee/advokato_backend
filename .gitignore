@@ -1,3 +1,7 @@
+#custom
+backup-postgres-advokato
+backup-static-advokato
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -7,6 +11,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+.flaskenv
 .Python
 build/
 develop-eggs/

@@ -1,0 +1,65 @@
+{% extends 'admin/model/list.html' %}
+{{ super() }}
+{% block model_menu_bar %}
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a href="javascript:void(0)" class="nav-link active">{{ _gettext('List') }}{% if count %} ({{ count }}){% endif
+            %}</a>
+    </li>
+
+    {% if admin_view.can_create %}
+    <li class="nav-item">
+        {%- if admin_view.create_modal -%}
+        {{ lib.add_modal_button(url=get_url('.create_view', url=return_url, modal=True), btn_class='nav-link',
+        title=_gettext('Create New Record'), content=_gettext('Create')) }}
+        {% else %}
+        <a href="{{ get_url('.create_view', url=return_url) }}" title="{{ _gettext('Create New Record') }}"
+            class="nav-link">{{ _gettext('Create') }}</a>
+        {%- endif -%}
+    </li>
+    {% endif %}
+
+    {% if admin_view.can_export %}
+    {{ model_layout.export_options() }}
+    {% endif %}
+
+    {% block model_menu_bar_before_filters %}{% endblock %}
+
+    {% if filters %}
+    <li class="nav-item dropdown">
+        {{ model_layout.filter_options() }}
+    </li>
+    {% endif %}
+
+    {% if can_set_page_size %}
+    <li class="nav-item dropdown">
+        {{ model_layout.page_size_form(page_size_url) }}
+    </li>
+    {% endif %}
+
+    {% if actions %}
+    <li class="nav-item dropdown">
+        {{ actionlib.dropdown(actions) }}
+    </li>
+    {% endif %}
+
+    {% if search_supported %}
+    <li class="nav-item ml-2">
+        {{ model_layout.search_form() }}
+    </li>
+    {% endif %}
+    {% block model_menu_bar_after_filters %}{% endblock %}
+    <form action="" method="post" class="nav-item dropdown ml-auto">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true"
+        aria-expanded="false">
+        {{admin_view.current_lawyer}}
+    </a>
+    <div class="dropdown-menu" style="max-height: 800%; overflow-y: auto;">
+        <input class="dropdown-item" type="submit" name="lawyer" value="Усі юристи" />
+        {% for lawyer in admin_view.get_lawyers() %}
+        <input class="dropdown-item" type="submit" name="lawyer" value="{{lawyer.name}}" />
+        {% endfor %}
+    </div>
+</form>
+    {% endblock %}
